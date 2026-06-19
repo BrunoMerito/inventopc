@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">InventoPC</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════ LOGIN ═══════════════════ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div id="loginLogoWrap" class="login-logo-mark">
+        <i class="fa-solid fa-network-wired"></i>
+      </div>
+      <h1 id="loginTitle">InventoPC</h1>
+      <p id="loginSubtitle">Sistema de Gestão de TI</p>
+    </div>
+    <form onsubmit="doLogin(event)">
+      <div class="field-group">
+        <label>Usuário</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="loginUser" placeholder="Digite seu usuário" autocomplete="username">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Senha</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <div id="loginError" class="login-error" style="display:none">
+        <i class="fa-solid fa-circle-exclamation"></i> Usuário ou senha incorretos.
+      </div>
+      <button type="submit" class="btn-login">Entrar <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="login-hint">Padrão: admin / admin123</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ APP ═══════════════════ -->
+<div id="app" class="app" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand" id="brandWrap">
+        <div class="brand-icon" id="sidebarLogoWrap">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <div>
+          <div class="brand-name" id="brandName">InventoPC</div>
+          <div class="brand-sub" id="brandSub">Gestão de TI</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+      <a class="nav-link active" data-view="dashboard" onclick="switchView('dashboard')">
+        <i class="fa-solid fa-gauge-high"></i> Dashboard
+      </a>
+
+      <div class="nav-section-label">Inventário</div>
+      <a class="nav-link" data-view="inv-stand" onclick="switchView('inv-stand')">
+        <i class="fa-solid fa-store"></i> Stand
+      </a>
+      <a class="nav-link" data-view="inv-escritorio" onclick="switchView('inv-escritorio')">
+        <i class="fa-solid fa-building"></i> Escritório
+      </a>
+      <a class="nav-link" data-view="inv-obra" onclick="switchView('inv-obra')">
+        <i class="fa-solid fa-hard-hat"></i> Obra
+      </a>
+      <a class="nav-link" data-view="rede" onclick="switchView('rede')">
+        <i class="fa-solid fa-network-wired"></i> Rede / Dispositivos
+      </a>
+
+      <div class="nav-section-label">Helpdesk</div>
+      <a class="nav-link" data-view="tickets" onclick="switchView('tickets')">
+        <i class="fa-solid fa-headset"></i> Tickets
+        <span class="nav-badge" id="ticketBadge" style="display:none">0</span>
+      </a>
+      <a class="nav-link" data-view="novo-ticket" onclick="switchView('novo-ticket')">
+        <i class="fa-solid fa-plus-circle"></i> Novo Ticket
+      </a>
+
+      <div class="nav-section-label">Sistema</div>
+      <a class="nav-link" data-view="relatorios" onclick="switchView('relatorios')">
+        <i class="fa-solid fa-chart-bar"></i> Relatórios
+      </a>
+      <a class="nav-link" data-view="configuracoes" onclick="switchView('configuracoes')">
+        <i class="fa-solid fa-gear"></i> Configurações
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar" id="sidebarAvatar">A</div>
+        <div>
+          <div class="user-name" id="sidebarUserName">Admin</div>
+          <div class="user-role" id="sidebarUserRole">Administrador</div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()" title="Sair">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="globalSearch" placeholder="Buscar dispositivo, IP, usuário..." oninput="onSearch()">
+        </div>
+        <div class="status-pill">
+          <div class="status-dot" id="serverDot"></div>
+          <span id="serverStatusText">Conectando...</span>
+        </div>
+        <button class="topbar-btn" onclick="refreshData()" title="Atualizar"><i class="fa-solid fa-rotate"></i></button>
+        <button class="topbar-btn primary" id="topAddBtn" onclick="openAddModal()">
+          <i class="fa-solid fa-plus"></i> Adicionar
+        </button>
+      </div>
+    </header>
+
+    <main class="page-content" id="pageContent"></main>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL PRINCIPAL (add/edit computador) ═══════════ -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
+<div class="modal" id="mainModal">
+  <div class="modal-header">
+    <div>
+      <h2 id="modalTitle">Adicionar Dispositivo</h2>
+      <div class="modal-header-sub" id="modalSub"></div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Hostname *</label>
+        <input type="text" id="f-hostname" placeholder="PC-ESCRITORIO-01">
+      </div>
+      <div class="form-field">
+        <label>Endereço IP</label>
+        <input type="text" id="f-ip" placeholder="192.168.1.10">
+      </div>
+      <div class="form-field">
+        <label>Usuário Responsável</label>
+        <input type="text" id="f-usuario" placeholder="Nome do usuário">
+      </div>
+      <div class="form-field">
+        <label>Localidade</label>
+        <select id="f-localidade">
+          <option value="escritorio">Escritório</option>
+          <option value="stand">Stand</option>
+          <option value="obra">Obra</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Setor / Departamento</label>
+        <input type="text" id="f-setor" placeholder="TI, RH, Financeiro...">
+      </div>
+      <div class="form-field">
+        <label>Localização Física</label>
+        <input type="text" id="f-localizacao" placeholder="Ex: Sala 3, Andar 2, Obra SP-01">
+      </div>
+      <div class="form-field">
+        <label>Tipo de Equipamento</label>
+        <select id="f-tipo" onchange="togglePatrimonio()">
+          <option value="desktop">Desktop / PC</option>
+          <option value="notebook">Notebook / Laptop</option>
+          <option value="servidor">Servidor</option>
+          <option value="impressora">Impressora</option>
+          <option value="switch">Switch / Roteador</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="online">Online</option>
+          <option value="offline">Offline</option>
+          <option value="manutencao">Manutenção</option>
+        </select>
+      </div>
+      <div class="form-field span2" id="field-patrimonio" style="display:none">
+        <label><i class="fa-solid fa-tag" style="color:#7C3AED;margin-right:5px"></i>Nº Patrimônio <span class="badge-patrimonio-label">Notebook</span></label>
+        <input type="text" id="f-patrimonio" placeholder="PAT-000001" style="font-family:monospace;font-weight:600">
+      </div>
+      <div class="form-field span2">
+        <label>Sistema Operacional</label>
+        <input type="text" id="f-so" placeholder="Windows 11 Pro">
+      </div>
+      <div class="form-field">
+        <label>Processador</label>
+        <input type="text" id="f-cpu" placeholder="Intel Core i5-12400">
+      </div>
+      <div class="form-field">
+        <label>Memória RAM</label>
+        <input type="text" id="f-ram" placeholder="16 GB">
+      </div>
+      <div class="form-field">
+        <label>Armazenamento</label>
+        <input type="text" id="f-disco" placeholder="512 GB SSD">
+      </div>
+      <div class="form-field">
+        <label>Nº de Série</label>
+        <input type="text" id="f-serial" placeholder="SN-ABC123">
+      </div>
+      <div class="form-field">
+        <label>Fabricante</label>
+        <input type="text" id="f-fabricante" placeholder="Dell, HP, Lenovo...">
+      </div>
+      <div class="form-field">
+        <label>Modelo</label>
+        <input type="text" id="f-modelo" placeholder="OptiPlex 7090">
+      </div>
+      <div class="form-field">
+        <label>MAC Address</label>
+        <input type="text" id="f-mac" placeholder="aa:bb:cc:dd:ee:ff">
+      </div>
+      <div class="form-field">
+        <label>Porta VNC (Acesso Remoto)</label>
+        <input type="number" id="f-vnc_port" placeholder="5900" value="5900">
+      </div>
+      <div class="form-field span2">
+        <label>Observações</label>
+        <textarea id="f-obs" rows="2" placeholder="Notas adicionais..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+    <button class="btn-primary" onclick="saveComputer()"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL DETALHE / REMOTO ═══════════ -->
+<div class="modal-backdrop" id="detailBackdrop" onclick="closeDetail()"></div>
+<div class="modal modal-wide" id="detailModal">
+  <div class="modal-header">
+    <div>
+      <h2 id="detailTitle">Detalhes</h2>
+      <div class="modal-header-sub" id="detailSub"></div>
+    </div>
+    <button class="modal-close" onclick="closeDetail()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="modal-body" id="detailBody"></div>
+</div>
+
+<!-- ═══════════ MODAL TICKET DETALHE ═══════════ -->
+<div class="modal-backdrop" id="ticketBackdrop" onclick="closeTicketModal()"></div>
+<div class="modal modal-lg" id="ticketModal">
+  <div class="modal-header">
+    <div>
+      <h2 id="ticketModalTitle">Ticket</h2>
+      <div class="modal-header-sub" id="ticketModalSub"></div>
+    </div>
+    <button class="modal-close" onclick="closeTicketModal()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="modal-body" id="ticketModalBody"></div>
+</div>
+
+<!-- TOAST -->
+<div id="toastContainer"></div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/inventario.js"></script>
+<script src="js/helpdesk.js"></script>
+<script src="js/rede.js"></script>
+<script src="js/configuracoes.js"></script>
+</body>
+</html>
