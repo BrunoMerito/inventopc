@@ -244,13 +244,35 @@ function sbSubscribeTickets(callback) {
 
 // ── CARREGAR DADOS COM FALLBACK ────────────────────────────────────
 async function loadDataWithSupabase() {
-  // Tentar Supabase primeiro
+  // Sempre buscar do Flask primeiro (fonte de verdade do agente)
+  try {
+    const r = await fetch(`${API_BASE}/api/computers`);
+    if (r.ok) {
+      const flaskData = await r.json();
+      if (flaskData && flaskData.length > 0) {
+        computers = flaskData.map(c => ({
+          ...c,
+          localidade: c.localidade || 'escritorio',
+          status:     c.status || 'offline',
+          ws_port:    c.ws_port || 8765,
+        }));
+        setServerStatus(true, 'Online');
+
+        // Sincronizar com Supabase em background
+        if (sb) {
+          flaskData.forEach(c => sbSaveComputer(c).catch(() => {}));
+        }
+        return;
+      }
+    }
+  } catch {}
+
+  // Tentar Supabase se Flask falhou
   if (sb) {
     const data = await sbGetComputers();
-    if (data) {
+    if (data && data.length > 0) {
       computers = data.map(c => ({
         ...c,
-        // Normalizar campos
         localidade: c.localidade || 'escritorio',
         status:     c.status || 'offline',
         ws_port:    c.ws_port || 8765,
@@ -259,12 +281,6 @@ async function loadDataWithSupabase() {
       return;
     }
   }
-
-  // Fallback: servidor Flask
-  try {
-    const r = await fetch(`${API_BASE}/api/computers`);
-    if (r.ok) { computers = await r.json(); setServerStatus(true, 'Flask'); return; }
-  } catch {}
 
   // Demo
   setServerStatus(false);
