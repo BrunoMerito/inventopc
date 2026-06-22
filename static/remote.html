@@ -8,117 +8,142 @@
 html,body{height:100%;background:#0a0f1e;font-family:'Segoe UI',sans-serif;color:#e2e8f0;overflow:hidden}
 
 /* TOPBAR */
-.bar{
-  position:fixed;top:0;left:0;right:0;height:48px;
+.bar{position:fixed;top:0;left:0;right:0;height:48px;
   background:linear-gradient(90deg,#1e3a8a,#1e40af);
-  display:flex;align-items:center;gap:12px;padding:0 16px;
-  z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.4);
-}
-.bar-logo{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+  display:flex;align-items:center;gap:10px;padding:0 14px;
+  z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.bar-logo{font-size:14px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
 .bar-logo span{background:rgba(255,255,255,.15);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
 .bar-sep{width:1px;height:20px;background:rgba(255,255,255,.2)}
 .bar-host{font-size:13px;font-weight:600;color:#bfdbfe}
-.bar-ip{font-size:12px;color:rgba(255,255,255,.5);font-family:monospace}
-.bar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.bar-ip{font-size:11px;color:rgba(255,255,255,.45);font-family:monospace}
+.bar-right{margin-left:auto;display:flex;align-items:center;gap:7px}
 
-.pill{display:flex;align-items:center;gap:6px;padding:4px 11px;border-radius:99px;
-  background:rgba(255,255,255,.1);font-size:11.5px;color:rgba(255,255,255,.8)}
+.pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;
+  background:rgba(255,255,255,.1);font-size:11px;color:rgba(255,255,255,.8)}
 .dot{width:7px;height:7px;border-radius:50%;background:#94a3b8}
 .dot.ok{background:#22c55e;box-shadow:0 0 8px #22c55e}
 .dot.err{background:#ef4444}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .dot.blink{background:#f59e0b;animation:blink 1s infinite}
 
-.btn{padding:5px 13px;border-radius:7px;background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;
-  cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:6px}
-.btn:hover{background:rgba(255,255,255,.2)}
+.btn{padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);color:#fff;font-size:12px;
+  cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.22)}
 .btn.red{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.4)}
-.btn.red:hover{background:rgba(239,68,68,.35)}
+.btn.red:hover{background:rgba(239,68,68,.38)}
+.btn.green{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35)}
+
+/* Monitor selector */
+.monitor-select{padding:4px 8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  border-radius:7px;color:#fff;font-size:12px;cursor:pointer;min-width:100px}
+.monitor-select option{background:#1e3a8a;color:#fff}
 
 /* LAYOUT */
-#main{position:fixed;inset:48px 0 0 0;display:flex}
+#main{position:fixed;inset:48px 0 0 0;display:flex;display:none}
 
 /* TELA REMOTA */
-#screenWrap{
-  flex:1;position:relative;background:#000;overflow:hidden;cursor:none;
-}
-#screenImg{
-  width:100%;height:100%;object-fit:contain;display:block;
-}
-.custom-cursor{
-  position:absolute;width:18px;height:18px;pointer-events:none;
-  transform:translate(-2px,-2px);z-index:10;
-}
-.custom-cursor::before{
-  content:'';position:absolute;width:0;height:0;
-  border-left:8px solid transparent;border-right:8px solid transparent;
-  border-bottom:14px solid rgba(255,255,255,.9);
-  transform:rotate(-45deg);filter:drop-shadow(0 0 2px rgba(0,0,0,.8));
-}
+#screenWrap{flex:1;position:relative;background:#000;overflow:hidden;cursor:none}
+#screenImg{width:100%;height:100%;object-fit:contain;display:block}
+.cursor{position:absolute;width:16px;height:16px;pointer-events:none;
+  border-left:2px solid white;border-top:2px solid white;
+  filter:drop-shadow(0 0 2px rgba(0,0,0,.9));z-index:10}
 
 /* PAINEL LATERAL */
-#sidePanel{
-  width:320px;flex-shrink:0;background:#0f172a;border-left:1px solid rgba(255,255,255,.07);
-  display:flex;flex-direction:column;overflow:hidden;
-}
-.panel-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.07)}
-.ptab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:600;
-  color:rgba(255,255,255,.4);border:none;background:none;cursor:pointer;
+#side{width:300px;flex-shrink:0;background:#0f172a;
+  border-left:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column}
+.tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.06)}
+.tab{flex:1;padding:9px 6px;text-align:center;font-size:11.5px;font-weight:600;
+  color:rgba(255,255,255,.35);border:none;background:none;cursor:pointer;
   border-bottom:2px solid transparent;transition:all .15s}
-.ptab.active{color:#60a5fa;border-bottom-color:#60a5fa;background:rgba(96,165,250,.05)}
-.ptab:hover:not(.active){color:rgba(255,255,255,.7)}
+.tab.active{color:#60a5fa;border-bottom-color:#60a5fa;background:rgba(96,165,250,.06)}
+.tab:hover:not(.active){color:rgba(255,255,255,.6)}
 
 /* TERMINAL */
-#terminal{
-  flex:1;overflow-y:auto;padding:12px;
-  font-family:'Cascadia Code','Consolas',monospace;font-size:12px;line-height:1.7;
-  background:#030712;
-}
-.t-line{margin-bottom:2px}
-.t-prompt{color:#3b82f6;font-weight:700}
-.t-output{color:#86efac;white-space:pre-wrap;word-break:break-all}
-.t-error{color:#f87171;white-space:pre-wrap}
-.t-info{color:#94a3b8}
-.t-input-row{display:flex;align-items:center;gap:8px;padding:8px 12px;
-  border-top:1px solid rgba(255,255,255,.07);background:#0f172a;flex-shrink:0}
-.t-input-row span{color:#3b82f6;font-weight:700;font-family:monospace;font-size:12px;white-space:nowrap}
-.t-input{flex:1;background:none;border:none;color:#e2e8f0;font-family:monospace;
-  font-size:12px;outline:none}
-.t-send{padding:4px 10px;border-radius:5px;background:#1e40af;border:none;
-  color:#fff;font-size:11px;cursor:pointer}
-.t-send:hover{background:#2563eb}
+#terminal{flex:1;overflow-y:auto;padding:10px;
+  font-family:'Cascadia Code','Consolas',monospace;font-size:11.5px;line-height:1.8;
+  background:#030712}
+.tl{margin-bottom:1px}
+.tp{color:#3b82f6;font-weight:700}
+.to{color:#86efac;white-space:pre-wrap;word-break:break-all}
+.te{color:#f87171;white-space:pre-wrap}
+.ti{color:#64748b}
+.tinput{display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border-top:1px solid rgba(255,255,255,.06);background:#0f172a;flex-shrink:0}
+.tinput span{color:#3b82f6;font-weight:700;font-family:monospace;font-size:11.5px;white-space:nowrap}
+.tinput input{flex:1;background:none;border:none;color:#e2e8f0;
+  font-family:monospace;font-size:11.5px;outline:none}
+.tsend{padding:4px 10px;border-radius:5px;background:#1e40af;
+  border:none;color:#fff;font-size:11px;cursor:pointer}
+.tsend:hover{background:#2563eb}
 
-/* INFO PANEL */
-#infoPanel{display:none;flex:1;overflow-y:auto;padding:14px}
-.info-section{margin-bottom:16px}
-.info-title{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.1em;color:#475569;margin-bottom:8px}
-.info-row{display:flex;justify-content:space-between;padding:6px 0;
+/* ARQUIVOS */
+#filesPanel{display:none;flex:1;flex-direction:column;overflow:hidden}
+.drop-zone{margin:12px;border:2px dashed rgba(96,165,250,.3);border-radius:10px;
+  padding:24px;text-align:center;cursor:pointer;transition:all .2s;flex-shrink:0}
+.drop-zone:hover,.drop-zone.drag{border-color:#60a5fa;background:rgba(96,165,250,.06)}
+.drop-zone i{font-size:28px;color:#3b82f6;display:block;margin-bottom:8px}
+.drop-zone p{font-size:12.5px;color:#64748b;line-height:1.6}
+.drop-zone strong{color:#93c5fd}
+.drop-zone input{display:none}
+.file-list{flex:1;overflow-y:auto;padding:0 12px 12px}
+.file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:8px;margin-bottom:8px;font-size:12px}
+.file-icon{font-size:20px;flex-shrink:0}
+.file-info{flex:1;min-width:0}
+.file-name{font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-size{font-size:11px;color:#64748b;margin-top:2px}
+.file-prog{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:6px;overflow:hidden}
+.file-prog-bar{height:100%;background:#3b82f6;border-radius:2px;transition:width .3s}
+.file-status{font-size:11px;margin-top:4px}
+.file-status.ok{color:#22c55e}
+.file-status.err{color:#ef4444}
+.file-status.sending{color:#f59e0b}
+.dest-input{margin:0 12px 10px;display:flex;gap:8px;flex-shrink:0}
+.dest-input input{flex:1;padding:7px 10px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);border-radius:7px;
+  color:#e2e8f0;font-size:12px;outline:none;font-family:monospace}
+.dest-input input:focus{border-color:#3b82f6}
+
+/* INFO */
+#infoPanel{display:none;flex:1;overflow-y:auto;padding:12px}
+.isec{margin-bottom:14px}
+.ititle{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:#334155;margin-bottom:7px}
+.irow{display:flex;justify-content:space-between;padding:5px 0;
   border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
-.info-key{color:#64748b}
-.info-val{color:#e2e8f0;font-family:monospace;font-size:11.5px}
+.ikey{color:#475569}
+.ival{color:#e2e8f0;font-family:monospace;font-size:11.5px}
 
 /* LOADING */
-#loadScreen{
-  position:fixed;inset:48px 0 0 0;background:#0a0f1e;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;
-}
-.spinner{width:44px;height:44px;border:3px solid #1e293b;border-top-color:#3b82f6;
+#load{position:fixed;inset:48px 0 0 0;background:#0a0f1e;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50}
+.spin{width:44px;height:44px;border:3px solid #1e293b;border-top-color:#3b82f6;
   border-radius:50%;animation:spin .8s linear infinite;margin-bottom:20px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-h{font-size:17px;font-weight:700;margin-bottom:6px}
-.load-s{font-size:13px;color:#64748b;text-align:center;max-width:360px;line-height:1.7}
-.load-steps{margin-top:16px;font-size:12px;color:#475569;line-height:2.6}
-.step.done{color:#22c55e} .step.active{color:#f59e0b} .step.error{color:#ef4444}
-
-.err-card{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
+.lh{font-size:17px;font-weight:700;margin-bottom:6px}
+.ls{font-size:13px;color:#64748b;text-align:center;max-width:360px;line-height:1.7}
+.lsteps{margin-top:16px;font-size:12px;color:#475569;line-height:2.6}
+.step.done{color:#22c55e}.step.active{color:#f59e0b}.step.error{color:#ef4444}
+.ecard{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
   border-radius:12px;padding:20px 24px;text-align:center;max-width:440px;margin-top:12px}
-.err-card h3{color:#ef4444;margin-bottom:8px}
-.err-card p{font-size:13px;color:#94a3b8;line-height:1.8}
-.err-card code{background:#1e293b;padding:2px 7px;border-radius:4px;font-size:11.5px;color:#e2e8f0}
-.retry-btn{margin-top:14px;padding:8px 22px;border-radius:8px;
+.ecard h3{color:#ef4444;margin-bottom:8px}
+.ecard p{font-size:13px;color:#94a3b8;line-height:1.8}
+.ecard code{background:#1e293b;padding:2px 7px;border-radius:4px;font-size:11.5px;color:#e2e8f0}
+.retry{margin-top:14px;padding:8px 22px;border-radius:8px;
   background:#3b82f6;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:600}
+
+/* TOAST */
+#toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  z-index:999;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{padding:9px 18px;background:#1e293b;border:1px solid rgba(255,255,255,.1);
+  border-radius:99px;font-size:12.5px;color:#e2e8f0;
+  animation:tfade .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+@keyframes tfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast.ok{border-color:rgba(34,197,94,.4);color:#86efac}
+.toast.err{border-color:rgba(239,68,68,.4);color:#f87171}
 </style>
 </head>
 <body>
@@ -137,60 +162,84 @@ html,body{height:100%;background:#0a0f1e;font-family:'Segoe UI',sans-serif;color
   <div class="bar-host" id="bHost">—</div>
   <div class="bar-ip" id="bIp">—</div>
   <div class="bar-right">
+    <!-- Seletor de monitor -->
+    <select class="monitor-select" id="monitorSel" onchange="changeMonitor()" title="Selecionar monitor">
+      <option value="0">🖥 Monitor 1</option>
+    </select>
+
     <div class="pill">
       <div class="dot blink" id="bDot"></div>
       <span id="bStatus">Conectando...</span>
     </div>
+
     <button class="btn" onclick="sendCad()" title="Ctrl+Alt+Del">CAD</button>
-    <button class="btn" onclick="toggleFS()">⛶</button>
+    <button class="btn" onclick="toggleFS()" title="Tela cheia">⛶</button>
+    <button class="btn green" onclick="showTab('files')" title="Enviar arquivo">📁 Arquivos</button>
     <button class="btn red" onclick="disconnect()">✕ Fechar</button>
   </div>
 </div>
 
 <!-- LOADING -->
-<div id="loadScreen">
-  <div class="spinner" id="lSpinner"></div>
-  <div class="load-h" id="lTitle">Iniciando sessão remota...</div>
-  <div class="load-s" id="lSub">Conectando ao agente System Mérito no PC remoto</div>
-  <div class="load-steps">
+<div id="load">
+  <div class="spin" id="lSpin"></div>
+  <div class="lh" id="lTitle">Iniciando sessão remota...</div>
+  <div class="ls" id="lSub">Conectando ao agente System Mérito</div>
+  <div class="lsteps">
     <div class="step" id="s1">⏳ Localizando agente...</div>
-    <div class="step" id="s2" style="opacity:.4">⏳ Abrindo conexão WebSocket...</div>
+    <div class="step" id="s2" style="opacity:.4">⏳ Abrindo conexão...</div>
     <div class="step" id="s3" style="opacity:.4">⏳ Iniciando captura de tela...</div>
   </div>
 </div>
 
 <!-- MAIN -->
-<div id="main" style="display:none">
-
+<div id="main">
   <!-- TELA -->
   <div id="screenWrap">
     <img id="screenImg" src="" alt="">
-    <div class="custom-cursor" id="cursor"></div>
+    <div class="cursor" id="cur"></div>
   </div>
 
-  <!-- PAINEL LATERAL -->
-  <div id="sidePanel">
-    <div class="panel-tabs">
-      <button class="ptab active" onclick="showTab('terminal')">
-        <i>⌨</i> Terminal
-      </button>
-      <button class="ptab" onclick="showTab('info')">
-        <i>ℹ</i> Info
-      </button>
+  <!-- PAINEL -->
+  <div id="side">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('terminal')">⌨ Terminal</button>
+      <button class="tab"        onclick="showTab('files')">📁 Arquivos</button>
+      <button class="tab"        onclick="showTab('info')">ℹ Info</button>
     </div>
 
-    <!-- TERMINAL POWERSHELL -->
-    <div id="terminal">
-      <div class="t-line t-info">System Mérito — Terminal PowerShell Remoto</div>
-      <div class="t-line t-info">Digite comandos e pressione Enter ou clique Enviar</div>
-      <div class="t-line t-info">─────────────────────────────────────────</div>
+    <!-- TERMINAL -->
+    <div id="terminalPanel" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+      <div id="terminal">
+        <div class="tl ti">System Mérito — Terminal PowerShell Remoto</div>
+        <div class="tl ti">Use ↑↓ para histórico de comandos</div>
+        <div class="tl ti">────────────────────────────────</div>
+      </div>
+      <div class="tinput">
+        <span>PS&gt;</span>
+        <input id="psIn" type="text" placeholder="Digite um comando PowerShell..."
+               onkeydown="psKey(event)">
+        <button class="tsend" onclick="sendPS()">↵</button>
+      </div>
     </div>
-    <div class="t-input-row">
-      <span>PS&gt;</span>
-      <input class="t-input" id="psInput" type="text"
-             placeholder="Get-Process | Select-Object Name,CPU"
-             onkeydown="if(event.key==='Enter')sendPS()">
-      <button class="t-send" onclick="sendPS()">Enviar</button>
+
+    <!-- ARQUIVOS -->
+    <div id="filesPanel">
+      <div class="dest-input" title="Pasta de destino no PC remoto">
+        <input id="destPath" type="text" placeholder="Destino: ex: C:\Users\Public\Downloads"
+               value="C:\Users\Public\Downloads">
+      </div>
+
+      <!-- Drop zone -->
+      <div class="drop-zone" id="dropZone"
+           ondragover="dragOver(event)" ondragleave="dragLeave(event)"
+           ondrop="dropFile(event)" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" multiple onchange="filesSelected(this.files)">
+        <i>📂</i>
+        <p>Arraste arquivos aqui ou <strong>clique para selecionar</strong></p>
+        <p style="margin-top:6px;font-size:11px">Múltiplos arquivos suportados</p>
+      </div>
+
+      <div class="file-list" id="fileList"></div>
     </div>
 
     <!-- INFO -->
@@ -198,28 +247,31 @@ html,body{height:100%;background:#0a0f1e;font-family:'Segoe UI',sans-serif;color
   </div>
 </div>
 
+<div id="toasts"></div>
+
 <script>
 // ── PARAMS ────────────────────────────────────────────────────────
-const P      = new URLSearchParams(location.search);
-const CID    = P.get('id');
-const HOST   = P.get('host') || 'PC Remoto';
-const IP     = P.get('ip')   || '';
-const WS_PORT= P.get('ws_port') || '8765';
-const SERVER = location.origin;
+const P       = new URLSearchParams(location.search);
+const CID     = P.get('id');
+const HOST    = P.get('host') || 'PC Remoto';
+const IP      = P.get('ip')   || '';
+const WS_PORT = P.get('ws_port') || '8765';
+const SERVER  = location.origin;
 
 document.getElementById('bHost').textContent = HOST;
 document.getElementById('bIp').textContent   = IP;
 document.title = `Remoto: ${HOST} — System Mérito`;
 
 // ── STATE ─────────────────────────────────────────────────────────
-let ws          = null;
-let connected   = false;
-let psHistory   = [];
-let psHistIdx   = -1;
-let reqId       = 0;
-let pendingPS   = {};
+let ws        = null;
+let connected = false;
+let psHist    = [];
+let psIdx     = -1;
+let reqId     = 0;
+let monitors  = [];
+let curMonitor= 0;
 
-// ── UI HELPERS ────────────────────────────────────────────────────
+// ── UI ────────────────────────────────────────────────────────────
 function step(n, s) {
   const el = document.getElementById('s'+n);
   if (!el) return;
@@ -230,157 +282,245 @@ function step(n, s) {
 }
 
 function setStatus(type, txt) {
-  const d = document.getElementById('bDot');
-  d.className = 'dot ' + (type==='ok'?'ok':type==='err'?'err':'blink');
+  document.getElementById('bDot').className = 'dot '+(type==='ok'?'ok':type==='err'?'err':'blink');
   document.getElementById('bStatus').textContent = txt;
 }
 
 function showErr(title, msg) {
-  document.getElementById('lSpinner').style.display = 'none';
-  document.getElementById('lTitle').textContent     = title;
+  document.getElementById('lSpin').style.display = 'none';
+  document.getElementById('lTitle').textContent  = title;
   document.getElementById('lSub').innerHTML = `
-    <div class="err-card">
-      <h3>${title}</h3>
-      <p>${msg}</p>
-      <button class="retry-btn" onclick="location.reload()">Tentar novamente</button>
-    </div>`;
-  document.querySelector('.load-steps').style.display = 'none';
-  setStatus('err', 'Falha');
+    <div class="ecard"><h3>${title}</h3><p>${msg}</p>
+    <button class="retry" onclick="location.reload()">Tentar novamente</button></div>`;
+  document.querySelector('.lsteps').style.display = 'none';
+  setStatus('err','Falha');
 }
 
-function showTab(tab) {
-  document.getElementById('terminal').style.display  = tab==='terminal'?'':'none';
-  document.getElementById('infoPanel').style.display = tab==='info'?'':'none';
-  document.querySelectorAll('.ptab').forEach((el,i) => {
-    el.classList.toggle('active', i===(tab==='terminal'?0:1));
+function showTab(t) {
+  document.getElementById('terminalPanel').style.display = t==='terminal'?'flex':'none';
+  document.getElementById('filesPanel').style.display    = t==='files'   ?'flex':'none';
+  document.getElementById('infoPanel').style.display     = t==='info'    ?'flex':'none';
+  document.querySelectorAll('.tab').forEach((el,i) => {
+    el.classList.toggle('active', ['terminal','files','info'][i]===t);
   });
+  if (t==='files') document.getElementById('fileList').scrollTop=0;
+}
+
+function toast(msg, type='') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(), 3000);
 }
 
 // ── TERMINAL ──────────────────────────────────────────────────────
-function termLine(html) {
+function tl(html) {
   const t  = document.getElementById('terminal');
   const el = document.createElement('div');
-  el.className = 't-line';
+  el.className = 'tl';
   el.innerHTML = html;
   t.appendChild(el);
   t.scrollTop = t.scrollHeight;
 }
 
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 function sendPS() {
-  const inp = document.getElementById('psInput');
+  const inp = document.getElementById('psIn');
   const cmd = inp.value.trim();
   if (!cmd || !ws || !connected) return;
-
-  termLine(`<span class="t-prompt">PS&gt; </span><span style="color:#e2e8f0">${escHtml(cmd)}</span>`);
-  psHistory.unshift(cmd);
-  psHistIdx = -1;
-  inp.value = '';
-
+  tl(`<span class="tp">PS&gt; </span><span style="color:#e2e8f0">${esc(cmd)}</span>`);
+  psHist.unshift(cmd); psIdx = -1; inp.value = '';
   const id = ++reqId;
-  pendingPS[id] = true;
-
-  termLine(`<span class="t-info" id="ps-running-${id}">⏳ Executando...</span>`);
-
+  tl(`<span class="ti" id="pr${id}">⏳ Executando...</span>`);
   ws.send(JSON.stringify({type:'powershell', cmd, id}));
 }
 
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// Histórico de comandos com setas
-document.addEventListener('keydown', e => {
-  const inp = document.getElementById('psInput');
-  if (document.activeElement !== inp) return;
-  if (e.key==='ArrowUp'&&psHistory.length) {
-    psHistIdx = Math.min(psHistIdx+1, psHistory.length-1);
-    inp.value = psHistory[psHistIdx];
-    e.preventDefault();
+function psKey(e) {
+  const inp = document.getElementById('psIn');
+  if (e.key==='Enter') { sendPS(); return; }
+  if (e.key==='ArrowUp'&&psHist.length) {
+    psIdx = Math.min(psIdx+1, psHist.length-1);
+    inp.value = psHist[psIdx]; e.preventDefault();
   }
   if (e.key==='ArrowDown') {
-    psHistIdx = Math.max(psHistIdx-1, -1);
-    inp.value = psHistIdx<0 ? '' : psHistory[psHistIdx];
-    e.preventDefault();
+    psIdx = Math.max(psIdx-1,-1);
+    inp.value = psIdx<0?'':psHist[psIdx]; e.preventDefault();
   }
-});
-
-// ── MOUSE / TECLADO NA TELA ───────────────────────────────────────
-const screenWrap = document.getElementById('screenWrap');
-const cursor     = document.getElementById('cursor');
-
-function getRelPos(e) {
-  const rect = screenWrap.getBoundingClientRect();
-  return {
-    x: (e.clientX - rect.left) / rect.width,
-    y: (e.clientY - rect.top)  / rect.height,
-  };
 }
 
-screenWrap.addEventListener('mousemove', e => {
-  cursor.style.left = (e.clientX - screenWrap.getBoundingClientRect().left) + 'px';
-  cursor.style.top  = (e.clientY - screenWrap.getBoundingClientRect().top)  + 'px';
-  if (ws && connected) {
-    const p = getRelPos(e);
-    ws.send(JSON.stringify({type:'mouse_move', x:p.x, y:p.y}));
+// ── MONITOR ───────────────────────────────────────────────────────
+function updateMonitorList(list) {
+  monitors = list || [];
+  const sel = document.getElementById('monitorSel');
+  sel.innerHTML = monitors.map((m,i) =>
+    `<option value="${i}">🖥 Monitor ${i+1}${m.primary?' (principal)':''} ${m.width||''}x${m.height||''}</option>`
+  ).join('');
+  if (!monitors.length) {
+    sel.innerHTML = '<option value="0">🖥 Monitor 1</option>';
   }
+}
+
+function changeMonitor() {
+  curMonitor = parseInt(document.getElementById('monitorSel').value) || 0;
+  if (ws && connected) {
+    ws.send(JSON.stringify({type:'set_monitor', monitor: curMonitor}));
+    toast(`Monitor ${curMonitor+1} selecionado`);
+  }
+}
+
+// ── MOUSE/TECLADO ─────────────────────────────────────────────────
+const sw  = () => document.getElementById('screenWrap');
+const cur = () => document.getElementById('cur');
+
+function relPos(e) {
+  const r = sw().getBoundingClientRect();
+  return {x:(e.clientX-r.left)/r.width, y:(e.clientY-r.top)/r.height};
+}
+
+document.getElementById('screenWrap').addEventListener('mousemove', e => {
+  const r = sw().getBoundingClientRect();
+  cur().style.left = (e.clientX-r.left)+'px';
+  cur().style.top  = (e.clientY-r.top)+'px';
+  if (ws&&connected) ws.send(JSON.stringify({type:'mouse_move',...relPos(e)}));
 });
 
-screenWrap.addEventListener('click', e => {
-  if (!ws || !connected) return;
-  const p = getRelPos(e);
-  ws.send(JSON.stringify({type:'mouse_click', x:p.x, y:p.y, button:'left'}));
-  document.getElementById('psInput').blur();
-  screenWrap.focus();
+document.getElementById('screenWrap').addEventListener('click', e => {
+  if (!ws||!connected) return;
+  ws.send(JSON.stringify({type:'mouse_click',...relPos(e),button:'left'}));
+  sw().focus();
 });
 
-screenWrap.addEventListener('dblclick', e => {
-  if (!ws || !connected) return;
-  const p = getRelPos(e);
-  ws.send(JSON.stringify({type:'mouse_click', x:p.x, y:p.y, button:'left', double:true}));
+document.getElementById('screenWrap').addEventListener('dblclick', e => {
+  if (!ws||!connected) return;
+  ws.send(JSON.stringify({type:'mouse_click',...relPos(e),button:'left',double:true}));
 });
 
-screenWrap.addEventListener('contextmenu', e => {
+document.getElementById('screenWrap').addEventListener('contextmenu', e => {
   e.preventDefault();
-  if (!ws || !connected) return;
-  const p = getRelPos(e);
-  ws.send(JSON.stringify({type:'mouse_click', x:p.x, y:p.y, button:'right'}));
+  if (!ws||!connected) return;
+  ws.send(JSON.stringify({type:'mouse_click',...relPos(e),button:'right'}));
 });
 
-screenWrap.addEventListener('wheel', e => {
+document.getElementById('screenWrap').addEventListener('wheel', e => {
   e.preventDefault();
-  if (!ws || !connected) return;
-  const p = getRelPos(e);
-  ws.send(JSON.stringify({type:'mouse_scroll', x:p.x, y:p.y, delta:e.deltaY>0?-1:1}));
-}, {passive:false});
+  if (!ws||!connected) return;
+  ws.send(JSON.stringify({type:'mouse_scroll',...relPos(e),delta:e.deltaY>0?-1:1}));
+},{passive:false});
 
-// Teclado
-screenWrap.setAttribute('tabindex','0');
-screenWrap.addEventListener('keydown', e => {
-  if (!ws || !connected) return;
+document.getElementById('screenWrap').setAttribute('tabindex','0');
+document.getElementById('screenWrap').addEventListener('keydown', e => {
+  if (!ws||!connected) return;
   e.preventDefault();
-  ws.send(JSON.stringify({type:'key_event', keyCode:e.keyCode||e.which, down:true}));
+  ws.send(JSON.stringify({type:'key_event',keyCode:e.keyCode||e.which,down:true}));
 });
-screenWrap.addEventListener('keyup', e => {
-  if (!ws || !connected) return;
+document.getElementById('screenWrap').addEventListener('keyup', e => {
+  if (!ws||!connected) return;
   e.preventDefault();
-  ws.send(JSON.stringify({type:'key_event', keyCode:e.keyCode||e.which, down:false}));
+  ws.send(JSON.stringify({type:'key_event',keyCode:e.keyCode||e.which,down:false}));
 });
 
-// ── CONEXÃO WEBSOCKET ─────────────────────────────────────────────
-async function connect() {
+// ── ENVIO DE ARQUIVOS ─────────────────────────────────────────────
+function dragOver(e)  { e.preventDefault(); document.getElementById('dropZone').classList.add('drag'); }
+function dragLeave(e) { document.getElementById('dropZone').classList.remove('drag'); }
+function dropFile(e)  { e.preventDefault(); dragLeave(e); filesSelected(e.dataTransfer.files); }
+
+function filesSelected(files) {
+  if (!files.length) return;
+  if (!ws || !connected) { toast('Conecte ao PC remoto primeiro.','err'); return; }
+  Array.from(files).forEach(sendFile);
+}
+
+function sendFile(file) {
+  const dest    = document.getElementById('destPath').value.trim() || 'C:\\Users\\Public\\Downloads';
+  const fileId  = 'f' + Date.now() + Math.random().toString(36).slice(2);
+  const maxSize = 50 * 1024 * 1024; // 50MB
+
+  if (file.size > maxSize) {
+    toast(`${file.name}: arquivo muito grande (max 50MB)`, 'err');
+    return;
+  }
+
+  // Adicionar card na lista
+  const list = document.getElementById('fileList');
+  const card = document.createElement('div');
+  card.className = 'file-item';
+  card.id = fileId;
+  card.innerHTML = `
+    <div class="file-icon">${getFileIcon(file.name)}</div>
+    <div class="file-info">
+      <div class="file-name">${esc(file.name)}</div>
+      <div class="file-size">${formatSize(file.size)} → <span style="color:#93c5fd;font-size:10.5px">${esc(dest)}</span></div>
+      <div class="file-prog"><div class="file-prog-bar" id="pb${fileId}" style="width:0%"></div></div>
+      <div class="file-status sending" id="st${fileId}">⏳ Preparando...</div>
+    </div>`;
+  list.insertBefore(card, list.firstChild);
+
+  // Ler e enviar em chunks
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const data    = e.target.result.split(',')[1]; // base64
+    const chunkSz = 64 * 1024; // 64KB por chunk
+    const total   = Math.ceil(data.length / chunkSz);
+
+    document.getElementById(`st${fileId}`).textContent = '📤 Enviando...';
+
+    let chunk = 0;
+    function sendChunk() {
+      if (chunk >= total) return;
+      const slice = data.slice(chunk * chunkSz, (chunk+1) * chunkSz);
+      ws.send(JSON.stringify({
+        type:      'file_chunk',
+        file_id:   fileId,
+        filename:  file.name,
+        dest:      dest,
+        chunk:     chunk,
+        total:     total,
+        data:      slice,
+        size:      file.size,
+      }));
+      chunk++;
+      const pct = Math.round((chunk/total)*100);
+      const pb  = document.getElementById('pb'+fileId);
+      if (pb) pb.style.width = pct + '%';
+      if (chunk < total) setTimeout(sendChunk, 10);
+    }
+    sendChunk();
+  };
+  reader.readAsDataURL(file);
+}
+
+function getFileIcon(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  const map  = {
+    pdf:'📄', doc:'📝', docx:'📝', xls:'📊', xlsx:'📊',
+    ppt:'📋', pptx:'📋', zip:'🗜', rar:'🗜', '7z':'🗜',
+    exe:'⚙️', msi:'⚙️', png:'🖼', jpg:'🖼', jpeg:'🖼',
+    gif:'🖼', mp4:'🎬', avi:'🎬', mp3:'🎵', txt:'📃',
+    py:'🐍', js:'📜', html:'🌐', csv:'📊',
+  };
+  return map[ext] || '📁';
+}
+
+function formatSize(b) {
+  if (b<1024) return b+'B';
+  if (b<1048576) return (b/1024).toFixed(1)+'KB';
+  return (b/1048576).toFixed(1)+'MB';
+}
+
+// ── WEBSOCKET ─────────────────────────────────────────────────────
+function connect() {
   step(1,'active');
-
-  // Conectar direto ao agente via WebSocket
   const wsUrl = `ws://${IP}:${WS_PORT}`;
   step(1,'done'); step(2,'active');
 
   try {
     ws = new WebSocket(wsUrl);
 
-    ws.onopen = () => {
-      step(2,'done'); step(3,'active');
-      log('WS conectado!');
-    };
+    ws.onopen = () => { step(2,'done'); step(3,'active'); };
 
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
@@ -388,86 +528,103 @@ async function connect() {
       if (msg.type === 'connected') {
         connected = true;
         step(3,'done');
-        document.getElementById('loadScreen').style.display = 'none';
-        document.getElementById('main').style.display       = 'flex';
+        document.getElementById('load').style.display = 'none';
+        document.getElementById('main').style.display = 'flex';
         setStatus('ok', `Conectado — ${HOST}`);
-        termLine(`<span class="t-info">✅ Conectado ao agente em ${HOST} (${IP})</span>`);
-        termLine(`<span class="t-info">Versão do agente: ${msg.version||'?'}</span>`);
-        termLine(`<span class="t-info">─────────────────────────────────────────</span>`);
-
-        // Iniciar streaming
-        ws.send(JSON.stringify({type:'start_stream'}));
-
-        // Preencher info
+        tl(`<span class="ti">✅ Conectado | Agente v${msg.version||'?'} | ${msg.hostname||HOST}</span>`);
+        tl(`<span class="ti">────────────────────────────────</span>`);
+        ws.send(JSON.stringify({type:'start_stream', monitor: curMonitor}));
+        ws.send(JSON.stringify({type:'get_monitors'}));
         fillInfo(msg);
       }
 
       else if (msg.type === 'frame') {
-        document.getElementById('screenImg').src = 'data:image/jpeg;base64,' + msg.data;
+        document.getElementById('screenImg').src = 'data:image/jpeg;base64,'+msg.data;
+      }
+
+      else if (msg.type === 'monitors') {
+        updateMonitorList(msg.monitors);
       }
 
       else if (msg.type === 'ps_result') {
-        const run = document.getElementById(`ps-running-${msg.id}`);
+        const run = document.getElementById('pr'+msg.id);
         if (run) run.remove();
-        if (msg.output) termLine(`<span class="t-output">${escHtml(msg.output)}</span>`);
-        if (msg.error)  termLine(`<span class="t-error">${escHtml(msg.error)}</span>`);
-        if (!msg.output && !msg.error) termLine(`<span class="t-info">(sem output)</span>`);
-        termLine('');
-        delete pendingPS[msg.id];
+        if (msg.output) tl(`<span class="to">${esc(msg.output)}</span>`);
+        if (msg.error)  tl(`<span class="te">${esc(msg.error)}</span>`);
+        if (!msg.output&&!msg.error) tl(`<span class="ti">(sem output)</span>`);
+        tl('');
+      }
+
+      else if (msg.type === 'file_progress') {
+        const pb = document.getElementById('pb'+msg.file_id);
+        const st = document.getElementById('st'+msg.file_id);
+        if (pb) pb.style.width = msg.pct + '%';
+        if (st) {
+          if (msg.done) {
+            st.className = 'file-status ok';
+            st.textContent = '✅ Enviado com sucesso!';
+            toast(`${msg.filename} enviado!`, 'ok');
+          } else if (msg.error) {
+            st.className = 'file-status err';
+            st.textContent = '❌ Erro: ' + msg.error;
+            toast(`Erro ao enviar ${msg.filename}`, 'err');
+          }
+        }
       }
     };
 
-    ws.onerror = (e) => {
+    ws.onerror = () => {
       step(2,'error');
       showErr('Falha na conexão',
-        `Não foi possível conectar ao agente em <code>${wsUrl}</code><br><br>
-        Verifique se o agente <strong>System Mérito</strong> está instalado e rodando no PC remoto.<br><br>
-        O agente precisa ter acesso liberado na porta <code>${WS_PORT}</code>.`);
+        `Não foi possível conectar ao agente em <code>${IP}:${WS_PORT}</code><br><br>
+        Verifique se o agente <strong>System Mérito</strong> está instalado e rodando.`);
     };
 
     ws.onclose = () => {
       if (connected) {
         connected = false;
         setStatus('err','Desconectado');
-        termLine('<span class="t-error">❌ Conexão encerrada pelo agente.</span>');
-        document.getElementById('loadScreen').style.display = 'flex';
-        document.getElementById('main').style.display       = 'none';
+        tl('<span class="te">❌ Conexão encerrada.</span>');
+        document.getElementById('load').style.display = 'flex';
+        document.getElementById('main').style.display = 'none';
         showErr('Sessão encerrada','A conexão com o agente foi interrompida.');
       }
     };
 
   } catch(e) {
     step(2,'error');
-    showErr('Erro ao conectar', e.message);
+    showErr('Erro', e.message);
   }
 }
 
 function fillInfo(msg) {
-  const p = document.getElementById('infoPanel');
-  p.innerHTML = `
-    <div class="info-section">
-      <div class="info-title">Conexão</div>
-      ${irow('Hostname', msg.hostname||HOST)}
-      ${irow('IP', msg.ip||IP)}
-      ${irow('Porta WS', WS_PORT)}
-      ${irow('Agente ID', msg.agent_id||'?')}
-      ${irow('Versão', msg.version||'?')}
+  document.getElementById('infoPanel').innerHTML = `
+    <div class="isec">
+      <div class="ititle">Conexão</div>
+      ${ir('Hostname',msg.hostname||HOST)}
+      ${ir('IP',msg.ip||IP)}
+      ${ir('Porta WS',WS_PORT)}
+      ${ir('Agente ID',msg.agent_id||'?')}
+      ${ir('Versão',msg.version||'?')}
     </div>`;
 }
 
-function irow(k,v) {
-  return `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${escHtml(String(v))}</span></div>`;
+function ir(k,v) {
+  return `<div class="irow"><span class="ikey">${k}</span><span class="ival">${esc(v)}</span></div>`;
 }
 
 // ── CONTROLES ─────────────────────────────────────────────────────
 function sendCad() {
-  if (!ws || !connected) return;
+  if (!ws||!connected) return;
   ws.send(JSON.stringify({type:'ctrl_alt_del'}));
+  toast('Ctrl+Alt+Del enviado');
 }
 
 function toggleFS() {
   const el = document.getElementById('screenWrap');
-  document.fullscreenElement ? document.exitFullscreen() : el.requestFullscreen().catch(()=>{});
+  document.fullscreenElement
+    ? document.exitFullscreen()
+    : el.requestFullscreen().catch(()=>{});
 }
 
 function disconnect() {
@@ -475,9 +632,6 @@ function disconnect() {
   window.close();
 }
 
-function log(m) { console.log('[Remote]', m); }
-
-// ── INICIAR ───────────────────────────────────────────────────────
 connect();
 </script>
 </body>
