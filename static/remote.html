@@ -5,408 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Acesso Remoto — InventoPC</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: #0f1117; font-family: 'Segoe UI', sans-serif; color: #e8eaf0; overflow: hidden; }
-
-  /* ── TOPBAR ── */
-  .topbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    height: 48px;
-    background: #161b27;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    display: flex; align-items: center; gap: 12px;
-    padding: 0 16px;
-  }
-  .topbar-logo { font-size: 13px; font-weight: 600; color: #3b82f6; display: flex; align-items: center; gap: 7px; }
-  .topbar-logo svg { width: 18px; height: 18px; }
-  .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.1); }
-  .topbar-host { font-size: 13px; font-weight: 600; }
-  .topbar-ip   { font-size: 12px; color: #8892a4; font-family: 'Courier New', monospace; }
-  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-
-  .status-pill {
-    display: flex; align-items: center; gap: 6px;
-    padding: 4px 10px; border-radius: 20px;
-    background: #1e2535; border: 1px solid rgba(255,255,255,0.08);
-    font-size: 11px; color: #8892a4;
-  }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #556070; }
-  .status-dot.connecting { background: #f59e0b; animation: pulse 1s infinite; }
-  .status-dot.connected  { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
-  .status-dot.error      { background: #ef4444; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-  .tb-btn {
-    padding: 5px 12px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.1);
-    background: #1e2535; color: #e8eaf0; font-size: 12px; cursor: pointer;
-    display: flex; align-items: center; gap: 6px; transition: background .15s;
-  }
-  .tb-btn:hover { background: #252d3d; }
-  .tb-btn.danger:hover { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #ef4444; }
-
-  /* ── LOADING / ERROR SCREEN ── */
-  #loadScreen {
-    position: fixed; inset: 0; top: 48px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: #0f1117; z-index: 50;
-  }
-  .load-icon { font-size: 48px; margin-bottom: 20px; }
-  .load-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-  .load-sub   { font-size: 13px; color: #8892a4; margin-bottom: 24px; text-align: center; max-width: 400px; line-height: 1.6; }
-  .spinner {
-    width: 40px; height: 40px; border: 3px solid #1e2535;
-    border-top-color: #3b82f6; border-radius: 50%;
-    animation: spin .8s linear infinite; margin-bottom: 20px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .steps { text-align: left; font-size: 12px; color: #556070; line-height: 2; }
-  .steps .done { color: #22c55e; }
-  .steps .active { color: #f59e0b; }
-
-  .error-box {
-    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3);
-    border-radius: 12px; padding: 20px 28px; text-align: center; max-width: 440px;
-  }
-  .error-box h3 { color: #ef4444; margin-bottom: 10px; }
-  .error-box p  { font-size: 13px; color: #8892a4; line-height: 1.7; }
-  .error-box code { background: #1e2535; padding: 2px 7px; border-radius: 5px; font-size: 12px; color: #e8eaf0; }
-
-  /* ── CANVAS VNC ── */
-  #vncFrame {
-    position: fixed; inset: 48px 0 0 0;
-    display: none;
-  }
-  #vncFrame iframe {
-    width: 100%; height: 100%; border: none;
-  }
-
-  /* ── TOOLBAR OVERLAY ── */
-  #toolbar {
-    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-    display: none;
-    background: rgba(22,27,39,0.92);
-    border: 1px solid rgba(255,255,255,0.1);
-    backdrop-filter: blur(12px);
-    border-radius: 12px; padding: 8px 12px;
-    flex-direction: row; gap: 8px; align-items: center;
-    z-index: 200;
-  }
-  .tool-btn {
-    padding: 7px 12px; border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05); color: #e8eaf0;
-    font-size: 12px; cursor: pointer;
-    display: flex; align-items: center; gap: 6px; transition: all .15s;
-    white-space: nowrap;
-  }
-  .tool-btn:hover { background: rgba(255,255,255,0.12); }
-  .tool-btn.red:hover { background: rgba(239,68,68,0.2); color: #ef4444; }
-  .tool-sep { width: 1px; height: 24px; background: rgba(255,255,255,0.1); }
-
-  /* ── PASS MODAL ── */
-  #passModal {
-    position: fixed; inset: 0; z-index: 300;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .pass-card {
-    background: #161b27; border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 16px; padding: 32px; width: 360px; text-align: center;
-  }
-  .pass-card h2 { font-size: 16px; margin-bottom: 6px; }
-  .pass-card p  { font-size: 13px; color: #8892a4; margin-bottom: 20px; }
-  .pass-card input {
-    width: 100%; padding: 10px 12px; border-radius: 8px;
-    background: #1e2535; border: 1px solid rgba(255,255,255,0.12);
-    color: #e8eaf0; font-size: 14px; text-align: center; letter-spacing: 3px;
-    margin-bottom: 14px;
-  }
-  .pass-card input:focus { outline: none; border-color: #3b82f6; }
-  .pass-card button {
-    width: 100%; padding: 10px; border-radius: 8px;
-    background: #3b82f6; border: none; color: #fff;
-    font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s;
-  }
-  .pass-card button:hover { background: #1d4ed8; }
-  .pass-hint { font-size: 11px; color: #556070; margin-top: 12px; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0f1117;font-family:'Segoe UI',sans-serif;color:#e8eaf0;overflow:hidden}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:46px;background:#161b27;
+  border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;padding:0 14px}
+.brand{font-size:13px;font-weight:700;color:#3b82f6}
+.sep{width:1px;height:18px;background:rgba(255,255,255,.1)}
+.host{font-size:13px;font-weight:600}
+.ip{font-size:12px;color:#8892a4;font-family:monospace}
+.right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.pill{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;
+  background:#1e2535;border:1px solid rgba(255,255,255,.08);font-size:11px;color:#8892a4}
+.dot{width:7px;height:7px;border-radius:50%;background:#f59e0b}
+.dot.ok{background:#22c55e;box-shadow:0 0 6px #22c55e}
+.dot.err{background:#ef4444}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.dot.blink{animation:pulse 1s infinite}
+.btn{padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);
+  background:#1e2535;color:#e8eaf0;font-size:12px;cursor:pointer;transition:background .15s}
+.btn:hover{background:#252d3d}
+.btn.red{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.1);color:#ef4444;font-weight:600}
+#load{position:fixed;inset:0;top:46px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:#0f1117;z-index:50}
+.spinner{width:42px;height:42px;border:3px solid #1e2535;border-top-color:#3b82f6;
+  border-radius:50%;animation:spin .8s linear infinite;margin-bottom:18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ltitle{font-size:17px;font-weight:600;margin-bottom:7px}
+.lsub{font-size:13px;color:#8892a4;text-align:center;max-width:380px;line-height:1.7;margin-bottom:16px}
+.steps{font-size:12px;color:#556070;text-align:left;line-height:2.4}
+.err-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
+  border-radius:12px;padding:20px 26px;text-align:center;max-width:460px}
+.err-box h3{color:#ef4444;margin-bottom:8px;font-size:15px}
+.err-box p{font-size:13px;color:#8892a4;line-height:1.8}
+.err-box code{background:#1e2535;padding:2px 7px;border-radius:5px;font-size:12px;color:#e8eaf0}
+.retry{margin-top:14px;padding:8px 20px;border-radius:8px;
+  background:#3b82f6;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:600}
+#screen{position:fixed;inset:46px 0 0 0;background:#000;display:none}
 </style>
 </head>
 <body>
-
-<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-logo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-    </svg>
-    InventoPC
-  </div>
-  <div class="topbar-sep"></div>
-  <div class="topbar-host" id="tbHost">—</div>
-  <div class="topbar-ip"   id="tbIp">—</div>
-  <div class="topbar-right">
-    <div class="status-pill">
-      <div class="status-dot connecting" id="statusDot"></div>
-      <span id="statusText">Conectando...</span>
+  <div class="brand">⬛ InventoPC</div>
+  <div class="sep"></div>
+  <div class="host" id="tbHost">—</div>
+  <div class="ip" id="tbIp">—</div>
+  <div class="right">
+    <div class="pill">
+      <div class="dot blink" id="dot"></div>
+      <span id="stText">Conectando...</span>
     </div>
-    <button class="tb-btn" onclick="toggleFullscreen()">⛶ Tela cheia</button>
-    <button class="tb-btn" onclick="sendCtrlAltDel()">Ctrl+Alt+Del</button>
-    <button class="tb-btn danger" onclick="disconnect()">✕ Desconectar</button>
-    <button class="tb-btn" onclick="window.close()">← Fechar</button>
+    <button class="btn" onclick="cad()">Ctrl+Alt+Del</button>
+    <button class="btn" onclick="fs()">⛶ Tela cheia</button>
+    <button class="btn red" onclick="disc()">✕ Fechar</button>
   </div>
 </div>
-
-<!-- LOADING SCREEN -->
-<div id="loadScreen">
-  <div class="spinner" id="spinner"></div>
-  <div class="load-title" id="loadTitle">Iniciando sessão remota...</div>
-  <div class="load-sub"   id="loadSub">Aguarde enquanto a conexão é estabelecida</div>
-  <div class="steps" id="stepsEl">
-    <div id="step1">⏳ Verificando agente no PC remoto...</div>
-    <div id="step2" style="opacity:.4">⏳ Iniciando proxy de conexão...</div>
-    <div id="step3" style="opacity:.4">⏳ Abrindo sessão VNC...</div>
+<div id="load">
+  <div class="spinner" id="spin"></div>
+  <div class="ltitle" id="ltitle">Iniciando sessão remota...</div>
+  <div class="lsub" id="lsub">Aguarde enquanto a conexão é estabelecida</div>
+  <div class="steps">
+    <div id="s1">⏳ Localizando o computador remoto...</div>
+    <div id="s2" style="opacity:.4">⏳ Iniciando proxy de conexão...</div>
+    <div id="s3" style="opacity:.4">⏳ Abrindo sessão VNC...</div>
   </div>
 </div>
-
-<!-- VNC FRAME (noVNC via iframe) -->
-<div id="vncFrame">
-  <iframe id="novncIframe" allow="clipboard-read; clipboard-write" allowfullscreen></iframe>
-</div>
-
-<!-- TOOLBAR -->
-<div id="toolbar">
-  <button class="tool-btn" onclick="sendCtrlAltDel()">🔑 Ctrl+Alt+Del</button>
-  <button class="tool-btn" onclick="toggleFullscreen()">⛶ Tela cheia</button>
-  <div class="tool-sep"></div>
-  <button class="tool-btn" onclick="takeScreenshot()">📷 Capturar tela</button>
-  <div class="tool-sep"></div>
-  <button class="tool-btn red" onclick="disconnect()">✕ Desconectar</button>
-</div>
-
-<!-- PASSWORD MODAL -->
-<div id="passModal" style="display:none">
-  <div class="pass-card">
-    <h2>🔐 Senha VNC</h2>
-    <p>Digite a senha configurada no VNC do computador remoto</p>
-    <input type="password" id="vncPassInput" placeholder="••••••••" maxlength="8"
-           onkeydown="if(event.key==='Enter') submitPass()">
-    <button onclick="submitPass()">Conectar</button>
-    <div class="pass-hint">Padrão no agente InventoPC: deixe em branco e pressione Enter</div>
-  </div>
-</div>
-
-<script>
-// ── PARAMS ────────────────────────────────────────────────────────────────────
-const params   = new URLSearchParams(location.search);
-const CID      = params.get("id");
-const HOSTNAME = params.get("host") || "PC Remoto";
-const IP       = params.get("ip")   || "";
-const SERVER   = location.origin;    // mesmo servidor Flask
-
-document.getElementById("tbHost").textContent = HOSTNAME;
-document.getElementById("tbIp").textContent   = IP;
-document.title = `Remoto: ${HOSTNAME} — InventoPC`;
-
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let wsPort   = null;
-let rfb      = null;      // noVNC RFB object (dentro do iframe)
-let connected = false;
-
-// ── STEPS UI ──────────────────────────────────────────────────────────────────
-function step(n, status) {
-  const el = document.getElementById("step"+n);
-  if (!el) return;
-  el.style.opacity = "1";
-  if (status === "done")   el.innerHTML = el.innerHTML.replace("⏳","✅").replace("🔄","✅");
-  if (status === "active") el.innerHTML = el.innerHTML.replace("⏳","🔄").replace("✅","🔄");
-  if (status === "error")  el.innerHTML = el.innerHTML.replace("⏳","❌").replace("🔄","❌");
-}
-
-function setStatus(dot, text) {
-  document.getElementById("statusDot").className = "status-dot " + dot;
-  document.getElementById("statusText").textContent = text;
-}
-
-function showError(title, sub) {
-  document.getElementById("spinner").style.display = "none";
-  document.getElementById("stepsEl").style.display = "none";
-  document.getElementById("loadTitle").textContent = title;
-  document.getElementById("loadSub").innerHTML = sub;
-}
-
-// ── INICIAR SESSÃO ────────────────────────────────────────────────────────────
-async function startSession() {
-  step(1, "active");
-
-  // 1. Pedir ao servidor para iniciar o proxy websockify
-  let data;
-  try {
-    const resp = await fetch(`${SERVER}/api/remote/start/${CID}`, { method: "POST" });
-    data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || "Erro no servidor");
-  } catch(e) {
-    step(1, "error");
-    setStatus("error", "Erro");
-    showError("Falha ao iniciar sessão", `
-      Não foi possível conectar ao servidor.<br><br>
-      <code>${e.message}</code><br><br>
-      Verifique se o <b>servidor InventoPC</b> está rodando.
-    `);
-    return;
-  }
-
-  step(1, "done");
-  step(2, "active");
-  wsPort = data.ws_port;
-
-  // 2. Aguardar websockify iniciar (pequeno delay)
-  await new Promise(r => setTimeout(r, 1200));
-  step(2, "done");
-  step(3, "active");
-
-  // 3. Carregar noVNC no iframe
-  launchNoVNC(wsPort);
-}
-
-// ── noVNC via iframe com URL pública CDN ──────────────────────────────────────
-function launchNoVNC(wsPort) {
-  // Construir URL do noVNC hospedado no CDN (novnc.com fornece demo público)
-  // Usamos nossa própria página inline para evitar restrições de CORS
-  const wsHost = location.hostname;
-  const iframe = document.getElementById("novncIframe");
-
-  // Gerar HTML do noVNC inline no iframe usando srcdoc
-  const wsUrl = `ws://${wsHost}:${wsPort}`;
-
-  const novncHtml = `<!DOCTYPE html>
-<html><head><meta charset="UTF-8">
-<title>VNC</title>
-<script src="https://cdn.jsdelivr.net/npm/@novnc/novnc@1.4.0/core/rfb.js" type="module"><\/script>
-<style>
-  html,body{margin:0;padding:0;background:#000;width:100%;height:100%;overflow:hidden}
-  #screen{width:100%;height:100%}
-  #msg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    color:#fff;font-family:sans-serif;font-size:16px;text-align:center;background:rgba(0,0,0,.7);
-    padding:24px 32px;border-radius:12px;}
-</style>
-</head>
-<body>
 <div id="screen"></div>
-<div id="msg">Conectando ao VNC...<br><small style="color:#888;font-size:12px">Se demorar, verifique o agente no PC remoto</small></div>
 <script type="module">
 import RFB from 'https://cdn.jsdelivr.net/npm/@novnc/novnc@1.4.0/core/rfb.js';
-
-const url = "${wsUrl}";
-let rfb;
-try {
-  rfb = new RFB(document.getElementById('screen'), url);
-  rfb.scaleViewport = true;
-  rfb.resizeSession = true;
-
-  rfb.addEventListener('connect', () => {
-    document.getElementById('msg').style.display='none';
-    window.parent.postMessage({type:'vnc-connected'}, '*');
-  });
-  rfb.addEventListener('disconnect', (e) => {
-    document.getElementById('msg').style.display='block';
-    document.getElementById('msg').textContent = 'Sessão encerrada. ' + (e.detail.reason||'');
-    window.parent.postMessage({type:'vnc-disconnected', reason: e.detail.reason}, '*');
-  });
-  rfb.addEventListener('credentialsrequired', () => {
-    window.parent.postMessage({type:'vnc-password'}, '*');
-  });
-  window._rfb = rfb;
-} catch(e) {
-  document.getElementById('msg').textContent = 'Erro: ' + e.message;
+const P=new URLSearchParams(location.search);
+const CID=P.get('id'),HOST=P.get('host')||'PC Remoto',IP=P.get('ip')||'',SERVER=location.origin;
+document.getElementById('tbHost').textContent=HOST;
+document.getElementById('tbIp').textContent=IP;
+document.title='Remoto: '+HOST;
+let rfb=null;
+function st(n,s){
+  const el=document.getElementById('s'+n);if(!el)return;
+  el.style.opacity='1';
+  const ic={done:'✅',active:'🔄',error:'❌'};
+  el.textContent=el.textContent.replace(/[⏳✅🔄❌]/u,ic[s]||'⏳');
+  el.className=s;
 }
-
-window.addEventListener('message', (ev) => {
-  if (ev.data.type === 'vnc-sendpass' && window._rfb) {
-    window._rfb.sendCredentials({password: ev.data.password});
-  }
-  if (ev.data.type === 'vnc-ctrlaltdel' && window._rfb) {
-    window._rfb.sendCtrlAltDel();
-  }
-  if (ev.data.type === 'vnc-screenshot' && window._rfb) {
-    const canvas = document.querySelector('#screen canvas');
-    if(canvas) window.parent.postMessage({type:'vnc-screenshot-data', data: canvas.toDataURL()}, '*');
-  }
-});
-<\/script>
-</body></html>`;
-
-  iframe.srcdoc = novncHtml;
-
-  // Mostrar frame
-  document.getElementById("loadScreen").style.display = "none";
-  document.getElementById("vncFrame").style.display   = "block";
-  document.getElementById("toolbar").style.display    = "flex";
-  step(3, "done");
-  setStatus("connecting", "Aguardando VNC...");
+function setStatus(type,txt){
+  document.getElementById('dot').className='dot'+(type==='ok'?' ok':type==='err'?' err':' blink');
+  document.getElementById('stText').textContent=txt;
 }
-
-// ── MENSAGENS DO IFRAME ────────────────────────────────────────────────────────
-window.addEventListener("message", (ev) => {
-  if (ev.data.type === "vnc-connected") {
-    connected = true;
-    setStatus("connected", "Conectado");
-  }
-  if (ev.data.type === "vnc-disconnected") {
-    connected = false;
-    setStatus("error", "Desconectado");
-    document.getElementById("vncFrame").style.display = "none";
-    document.getElementById("toolbar").style.display  = "none";
-    document.getElementById("loadScreen").style.display = "flex";
-    showError("Sessão encerrada", ev.data.reason || "A conexão foi fechada pelo computador remoto.");
-  }
-  if (ev.data.type === "vnc-password") {
-    document.getElementById("passModal").style.display = "flex";
-    setTimeout(() => document.getElementById("vncPassInput").focus(), 100);
-  }
-  if (ev.data.type === "vnc-screenshot-data") {
-    const a = document.createElement("a");
-    a.href     = ev.data.data;
-    a.download = `${HOSTNAME}-${new Date().toISOString().slice(0,19).replace(/:/g,"-")}.png`;
-    a.click();
-  }
-});
-
-// ── CONTROLES ─────────────────────────────────────────────────────────────────
-function submitPass() {
-  const pass = document.getElementById("vncPassInput").value;
-  document.getElementById("passModal").style.display = "none";
-  document.getElementById("novncIframe").contentWindow
-    .postMessage({type: "vnc-sendpass", password: pass}, "*");
+function showErr(title,msg){
+  document.getElementById('spin').style.display='none';
+  document.getElementById('ltitle').textContent=title;
+  document.getElementById('lsub').innerHTML=`<div class="err-box"><h3>${title}</h3><p>${msg}</p><button class="retry" onclick="location.reload()">Tentar novamente</button></div>`;
+  document.querySelector('.steps').style.display='none';
+  setStatus('err','Falha na conexão');
 }
-
-function sendCtrlAltDel() {
-  document.getElementById("novncIframe").contentWindow
-    .postMessage({type: "vnc-ctrlaltdel"}, "*");
+async function start(){
+  st(1,'active');
+  let wsPort;
+  try{
+    const r=await fetch(`${SERVER}/api/remote/start/${CID}`,{method:'POST'});
+    const d=await r.json();
+    if(!r.ok||d.error)throw new Error(d.error||`HTTP ${r.status}`);
+    wsPort=d.ws_port;
+  }catch(e){st(1,'error');showErr('Servidor indisponível',`Não foi possível iniciar o proxy.<br><code>${e.message}</code>`);return;}
+  st(1,'done');st(2,'active');
+  await new Promise(r=>setTimeout(r,800));
+  st(2,'done');st(3,'active');
+  const wsUrl=`ws://${location.hostname}:${wsPort}`;
+  try{
+    const screen=document.getElementById('screen');
+    rfb=new RFB(screen,wsUrl);
+    rfb.scaleViewport=true;rfb.resizeSession=true;rfb.clipViewport=false;
+    rfb.addEventListener('connect',()=>{
+      st(3,'done');
+      document.getElementById('load').style.display='none';
+      document.getElementById('screen').style.display='block';
+      setStatus('ok',`Conectado — ${HOST}`);
+    });
+    rfb.addEventListener('disconnect',e=>{
+      setStatus('err','Desconectado');
+      document.getElementById('screen').style.display='none';
+      document.getElementById('load').style.display='flex';
+      showErr('Sessão encerrada',e.detail?.reason||'Conexão encerrada pelo PC remoto.');
+    });
+    rfb.addEventListener('credentialsrequired',()=>{rfb.sendCredentials({password:''});});
+  }catch(e){st(3,'error');showErr('Erro ao conectar VNC',`Verifique se o agente está instalado e o VNC está rodando.<br><code>${e.message}</code>`);}
 }
-
-function takeScreenshot() {
-  document.getElementById("novncIframe").contentWindow
-    .postMessage({type: "vnc-screenshot"}, "*");
-}
-
-function toggleFullscreen() {
-  const el = document.getElementById("vncFrame");
-  if (!document.fullscreenElement) {
-    el.requestFullscreen().catch(() => {});
-  } else {
-    document.exitFullscreen();
-  }
-}
-
-async function disconnect() {
-  if (!confirm("Encerrar a sessão remota?")) return;
-  try { await fetch(`${SERVER}/api/remote/stop/${CID}`, {method:"POST"}); } catch {}
-  window.close();
-  location.href = "/";
-}
-
-// ── INICIAR ───────────────────────────────────────────────────────────────────
-startSession();
+window.cad=()=>rfb?.sendCtrlAltDel();
+window.fs=()=>{const el=document.getElementById('screen');document.fullscreenElement?document.exitFullscreen():el.requestFullscreen().catch(()=>{});};
+window.disc=async()=>{rfb?.disconnect();try{await fetch(`${SERVER}/api/remote/stop/${CID}`,{method:'POST'});}catch{}window.close();};
+start();
 </script>
 </body>
 </html>
