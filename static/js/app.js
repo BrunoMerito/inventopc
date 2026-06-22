@@ -427,7 +427,7 @@ function openDetail(id) {
           <span style="color:#334155">$ </span>VNC porta ${c.vnc_port||5900} <span style="color:#86efac">✓ disponível</span>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn-primary btn-sm" onclick="openRemoteModal(${c.id},'${c.hostname}','${c.ip}')">
+          <button class="btn-primary btn-sm" onclick="openWebRemote(${c.id},'${c.hostname}','${c.ip}')">
             <i class="fa-solid fa-display"></i> Acessar via Navegador
           </button>
           <button class="btn-secondary btn-sm" onclick="downloadRDP('${c.ip}','${c.hostname}')">
@@ -460,25 +460,11 @@ function dr(key, val) {
 
 // ── REMOTE ──────────────────────────────────────────────────────
 function openWebRemote(id, hostname, ip) {
-  // Buscar ws_port do agente e abrir em nova aba
-  fetch(API_BASE + '/api/remote/ws_info/' + id)
-    .then(r => r.json())
-    .then(d => {
-      if (d.error) { toast('PC offline ou agente nao instalado.', 'error'); return; }
-      const url = '/remote.html?id=' + id +
-        '&host=' + encodeURIComponent(hostname) +
-        '&ip='   + encodeURIComponent(d.ip) +
-        '&ws_port=' + (d.ws_port || 8765);
-      window.open(url, 'remote_' + id, 'width=1400,height=860,menubar=no,toolbar=no,location=no');
-    })
-    .catch(() => {
-      // Fallback: abrir com ip direto
-      const url = '/remote.html?id=' + id +
-        '&host=' + encodeURIComponent(hostname) +
-        '&ip='   + encodeURIComponent(ip) +
-        '&ws_port=8765';
-      window.open(url, 'remote_' + id, 'width=1400,height=860,menubar=no,toolbar=no,location=no');
-    });
+  const url = '/remote.html?id=' + id +
+    '&host=' + encodeURIComponent(hostname) +
+    '&ip='   + encodeURIComponent(ip) +
+    '&ws_port=8765';
+  window.open(url, 'remote_' + id, 'width=1400,height=860,menubar=no,toolbar=no,location=no,resizable=yes');
 }
 
 function downloadRDP(ip, hostname) {
