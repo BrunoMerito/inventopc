@@ -88,7 +88,7 @@ def send_whatsapp(to, body):
 
 # ── HELPERS ───────────────────────────────────────────────────────────────────
 def now():
-    return datetime.datetime.utcnow().isoformat() + "Z"
+    return datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None).isoformat() + "Z"
 
 def hash_pass(password):
     return hashlib.sha256(password.encode()).hexdigest()
@@ -110,7 +110,7 @@ def save_db(db):
         json.dump(db, f, ensure_ascii=False, indent=2)
 
 def mark_offline(computers_list):
-    ts_now = datetime.datetime.utcnow()
+    ts_now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
     for c in computers_list:
         last = c.get("ultimo_visto", "")
         if last:
@@ -295,7 +295,7 @@ def get_computer(cid):
 def update_computer(cid):
     data = request.get_json(force=True) or {}
     fields = ["hostname","ip","usuario","setor","obs","status","so","cpu","cpu_detalhes",
-              "ram","disco","fabricante","modelo","serial","mac","vnc_port","tipo","patrimonio"]
+              "ram","disco","fabricante","modelo","serial","mac","vnc_port","ws_port","tipo","patrimonio","localidade","localizacao","setor"]
 
     if USE_SUPABASE:
         try:

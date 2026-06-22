@@ -90,6 +90,10 @@
         <i class="fa-solid fa-plus-circle"></i> Novo Ticket
       </a>
 
+      <a class="nav-link" data-view="acoes" onclick="switchView('acoes')">
+        <i class="fa-solid fa-bolt"></i> Ações Remotas
+      </a>
+
       <div class="nav-section-label">Sistema</div>
       <a class="nav-link" data-view="relatorios" onclick="switchView('relatorios')">
         <i class="fa-solid fa-chart-bar"></i> Relatórios
@@ -278,12 +282,15 @@
 <!-- TOAST -->
 <div id="toastContainer"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase_client.js"></script>
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script src="js/inventario.js"></script>
 <script src="js/helpdesk.js"></script>
 <script src="js/rede.js"></script>
 <script src="js/configuracoes.js"></script>
+<script src="js/acoes.js"></script>
 <script src="js/remote_modal.js"></script>
 </body>
 </html>

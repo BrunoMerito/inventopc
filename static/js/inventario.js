@@ -32,9 +32,12 @@ function renderInventario(localidade) {
         <div style="font-size:11px;color:var(--text-3)">${c.setor||""}</div>
       </td>
       <td>
-        <div style="font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:5px">
-          <i class="fa-solid fa-location-dot" style="color:var(--text-3);font-size:11px"></i>
-          ${c.localizacao||"—"}
+        <div style="font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:5px;flex-direction:column;align-items:flex-start;gap:3px">
+          ${badgeLoc(c.localidade)}
+          <span style="font-size:11px;color:var(--text-3);display:flex;align-items:center;gap:4px">
+            <i class="fa-solid fa-location-dot" style="font-size:10px"></i>
+            ${c.localizacao||"—"}
+          </span>
         </div>
       </td>
       <td>
@@ -46,7 +49,7 @@ function renderInventario(localidade) {
       <td style="font-size:11px;color:var(--text-3)">${relativeTime(c.ultimo_visto)}</td>
       <td>
         <div class="row-actions">
-          <button class="row-btn success" onclick="openDetail(${c.id})" title="Ver / Acesso remoto">
+          <button class="row-btn success" onclick="openDetail(${c.id})" title="Ver detalhes">
             <i class="fa-solid fa-display"></i>
           </button>
           <button class="row-btn" onclick="openEdit(${c.id})" title="Editar">

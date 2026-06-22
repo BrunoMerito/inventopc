@@ -75,9 +75,17 @@ function doLogout() {
 // ── INIT ────────────────────────────────────────────────────────
 async function init() {
   applyBranding();
-  loadTickets();
-  await loadData();
+  // Inicializar Supabase
+  await initSupabase();
+  // Carregar dados com Supabase ou fallback
+  await loadDataWithSupabase();
+  await loadTicketsWithSupabase();
   switchView("dashboard");
+  // Realtime updates
+  if (sb) {
+    sbSubscribeComputers(async () => { await loadDataWithSupabase(); render(); });
+    sbSubscribeTickets(async () => { await loadTicketsWithSupabase(); updateTicketBadge(); });
+  }
   refreshTimer = setInterval(refreshData, REFRESH_INTERVAL);
 }
 
@@ -88,12 +96,7 @@ async function refreshData() {
 
 // ── DATA ────────────────────────────────────────────────────────
 async function loadData() {
-  try {
-    const r = await fetch(`${API_BASE}/api/computers`);
-    if (r.ok) { computers = await r.json(); setServerStatus(true); return; }
-  } catch {}
-  setServerStatus(false);
-  if (!computers.length) loadDemoData();
+  await loadDataWithSupabase();
 }
 
 function loadDemoData() {
@@ -110,11 +113,11 @@ function loadDemoData() {
 }
 
 // ── SERVER STATUS ────────────────────────────────────────────────
-function setServerStatus(online) {
+function setServerStatus(online, source) {
   const dot  = document.getElementById("serverDot");
   const text = document.getElementById("serverStatusText");
   dot.className  = "status-dot " + (online ? "online" : "offline");
-  text.textContent = online ? "Servidor online" : "Modo demo";
+  text.textContent = online ? `Online (${source||"API"})` : "Modo demo";
 }
 
 // ── ROUTING ──────────────────────────────────────────────────────
@@ -140,6 +143,7 @@ function switchView(view) {
     "novo-ticket":   "Novo Ticket",
     relatorios:      "Relatórios",
     configuracoes:   "Configurações",
+    acoes:           "Ações Remotas",
   };
   document.getElementById("topbarTitle").textContent = titles[view] || view;
 
@@ -174,6 +178,7 @@ function render() {
     "novo-ticket":   renderNovoTicket,
     relatorios:      renderRelatorios,
     configuracoes:   renderConfiguracoes,
+    acoes:           renderAcoes,
   };
   (views[currentView] || renderDashboard)();
 }
@@ -336,18 +341,14 @@ async function saveComputer() {
   };
 
   if (editingId) {
-    try { await fetch(`${API_BASE}/api/computers/${editingId}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}); } catch {}
+    await updateComputerWithSupabase(editingId, data);
     const i = computers.findIndex(x => x.id === editingId);
-    computers[i] = { ...computers[i], ...data };
+    if (i >= 0) computers[i] = { ...computers[i], ...data };
     toast("Dispositivo atualizado!", "success");
   } else {
-    let newId = null;
-    try {
-      const r = await fetch(`${API_BASE}/api/register`,{method:"POST",headers:{"Content-Type":"application/json","X-API-Key":"inventopc-chave-secreta"},body:JSON.stringify(data)});
-      if(r.ok){ const j=await r.json(); newId=j.id; }
-    } catch {}
-    if(!newId) newId = Math.max(0,...computers.map(c=>c.id))+1;
-    computers.push({id:newId,...data});
+    const result = await saveComputerWithSupabase(data);
+    const newId  = result?.id || (Math.max(0,...computers.map(c=>c.id))+1);
+    computers.push({ id:newId, ...data });
     toast("Dispositivo adicionado!", "success");
   }
   closeModal();
@@ -357,7 +358,7 @@ async function saveComputer() {
 async function deleteComputer(id) {
   const c = computers.find(x=>x.id===id);
   if (!c || !confirm(`Remover "${c.hostname}" do inventário?`)) return;
-  try { await fetch(`${API_BASE}/api/computers/${id}`,{method:"DELETE"}); } catch {}
+  await deleteComputerWithSupabase(id);
   computers = computers.filter(x=>x.id!==id);
   toast("Dispositivo removido.", "info");
   render();
