@@ -2,136 +2,483 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acesso Remoto — InventoPC</title>
+<title>Acesso Remoto — System Mérito</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#0f1117;font-family:'Segoe UI',sans-serif;color:#e8eaf0;overflow:hidden}
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:46px;background:#161b27;
-  border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;padding:0 14px}
-.brand{font-size:13px;font-weight:700;color:#3b82f6}
-.sep{width:1px;height:18px;background:rgba(255,255,255,.1)}
-.host{font-size:13px;font-weight:600}
-.ip{font-size:12px;color:#8892a4;font-family:monospace}
-.right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.pill{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;
-  background:#1e2535;border:1px solid rgba(255,255,255,.08);font-size:11px;color:#8892a4}
-.dot{width:7px;height:7px;border-radius:50%;background:#f59e0b}
-.dot.ok{background:#22c55e;box-shadow:0 0 6px #22c55e}
+html,body{height:100%;background:#0a0f1e;font-family:'Segoe UI',sans-serif;color:#e2e8f0;overflow:hidden}
+
+/* TOPBAR */
+.bar{
+  position:fixed;top:0;left:0;right:0;height:48px;
+  background:linear-gradient(90deg,#1e3a8a,#1e40af);
+  display:flex;align-items:center;gap:12px;padding:0 16px;
+  z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.4);
+}
+.bar-logo{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.bar-logo span{background:rgba(255,255,255,.15);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.bar-sep{width:1px;height:20px;background:rgba(255,255,255,.2)}
+.bar-host{font-size:13px;font-weight:600;color:#bfdbfe}
+.bar-ip{font-size:12px;color:rgba(255,255,255,.5);font-family:monospace}
+.bar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+
+.pill{display:flex;align-items:center;gap:6px;padding:4px 11px;border-radius:99px;
+  background:rgba(255,255,255,.1);font-size:11.5px;color:rgba(255,255,255,.8)}
+.dot{width:7px;height:7px;border-radius:50%;background:#94a3b8}
+.dot.ok{background:#22c55e;box-shadow:0 0 8px #22c55e}
 .dot.err{background:#ef4444}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.dot.blink{animation:pulse 1s infinite}
-.btn{padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);
-  background:#1e2535;color:#e8eaf0;font-size:12px;cursor:pointer;transition:background .15s}
-.btn:hover{background:#252d3d}
-.btn.red{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.1);color:#ef4444;font-weight:600}
-#load{position:fixed;inset:0;top:46px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;background:#0f1117;z-index:50}
-.spinner{width:42px;height:42px;border:3px solid #1e2535;border-top-color:#3b82f6;
-  border-radius:50%;animation:spin .8s linear infinite;margin-bottom:18px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.dot.blink{background:#f59e0b;animation:blink 1s infinite}
+
+.btn{padding:5px 13px;border-radius:7px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;
+  cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:6px}
+.btn:hover{background:rgba(255,255,255,.2)}
+.btn.red{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.4)}
+.btn.red:hover{background:rgba(239,68,68,.35)}
+
+/* LAYOUT */
+#main{position:fixed;inset:48px 0 0 0;display:flex}
+
+/* TELA REMOTA */
+#screenWrap{
+  flex:1;position:relative;background:#000;overflow:hidden;cursor:none;
+}
+#screenImg{
+  width:100%;height:100%;object-fit:contain;display:block;
+}
+.custom-cursor{
+  position:absolute;width:18px;height:18px;pointer-events:none;
+  transform:translate(-2px,-2px);z-index:10;
+}
+.custom-cursor::before{
+  content:'';position:absolute;width:0;height:0;
+  border-left:8px solid transparent;border-right:8px solid transparent;
+  border-bottom:14px solid rgba(255,255,255,.9);
+  transform:rotate(-45deg);filter:drop-shadow(0 0 2px rgba(0,0,0,.8));
+}
+
+/* PAINEL LATERAL */
+#sidePanel{
+  width:320px;flex-shrink:0;background:#0f172a;border-left:1px solid rgba(255,255,255,.07);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.panel-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.07)}
+.ptab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:600;
+  color:rgba(255,255,255,.4);border:none;background:none;cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .15s}
+.ptab.active{color:#60a5fa;border-bottom-color:#60a5fa;background:rgba(96,165,250,.05)}
+.ptab:hover:not(.active){color:rgba(255,255,255,.7)}
+
+/* TERMINAL */
+#terminal{
+  flex:1;overflow-y:auto;padding:12px;
+  font-family:'Cascadia Code','Consolas',monospace;font-size:12px;line-height:1.7;
+  background:#030712;
+}
+.t-line{margin-bottom:2px}
+.t-prompt{color:#3b82f6;font-weight:700}
+.t-output{color:#86efac;white-space:pre-wrap;word-break:break-all}
+.t-error{color:#f87171;white-space:pre-wrap}
+.t-info{color:#94a3b8}
+.t-input-row{display:flex;align-items:center;gap:8px;padding:8px 12px;
+  border-top:1px solid rgba(255,255,255,.07);background:#0f172a;flex-shrink:0}
+.t-input-row span{color:#3b82f6;font-weight:700;font-family:monospace;font-size:12px;white-space:nowrap}
+.t-input{flex:1;background:none;border:none;color:#e2e8f0;font-family:monospace;
+  font-size:12px;outline:none}
+.t-send{padding:4px 10px;border-radius:5px;background:#1e40af;border:none;
+  color:#fff;font-size:11px;cursor:pointer}
+.t-send:hover{background:#2563eb}
+
+/* INFO PANEL */
+#infoPanel{display:none;flex:1;overflow-y:auto;padding:14px}
+.info-section{margin-bottom:16px}
+.info-title{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:#475569;margin-bottom:8px}
+.info-row{display:flex;justify-content:space-between;padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.info-key{color:#64748b}
+.info-val{color:#e2e8f0;font-family:monospace;font-size:11.5px}
+
+/* LOADING */
+#loadScreen{
+  position:fixed;inset:48px 0 0 0;background:#0a0f1e;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;
+}
+.spinner{width:44px;height:44px;border:3px solid #1e293b;border-top-color:#3b82f6;
+  border-radius:50%;animation:spin .8s linear infinite;margin-bottom:20px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ltitle{font-size:17px;font-weight:600;margin-bottom:7px}
-.lsub{font-size:13px;color:#8892a4;text-align:center;max-width:380px;line-height:1.7;margin-bottom:16px}
-.steps{font-size:12px;color:#556070;text-align:left;line-height:2.4}
-.err-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
-  border-radius:12px;padding:20px 26px;text-align:center;max-width:460px}
-.err-box h3{color:#ef4444;margin-bottom:8px;font-size:15px}
-.err-box p{font-size:13px;color:#8892a4;line-height:1.8}
-.err-box code{background:#1e2535;padding:2px 7px;border-radius:5px;font-size:12px;color:#e8eaf0}
-.retry{margin-top:14px;padding:8px 20px;border-radius:8px;
+.load-h{font-size:17px;font-weight:700;margin-bottom:6px}
+.load-s{font-size:13px;color:#64748b;text-align:center;max-width:360px;line-height:1.7}
+.load-steps{margin-top:16px;font-size:12px;color:#475569;line-height:2.6}
+.step.done{color:#22c55e} .step.active{color:#f59e0b} .step.error{color:#ef4444}
+
+.err-card{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
+  border-radius:12px;padding:20px 24px;text-align:center;max-width:440px;margin-top:12px}
+.err-card h3{color:#ef4444;margin-bottom:8px}
+.err-card p{font-size:13px;color:#94a3b8;line-height:1.8}
+.err-card code{background:#1e293b;padding:2px 7px;border-radius:4px;font-size:11.5px;color:#e2e8f0}
+.retry-btn{margin-top:14px;padding:8px 22px;border-radius:8px;
   background:#3b82f6;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:600}
-#screen{position:fixed;inset:46px 0 0 0;background:#000;display:none}
 </style>
 </head>
 <body>
-<div class="topbar">
-  <div class="brand">⬛ InventoPC</div>
-  <div class="sep"></div>
-  <div class="host" id="tbHost">—</div>
-  <div class="ip" id="tbIp">—</div>
-  <div class="right">
+
+<!-- TOPBAR -->
+<div class="bar">
+  <div class="bar-logo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+      <rect x="2" y="3" width="20" height="14" rx="2"/>
+      <line x1="8" y1="21" x2="16" y2="21"/>
+      <line x1="12" y1="17" x2="12" y2="21"/>
+    </svg>
+    System Mérito <span>REMOTO</span>
+  </div>
+  <div class="bar-sep"></div>
+  <div class="bar-host" id="bHost">—</div>
+  <div class="bar-ip" id="bIp">—</div>
+  <div class="bar-right">
     <div class="pill">
-      <div class="dot blink" id="dot"></div>
-      <span id="stText">Conectando...</span>
+      <div class="dot blink" id="bDot"></div>
+      <span id="bStatus">Conectando...</span>
     </div>
-    <button class="btn" onclick="cad()">Ctrl+Alt+Del</button>
-    <button class="btn" onclick="fs()">⛶ Tela cheia</button>
-    <button class="btn red" onclick="disc()">✕ Fechar</button>
+    <button class="btn" onclick="sendCad()" title="Ctrl+Alt+Del">CAD</button>
+    <button class="btn" onclick="toggleFS()">⛶</button>
+    <button class="btn red" onclick="disconnect()">✕ Fechar</button>
   </div>
 </div>
-<div id="load">
-  <div class="spinner" id="spin"></div>
-  <div class="ltitle" id="ltitle">Iniciando sessão remota...</div>
-  <div class="lsub" id="lsub">Aguarde enquanto a conexão é estabelecida</div>
-  <div class="steps">
-    <div id="s1">⏳ Localizando o computador remoto...</div>
-    <div id="s2" style="opacity:.4">⏳ Iniciando proxy de conexão...</div>
-    <div id="s3" style="opacity:.4">⏳ Abrindo sessão VNC...</div>
+
+<!-- LOADING -->
+<div id="loadScreen">
+  <div class="spinner" id="lSpinner"></div>
+  <div class="load-h" id="lTitle">Iniciando sessão remota...</div>
+  <div class="load-s" id="lSub">Conectando ao agente System Mérito no PC remoto</div>
+  <div class="load-steps">
+    <div class="step" id="s1">⏳ Localizando agente...</div>
+    <div class="step" id="s2" style="opacity:.4">⏳ Abrindo conexão WebSocket...</div>
+    <div class="step" id="s3" style="opacity:.4">⏳ Iniciando captura de tela...</div>
   </div>
 </div>
-<div id="screen"></div>
-<script type="module">
-import RFB from 'https://cdn.jsdelivr.net/npm/@novnc/novnc@1.4.0/core/rfb.js';
-const P=new URLSearchParams(location.search);
-const CID=P.get('id'),HOST=P.get('host')||'PC Remoto',IP=P.get('ip')||'',SERVER=location.origin;
-document.getElementById('tbHost').textContent=HOST;
-document.getElementById('tbIp').textContent=IP;
-document.title='Remoto: '+HOST;
-let rfb=null;
-function st(n,s){
-  const el=document.getElementById('s'+n);if(!el)return;
-  el.style.opacity='1';
-  const ic={done:'✅',active:'🔄',error:'❌'};
-  el.textContent=el.textContent.replace(/[⏳✅🔄❌]/u,ic[s]||'⏳');
-  el.className=s;
+
+<!-- MAIN -->
+<div id="main" style="display:none">
+
+  <!-- TELA -->
+  <div id="screenWrap">
+    <img id="screenImg" src="" alt="">
+    <div class="custom-cursor" id="cursor"></div>
+  </div>
+
+  <!-- PAINEL LATERAL -->
+  <div id="sidePanel">
+    <div class="panel-tabs">
+      <button class="ptab active" onclick="showTab('terminal')">
+        <i>⌨</i> Terminal
+      </button>
+      <button class="ptab" onclick="showTab('info')">
+        <i>ℹ</i> Info
+      </button>
+    </div>
+
+    <!-- TERMINAL POWERSHELL -->
+    <div id="terminal">
+      <div class="t-line t-info">System Mérito — Terminal PowerShell Remoto</div>
+      <div class="t-line t-info">Digite comandos e pressione Enter ou clique Enviar</div>
+      <div class="t-line t-info">─────────────────────────────────────────</div>
+    </div>
+    <div class="t-input-row">
+      <span>PS&gt;</span>
+      <input class="t-input" id="psInput" type="text"
+             placeholder="Get-Process | Select-Object Name,CPU"
+             onkeydown="if(event.key==='Enter')sendPS()">
+      <button class="t-send" onclick="sendPS()">Enviar</button>
+    </div>
+
+    <!-- INFO -->
+    <div id="infoPanel"></div>
+  </div>
+</div>
+
+<script>
+// ── PARAMS ────────────────────────────────────────────────────────
+const P      = new URLSearchParams(location.search);
+const CID    = P.get('id');
+const HOST   = P.get('host') || 'PC Remoto';
+const IP     = P.get('ip')   || '';
+const WS_PORT= P.get('ws_port') || '8765';
+const SERVER = location.origin;
+
+document.getElementById('bHost').textContent = HOST;
+document.getElementById('bIp').textContent   = IP;
+document.title = `Remoto: ${HOST} — System Mérito`;
+
+// ── STATE ─────────────────────────────────────────────────────────
+let ws          = null;
+let connected   = false;
+let psHistory   = [];
+let psHistIdx   = -1;
+let reqId       = 0;
+let pendingPS   = {};
+
+// ── UI HELPERS ────────────────────────────────────────────────────
+function step(n, s) {
+  const el = document.getElementById('s'+n);
+  if (!el) return;
+  el.style.opacity = '1';
+  el.className = 'step ' + s;
+  const ic = {done:'✅',active:'🔄',error:'❌'};
+  el.textContent = el.textContent.replace(/[⏳✅🔄❌]/u, ic[s]||'⏳');
 }
-function setStatus(type,txt){
-  document.getElementById('dot').className='dot'+(type==='ok'?' ok':type==='err'?' err':' blink');
-  document.getElementById('stText').textContent=txt;
+
+function setStatus(type, txt) {
+  const d = document.getElementById('bDot');
+  d.className = 'dot ' + (type==='ok'?'ok':type==='err'?'err':'blink');
+  document.getElementById('bStatus').textContent = txt;
 }
-function showErr(title,msg){
-  document.getElementById('spin').style.display='none';
-  document.getElementById('ltitle').textContent=title;
-  document.getElementById('lsub').innerHTML=`<div class="err-box"><h3>${title}</h3><p>${msg}</p><button class="retry" onclick="location.reload()">Tentar novamente</button></div>`;
-  document.querySelector('.steps').style.display='none';
-  setStatus('err','Falha na conexão');
+
+function showErr(title, msg) {
+  document.getElementById('lSpinner').style.display = 'none';
+  document.getElementById('lTitle').textContent     = title;
+  document.getElementById('lSub').innerHTML = `
+    <div class="err-card">
+      <h3>${title}</h3>
+      <p>${msg}</p>
+      <button class="retry-btn" onclick="location.reload()">Tentar novamente</button>
+    </div>`;
+  document.querySelector('.load-steps').style.display = 'none';
+  setStatus('err', 'Falha');
 }
-async function start(){
-  st(1,'active');
-  let wsPort;
-  try{
-    const r=await fetch(`${SERVER}/api/remote/start/${CID}`,{method:'POST'});
-    const d=await r.json();
-    if(!r.ok||d.error)throw new Error(d.error||`HTTP ${r.status}`);
-    wsPort=d.ws_port;
-  }catch(e){st(1,'error');showErr('Servidor indisponível',`Não foi possível iniciar o proxy.<br><code>${e.message}</code>`);return;}
-  st(1,'done');st(2,'active');
-  await new Promise(r=>setTimeout(r,800));
-  st(2,'done');st(3,'active');
-  const wsUrl=`ws://${location.hostname}:${wsPort}`;
-  try{
-    const screen=document.getElementById('screen');
-    rfb=new RFB(screen,wsUrl);
-    rfb.scaleViewport=true;rfb.resizeSession=true;rfb.clipViewport=false;
-    rfb.addEventListener('connect',()=>{
-      st(3,'done');
-      document.getElementById('load').style.display='none';
-      document.getElementById('screen').style.display='block';
-      setStatus('ok',`Conectado — ${HOST}`);
-    });
-    rfb.addEventListener('disconnect',e=>{
-      setStatus('err','Desconectado');
-      document.getElementById('screen').style.display='none';
-      document.getElementById('load').style.display='flex';
-      showErr('Sessão encerrada',e.detail?.reason||'Conexão encerrada pelo PC remoto.');
-    });
-    rfb.addEventListener('credentialsrequired',()=>{rfb.sendCredentials({password:''});});
-  }catch(e){st(3,'error');showErr('Erro ao conectar VNC',`Verifique se o agente está instalado e o VNC está rodando.<br><code>${e.message}</code>`);}
+
+function showTab(tab) {
+  document.getElementById('terminal').style.display  = tab==='terminal'?'':'none';
+  document.getElementById('infoPanel').style.display = tab==='info'?'':'none';
+  document.querySelectorAll('.ptab').forEach((el,i) => {
+    el.classList.toggle('active', i===(tab==='terminal'?0:1));
+  });
 }
-window.cad=()=>rfb?.sendCtrlAltDel();
-window.fs=()=>{const el=document.getElementById('screen');document.fullscreenElement?document.exitFullscreen():el.requestFullscreen().catch(()=>{});};
-window.disc=async()=>{rfb?.disconnect();try{await fetch(`${SERVER}/api/remote/stop/${CID}`,{method:'POST'});}catch{}window.close();};
-start();
+
+// ── TERMINAL ──────────────────────────────────────────────────────
+function termLine(html) {
+  const t  = document.getElementById('terminal');
+  const el = document.createElement('div');
+  el.className = 't-line';
+  el.innerHTML = html;
+  t.appendChild(el);
+  t.scrollTop = t.scrollHeight;
+}
+
+function sendPS() {
+  const inp = document.getElementById('psInput');
+  const cmd = inp.value.trim();
+  if (!cmd || !ws || !connected) return;
+
+  termLine(`<span class="t-prompt">PS&gt; </span><span style="color:#e2e8f0">${escHtml(cmd)}</span>`);
+  psHistory.unshift(cmd);
+  psHistIdx = -1;
+  inp.value = '';
+
+  const id = ++reqId;
+  pendingPS[id] = true;
+
+  termLine(`<span class="t-info" id="ps-running-${id}">⏳ Executando...</span>`);
+
+  ws.send(JSON.stringify({type:'powershell', cmd, id}));
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Histórico de comandos com setas
+document.addEventListener('keydown', e => {
+  const inp = document.getElementById('psInput');
+  if (document.activeElement !== inp) return;
+  if (e.key==='ArrowUp'&&psHistory.length) {
+    psHistIdx = Math.min(psHistIdx+1, psHistory.length-1);
+    inp.value = psHistory[psHistIdx];
+    e.preventDefault();
+  }
+  if (e.key==='ArrowDown') {
+    psHistIdx = Math.max(psHistIdx-1, -1);
+    inp.value = psHistIdx<0 ? '' : psHistory[psHistIdx];
+    e.preventDefault();
+  }
+});
+
+// ── MOUSE / TECLADO NA TELA ───────────────────────────────────────
+const screenWrap = document.getElementById('screenWrap');
+const cursor     = document.getElementById('cursor');
+
+function getRelPos(e) {
+  const rect = screenWrap.getBoundingClientRect();
+  return {
+    x: (e.clientX - rect.left) / rect.width,
+    y: (e.clientY - rect.top)  / rect.height,
+  };
+}
+
+screenWrap.addEventListener('mousemove', e => {
+  cursor.style.left = (e.clientX - screenWrap.getBoundingClientRect().left) + 'px';
+  cursor.style.top  = (e.clientY - screenWrap.getBoundingClientRect().top)  + 'px';
+  if (ws && connected) {
+    const p = getRelPos(e);
+    ws.send(JSON.stringify({type:'mouse_move', x:p.x, y:p.y}));
+  }
+});
+
+screenWrap.addEventListener('click', e => {
+  if (!ws || !connected) return;
+  const p = getRelPos(e);
+  ws.send(JSON.stringify({type:'mouse_click', x:p.x, y:p.y, button:'left'}));
+  document.getElementById('psInput').blur();
+  screenWrap.focus();
+});
+
+screenWrap.addEventListener('dblclick', e => {
+  if (!ws || !connected) return;
+  const p = getRelPos(e);
+  ws.send(JSON.stringify({type:'mouse_click', x:p.x, y:p.y, button:'left', double:true}));
+});
+
+screenWrap.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  if (!ws || !connected) return;
+  const p = getRelPos(e);
+  ws.send(JSON.stringify({type:'mouse_click', x:p.x, y:p.y, button:'right'}));
+});
+
+screenWrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  if (!ws || !connected) return;
+  const p = getRelPos(e);
+  ws.send(JSON.stringify({type:'mouse_scroll', x:p.x, y:p.y, delta:e.deltaY>0?-1:1}));
+}, {passive:false});
+
+// Teclado
+screenWrap.setAttribute('tabindex','0');
+screenWrap.addEventListener('keydown', e => {
+  if (!ws || !connected) return;
+  e.preventDefault();
+  ws.send(JSON.stringify({type:'key_event', keyCode:e.keyCode||e.which, down:true}));
+});
+screenWrap.addEventListener('keyup', e => {
+  if (!ws || !connected) return;
+  e.preventDefault();
+  ws.send(JSON.stringify({type:'key_event', keyCode:e.keyCode||e.which, down:false}));
+});
+
+// ── CONEXÃO WEBSOCKET ─────────────────────────────────────────────
+async function connect() {
+  step(1,'active');
+
+  // Conectar direto ao agente via WebSocket
+  const wsUrl = `ws://${IP}:${WS_PORT}`;
+  step(1,'done'); step(2,'active');
+
+  try {
+    ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      step(2,'done'); step(3,'active');
+      log('WS conectado!');
+    };
+
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+
+      if (msg.type === 'connected') {
+        connected = true;
+        step(3,'done');
+        document.getElementById('loadScreen').style.display = 'none';
+        document.getElementById('main').style.display       = 'flex';
+        setStatus('ok', `Conectado — ${HOST}`);
+        termLine(`<span class="t-info">✅ Conectado ao agente em ${HOST} (${IP})</span>`);
+        termLine(`<span class="t-info">Versão do agente: ${msg.version||'?'}</span>`);
+        termLine(`<span class="t-info">─────────────────────────────────────────</span>`);
+
+        // Iniciar streaming
+        ws.send(JSON.stringify({type:'start_stream'}));
+
+        // Preencher info
+        fillInfo(msg);
+      }
+
+      else if (msg.type === 'frame') {
+        document.getElementById('screenImg').src = 'data:image/jpeg;base64,' + msg.data;
+      }
+
+      else if (msg.type === 'ps_result') {
+        const run = document.getElementById(`ps-running-${msg.id}`);
+        if (run) run.remove();
+        if (msg.output) termLine(`<span class="t-output">${escHtml(msg.output)}</span>`);
+        if (msg.error)  termLine(`<span class="t-error">${escHtml(msg.error)}</span>`);
+        if (!msg.output && !msg.error) termLine(`<span class="t-info">(sem output)</span>`);
+        termLine('');
+        delete pendingPS[msg.id];
+      }
+    };
+
+    ws.onerror = (e) => {
+      step(2,'error');
+      showErr('Falha na conexão',
+        `Não foi possível conectar ao agente em <code>${wsUrl}</code><br><br>
+        Verifique se o agente <strong>System Mérito</strong> está instalado e rodando no PC remoto.<br><br>
+        O agente precisa ter acesso liberado na porta <code>${WS_PORT}</code>.`);
+    };
+
+    ws.onclose = () => {
+      if (connected) {
+        connected = false;
+        setStatus('err','Desconectado');
+        termLine('<span class="t-error">❌ Conexão encerrada pelo agente.</span>');
+        document.getElementById('loadScreen').style.display = 'flex';
+        document.getElementById('main').style.display       = 'none';
+        showErr('Sessão encerrada','A conexão com o agente foi interrompida.');
+      }
+    };
+
+  } catch(e) {
+    step(2,'error');
+    showErr('Erro ao conectar', e.message);
+  }
+}
+
+function fillInfo(msg) {
+  const p = document.getElementById('infoPanel');
+  p.innerHTML = `
+    <div class="info-section">
+      <div class="info-title">Conexão</div>
+      ${irow('Hostname', msg.hostname||HOST)}
+      ${irow('IP', msg.ip||IP)}
+      ${irow('Porta WS', WS_PORT)}
+      ${irow('Agente ID', msg.agent_id||'?')}
+      ${irow('Versão', msg.version||'?')}
+    </div>`;
+}
+
+function irow(k,v) {
+  return `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${escHtml(String(v))}</span></div>`;
+}
+
+// ── CONTROLES ─────────────────────────────────────────────────────
+function sendCad() {
+  if (!ws || !connected) return;
+  ws.send(JSON.stringify({type:'ctrl_alt_del'}));
+}
+
+function toggleFS() {
+  const el = document.getElementById('screenWrap');
+  document.fullscreenElement ? document.exitFullscreen() : el.requestFullscreen().catch(()=>{});
+}
+
+function disconnect() {
+  if (ws) ws.close();
+  window.close();
+}
+
+function log(m) { console.log('[Remote]', m); }
+
+// ── INICIAR ───────────────────────────────────────────────────────
+connect();
 </script>
 </body>
 </html>

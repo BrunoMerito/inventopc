@@ -4,8 +4,8 @@ const CFG_KEY = "inventopc_config";
 
 const DEFAULT_CONFIG = {
   // Identidade
-  empresa_nome:     "InventoPC",
-  empresa_sub:      "Gestão de TI",
+  empresa_nome:     "System Mérito",
+  empresa_sub:      "Gestão de TI — Mérito",
   empresa_logo:     "",          // base64 ou URL
 
   // Helpdesk
@@ -62,19 +62,19 @@ function applyBranding(cfg) {
   cfg = cfg || loadConfig();
 
   // Título da página
-  document.getElementById("pageTitle").textContent = cfg.empresa_nome || "InventoPC";
+  document.getElementById("pageTitle").textContent = cfg.empresa_nome || "System Mérito";
 
   // Login
   const loginTitle    = document.getElementById("loginTitle");
   const loginSubtitle = document.getElementById("loginSubtitle");
-  if (loginTitle)    loginTitle.textContent    = cfg.empresa_nome || "InventoPC";
-  if (loginSubtitle) loginSubtitle.textContent = cfg.empresa_sub  || "Gestão de TI";
+  if (loginTitle)    loginTitle.textContent    = cfg.empresa_nome || "System Mérito";
+  if (loginSubtitle) loginSubtitle.textContent = cfg.empresa_sub  || "Gestão de TI — Mérito";
 
   // Sidebar brand
   const brandName = document.getElementById("brandName");
   const brandSub  = document.getElementById("brandSub");
-  if (brandName) brandName.textContent = cfg.empresa_nome || "InventoPC";
-  if (brandSub)  brandSub.textContent  = cfg.empresa_sub  || "Gestão de TI";
+  if (brandName) brandName.textContent = cfg.empresa_nome || "System Mérito";
+  if (brandSub)  brandSub.textContent  = cfg.empresa_sub  || "Gestão de TI — Mérito";
 
   // Logo
   if (cfg.empresa_logo) {

@@ -8,7 +8,7 @@
       "so": "Microsoft Windows 11 Pro (64 bits)",
       "so_versao": "10.0.26200",
       "cpu": "12th Gen Intel(R) Core(TM) i5-12400",
-      "cpu_detalhes": "6 nucleos / 12 threads 2.5 GHz",
+      "cpu_detalhes": "6 nucleos / 12 threads 2.5GHz",
       "ram": "8 GB",
       "disco": "238 GB",
       "fabricante": "Dell Inc.",
@@ -16,13 +16,16 @@
       "serial": "B4MXPW3",
       "tipo": "desktop",
       "vnc_port": 5900,
-      "agente_versao": "1.0.0",
-      "timestamp": "2026-06-19T21:16:30.647487Z",
+      "agente_versao": "4.0.0",
+      "timestamp": "2026-06-22T19:25:34Z",
       "id": 1,
-      "status": "offline",
+      "status": "online",
       "registrado_em": "2026-06-19T21:16:30.713379Z",
-      "ultimo_visto": "2026-06-19T21:21:30.736186Z",
-      "obs": ""
+      "ultimo_visto": "2026-06-22T19:36:27.654128Z",
+      "obs": "",
+      "setor": "",
+      "patrimonio": "",
+      "ws_port": 8765
     }
   },
   "next_id": 2
