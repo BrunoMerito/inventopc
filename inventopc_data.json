@@ -1,4 +1,29 @@
 {
-  "computers": {},
-  "next_id": 1
+  "computers": {
+    "1": {
+      "hostname": "MERITOSP195",
+      "ip": "192.168.88.66",
+      "mac": "f4:c8:8a:9d:7d:e9",
+      "usuario": "BrunoRibamar",
+      "so": "Microsoft Windows 11 Pro (64 bits)",
+      "so_versao": "10.0.26200",
+      "cpu": "12th Gen Intel(R) Core(TM) i5-12400",
+      "cpu_detalhes": "6 nucleos / 12 threads 2.5 GHz",
+      "ram": "8 GB",
+      "disco": "238 GB",
+      "fabricante": "Dell Inc.",
+      "modelo": "076VHM",
+      "serial": "B4MXPW3",
+      "tipo": "desktop",
+      "vnc_port": 5900,
+      "agente_versao": "1.0.0",
+      "timestamp": "2026-06-19T21:16:30.647487Z",
+      "id": 1,
+      "status": "offline",
+      "registrado_em": "2026-06-19T21:16:30.713379Z",
+      "ultimo_visto": "2026-06-19T21:21:30.736186Z",
+      "obs": ""
+    }
+  },
+  "next_id": 2
 }
