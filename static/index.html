@@ -6,6 +6,31 @@
 <title id="pageTitle">System Mérito</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/style.css">
+<style>
+/* Fix logo — sem fundo azul por cima da imagem */
+.login-logo-mark img,
+.brand-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+  background: transparent !important;
+}
+.login-logo-mark {
+  background: linear-gradient(135deg, #1e3a8a, #2563EB) !important;
+  overflow: hidden;
+}
+.brand-icon {
+  background: linear-gradient(135deg, #1e3a8a, #2563EB) !important;
+  overflow: hidden;
+}
+/* Quando tem logo, remover gradiente e mostrar só a imagem */
+.login-logo-mark.has-logo,
+.brand-icon.has-logo {
+  background: white !important;
+  padding: 2px;
+}
+</style>
 </head>
 <body>
 
@@ -18,7 +43,7 @@
         <i class="fa-solid fa-laptop-code"></i>
       </div>
       <h1 id="loginTitle">System Mérito</h1>
-      <p id="loginSubtitle">Sistema de Gestão de TI</p>
+      <p id="loginSubtitle">Gestão de TI</p>
     </div>
     <form onsubmit="doLogin(event)">
       <div class="field-group">
@@ -34,6 +59,11 @@
           <i class="fa-solid fa-lock"></i>
           <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
         </div>
+      </div>
+      <!-- Lembrar senha -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <input type="checkbox" id="rememberMe" style="accent-color:var(--brand);width:15px;height:15px;cursor:pointer">
+        <label for="rememberMe" style="font-size:12.5px;color:var(--text-2);cursor:pointer;font-weight:500">Lembrar senha</label>
       </div>
       <div id="loginError" class="login-error" style="display:none">
         <i class="fa-solid fa-circle-exclamation"></i> Usuário ou senha incorretos.
@@ -78,7 +108,7 @@
         <i class="fa-solid fa-hard-hat"></i> Obra
       </a>
       <a class="nav-link" data-view="rede" onclick="switchView('rede')">
-        <i class="fa-solid fa-laptop-code"></i> Rede / Dispositivos
+        <i class="fa-solid fa-network-wired"></i> Rede / Dispositivos
       </a>
 
       <div class="nav-section-label">Helpdesk</div>
@@ -90,11 +120,10 @@
         <i class="fa-solid fa-plus-circle"></i> Novo Ticket
       </a>
 
+      <div class="nav-section-label">Sistema</div>
       <a class="nav-link" data-view="acoes" onclick="switchView('acoes')">
         <i class="fa-solid fa-bolt"></i> Ações Remotas
       </a>
-
-      <div class="nav-section-label">Sistema</div>
       <a class="nav-link" data-view="relatorios" onclick="switchView('relatorios')">
         <i class="fa-solid fa-chart-bar"></i> Relatórios
       </a>
@@ -137,12 +166,11 @@
         </button>
       </div>
     </header>
-
     <main class="page-content" id="pageContent"></main>
   </div>
 </div>
 
-<!-- ═══════════ MODAL PRINCIPAL (add/edit computador) ═══════════ -->
+<!-- MODAL ADD/EDIT -->
 <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
 <div class="modal" id="mainModal">
   <div class="modal-header">
@@ -154,18 +182,9 @@
   </div>
   <div class="modal-body">
     <div class="form-grid">
-      <div class="form-field">
-        <label>Hostname *</label>
-        <input type="text" id="f-hostname" placeholder="PC-ESCRITORIO-01">
-      </div>
-      <div class="form-field">
-        <label>Endereço IP</label>
-        <input type="text" id="f-ip" placeholder="192.168.1.10">
-      </div>
-      <div class="form-field">
-        <label>Usuário Responsável</label>
-        <input type="text" id="f-usuario" placeholder="Nome do usuário">
-      </div>
+      <div class="form-field"><label>Hostname *</label><input type="text" id="f-hostname" placeholder="PC-ESCRITORIO-01"></div>
+      <div class="form-field"><label>Endereço IP</label><input type="text" id="f-ip" placeholder="192.168.1.10"></div>
+      <div class="form-field"><label>Usuário Responsável</label><input type="text" id="f-usuario" placeholder="Nome do usuário"></div>
       <div class="form-field">
         <label>Localidade</label>
         <select id="f-localidade">
@@ -174,14 +193,8 @@
           <option value="obra">Obra</option>
         </select>
       </div>
-      <div class="form-field">
-        <label>Setor / Departamento</label>
-        <input type="text" id="f-setor" placeholder="TI, RH, Financeiro...">
-      </div>
-      <div class="form-field">
-        <label>Localização Física</label>
-        <input type="text" id="f-localizacao" placeholder="Ex: Sala 3, Andar 2, Obra SP-01">
-      </div>
+      <div class="form-field"><label>Setor / Departamento</label><input type="text" id="f-setor" placeholder="TI, RH, Financeiro..."></div>
+      <div class="form-field"><label>Localização Física</label><input type="text" id="f-localizacao" placeholder="Ex: Sala 3, Andar 2"></div>
       <div class="form-field">
         <label>Tipo de Equipamento</label>
         <select id="f-tipo" onchange="togglePatrimonio()">
@@ -205,46 +218,16 @@
         <label><i class="fa-solid fa-tag" style="color:#7C3AED;margin-right:5px"></i>Nº Patrimônio <span class="badge-patrimonio-label">Notebook</span></label>
         <input type="text" id="f-patrimonio" placeholder="PAT-000001" style="font-family:monospace;font-weight:600">
       </div>
-      <div class="form-field span2">
-        <label>Sistema Operacional</label>
-        <input type="text" id="f-so" placeholder="Windows 11 Pro">
-      </div>
-      <div class="form-field">
-        <label>Processador</label>
-        <input type="text" id="f-cpu" placeholder="Intel Core i5-12400">
-      </div>
-      <div class="form-field">
-        <label>Memória RAM</label>
-        <input type="text" id="f-ram" placeholder="16 GB">
-      </div>
-      <div class="form-field">
-        <label>Armazenamento</label>
-        <input type="text" id="f-disco" placeholder="512 GB SSD">
-      </div>
-      <div class="form-field">
-        <label>Nº de Série</label>
-        <input type="text" id="f-serial" placeholder="SN-ABC123">
-      </div>
-      <div class="form-field">
-        <label>Fabricante</label>
-        <input type="text" id="f-fabricante" placeholder="Dell, HP, Lenovo...">
-      </div>
-      <div class="form-field">
-        <label>Modelo</label>
-        <input type="text" id="f-modelo" placeholder="OptiPlex 7090">
-      </div>
-      <div class="form-field">
-        <label>MAC Address</label>
-        <input type="text" id="f-mac" placeholder="aa:bb:cc:dd:ee:ff">
-      </div>
-      <div class="form-field">
-        <label>Porta VNC (Acesso Remoto)</label>
-        <input type="number" id="f-vnc_port" placeholder="5900" value="5900">
-      </div>
-      <div class="form-field span2">
-        <label>Observações</label>
-        <textarea id="f-obs" rows="2" placeholder="Notas adicionais..."></textarea>
-      </div>
+      <div class="form-field span2"><label>Sistema Operacional</label><input type="text" id="f-so" placeholder="Windows 11 Pro"></div>
+      <div class="form-field"><label>Processador</label><input type="text" id="f-cpu" placeholder="Intel Core i5-12400"></div>
+      <div class="form-field"><label>Memória RAM</label><input type="text" id="f-ram" placeholder="16 GB"></div>
+      <div class="form-field"><label>Armazenamento</label><input type="text" id="f-disco" placeholder="512 GB SSD"></div>
+      <div class="form-field"><label>Nº de Série</label><input type="text" id="f-serial" placeholder="SN-ABC123"></div>
+      <div class="form-field"><label>Fabricante</label><input type="text" id="f-fabricante" placeholder="Dell, HP, Lenovo..."></div>
+      <div class="form-field"><label>Modelo</label><input type="text" id="f-modelo" placeholder="OptiPlex 7090"></div>
+      <div class="form-field"><label>MAC Address</label><input type="text" id="f-mac" placeholder="aa:bb:cc:dd:ee:ff"></div>
+      <div class="form-field"><label>Porta VNC</label><input type="number" id="f-vnc_port" placeholder="5900" value="5900"></div>
+      <div class="form-field span2"><label>Observações</label><textarea id="f-obs" rows="2" placeholder="Notas adicionais..."></textarea></div>
     </div>
   </div>
   <div class="modal-footer">
@@ -253,7 +236,7 @@
   </div>
 </div>
 
-<!-- ═══════════ MODAL DETALHE / REMOTO ═══════════ -->
+<!-- MODAL DETALHE -->
 <div class="modal-backdrop" id="detailBackdrop" onclick="closeDetail()"></div>
 <div class="modal modal-wide" id="detailModal">
   <div class="modal-header">
@@ -266,7 +249,7 @@
   <div class="modal-body" id="detailBody"></div>
 </div>
 
-<!-- ═══════════ MODAL TICKET DETALHE ═══════════ -->
+<!-- MODAL TICKET -->
 <div class="modal-backdrop" id="ticketBackdrop" onclick="closeTicketModal()"></div>
 <div class="modal modal-lg" id="ticketModal">
   <div class="modal-header">
@@ -282,6 +265,7 @@
 <!-- TOAST -->
 <div id="toastContainer"></div>
 
+<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase_client.js"></script>
 <script src="js/config.js"></script>
