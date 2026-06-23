@@ -300,24 +300,19 @@ async function runPSMass() {
 
 // ── PAPEL DE PAREDE ────────────────────────────────────────────────
 let wallpaperB64 = '';
+let wallpaperReady = false;
 
 function previewWallpaper(input) {
   const file = input.files[0];
   if (!file) return;
-  wallpaperB64 = ''; // reset enquanto carrega
-  const btn = document.querySelector('#wallpaperModal .btn-primary');
-  if (btn) { btn.textContent = '⏳ Carregando...'; btn.disabled = true; }
+  wallpaperB64 = ''; wallpaperReady = false;
   const reader = new FileReader();
   reader.onload = e => {
     wallpaperB64 = e.target.result.split(',')[1];
+    wallpaperReady = true;
     const prev = document.getElementById('wallpaperPreview');
-    prev.src = e.target.result;
-    prev.style.display = 'block';
-    if (btn) { btn.innerHTML = '🎨 Aplicar'; btn.disabled = false; }
-  };
-  reader.onerror = () => {
-    toast('Erro ao ler arquivo.', 'error');
-    if (btn) { btn.innerHTML = '🎨 Aplicar'; btn.disabled = false; }
+    if (prev) { prev.src = e.target.result; prev.style.display = 'block'; }
+    toast(`Imagem pronta (${Math.round(wallpaperB64.length*0.75/1024)}KB) — clique Aplicar`, 'info');
   };
   reader.readAsDataURL(file);
 }
@@ -481,4 +476,122 @@ async function installApp(appId) {
   for (const pc of computers.filter(c=>selectedMachines.has(c.id))) {
     await runCmdOnPC(pc, app.cmd, app.nome);
   }
+}
+
+
+// ── PAPEL DE PAREDE ────────────────────────────────────────────────
+let wallpaperB64 = '';
+let wallpaperReady = false;
+let wallpaperReady = false;
+
+function previewWallpaper(input) {
+  const file = input.files[0];
+  if (!file) return;
+  wallpaperB64 = ''; wallpaperReady = false;
+  const reader = new FileReader();
+  reader.onload = e => {
+    wallpaperB64 = e.target.result.split(',')[1];
+    wallpaperReady = true;
+    const prev = document.getElementById('wallpaperPreview');
+    if (prev) { prev.src = e.target.result; prev.style.display = 'block'; }
+    toast(`Imagem pronta (${Math.round(wallpaperB64.length*0.75/1024)}KB) — clique Aplicar`, 'info');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function applyWallpaper() {
+  if (selectedMachines.size === 0) { toast('Selecione máquinas.', 'error'); return; }
+  const url = document.getElementById('wallpaperUrl')?.value.trim();
+
+  if (!wallpaperReady && !url) {
+    toast('Selecione uma imagem ou informe uma URL.', 'error');
+    return;
+  }
+
+  closeWallpaperModal();
+  logAcao(`▶ 🎨 Papel de parede — ${selectedMachines.size} máquina(s)`, 'cmd');
+  const targets = computers.filter(c => selectedMachines.has(c.id));
+
+  if (wallpaperReady && wallpaperB64) {
+    for (const pc of targets) {
+      logAcao(`⏳ ${pc.hostname} — enviando via WebSocket...`, 'info');
+      await sendWallpaperViaWS(pc, wallpaperB64);
+    }
+    wallpaperB64 = '';
+    wallpaperReady = false;
+    return;
+  }
+
+  if (url) {
+    const cmd = `
+$imgPath = "$env:TEMP\wallpaper_merito.jpg"
+try {
+  Invoke-WebRequest -Uri '${url}' -OutFile $imgPath -UseBasicParsing -TimeoutSec 30
+  Add-Type -TypeDefinition 'using System;using System.Runtime.InteropServices;public class WP{[DllImport("user32.dll",CharSet=CharSet.Auto)]public static extern int SystemParametersInfo(int a,int b,string c,int d);}'
+  [WP]::SystemParametersInfo(20, 0, $imgPath, 3) | Out-Null
+  Write-Output "Papel de parede aplicado!"
+} catch { Write-Error "Erro: $_" }`;
+    for (const pc of targets) {
+      await runCmdOnPC(pc, cmd, 'Papel de Parede');
+    }
+  }
+}
+
+async function sendWallpaperViaWS(pc, b64) {
+  return new Promise((resolve) => {
+    try {
+      const ws      = new WebSocket(`ws://${pc.ip}:${pc.ws_port||8765}`);
+      const fileId  = 'wp_' + Date.now();
+      const chunkSz = 32 * 1024;
+      const total   = Math.ceil(b64.length / chunkSz);
+      let   done    = false;
+
+      const timeout = setTimeout(() => {
+        if (!done) { logAcao(`❌ ${pc.hostname}: Timeout`, 'err'); try{ws.close();}catch{} resolve(); }
+      }, 60000);
+
+      ws.onmessage = async (e) => {
+        try {
+          const msg = JSON.parse(e.data);
+          if (msg.type === 'connected') {
+            logAcao(`📤 ${pc.hostname}: enviando ${total} chunks...`, 'info');
+            for (let i = 0; i < total; i++) {
+              ws.send(JSON.stringify({
+                type:'file_chunk', file_id:fileId,
+                filename:'wallpaper_merito.jpg',
+                dest:'C:\Windows\Temp',
+                chunk:i, total, data:b64.slice(i*chunkSz,(i+1)*chunkSz), size:b64.length,
+              }));
+              if (i % 10 === 0) await new Promise(r=>setTimeout(r,20));
+            }
+          }
+          if (msg.type==='file_progress' && msg.file_id===fileId && msg.done) {
+            const imgPath = (msg.path||'C:\Windows\Temp\wallpaper_merito.jpg').replace(/\\/g,'\\');
+            ws.send(JSON.stringify({ type:'powershell', id:'wp_apply', cmd:
+              `$p='${imgPath}';if(Test-Path $p){Add-Type -TypeDefinition 'using System;using System.Runtime.InteropServices;public class WP{[DllImport("user32.dll",CharSet=CharSet.Auto)]public static extern int SystemParametersInfo(int a,int b,string c,int d);}';[WP]::SystemParametersInfo(20,0,$p,3)|Out-Null;Write-Output "Papel de parede aplicado!"}else{Write-Error "Arquivo nao encontrado: $p"}`
+            }));
+          }
+          if (msg.type==='file_progress' && msg.file_id===fileId && msg.error) {
+            logAcao(`❌ ${pc.hostname}: ${msg.error}`, 'err');
+            done=true; clearTimeout(timeout); try{ws.close();}catch{} resolve();
+          }
+          if (msg.type==='ps_result' && msg.id==='wp_apply') {
+            if (msg.output) logAcao(`✅ ${pc.hostname}: ${msg.output.trim()}`, 'ok');
+            if (msg.error && msg.error.trim()) logAcao(`❌ ${pc.hostname}: ${msg.error}`, 'err');
+            done=true; clearTimeout(timeout); try{ws.close();}catch{} resolve();
+          }
+        } catch(err) {
+          logAcao(`❌ ${pc.hostname}: ${err.message}`, 'err');
+          done=true; clearTimeout(timeout); try{ws.close();}catch{} resolve();
+        }
+      };
+      ws.onerror = () => {
+        logAcao(`❌ ${pc.hostname}: Falha WebSocket`, 'err');
+        done=true; clearTimeout(timeout); resolve();
+      };
+    } catch(e) {
+      logAcao(`❌ ${pc.hostname}: ${e.message}`, 'err');
+      resolve();
+    }
+  });
 }
