@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   System Mérito — supabase.js
+   System Mérito — supabase_client.js
    Integração completa com Supabase
 ═══════════════════════════════════════════════════════ */
 
@@ -8,7 +8,6 @@ const SUPABASE_KEY = "sb_publishable_ZXQKcK80wCwhL0R-Mt52iw_HAiuF61i";
 
 let sb = null;
 
-// Inicializar Supabase
 async function initSupabase() {
   try {
     const { createClient } = supabase;
@@ -16,7 +15,7 @@ async function initSupabase() {
     console.log("[Supabase] Conectado!");
     return true;
   } catch (e) {
-    console.warn("[Supabase] Erro ao inicializar:", e);
+    console.warn("[Supabase] Erro:", e);
     return false;
   }
 }
@@ -41,19 +40,35 @@ async function sbSaveComputer(computer) {
   if (!sb) return null;
   try {
     const { mac, hostname } = computer;
+    let existingId = null;
 
-    // Buscar existente
-    const { data: existing } = await sb
-      .from('computadores')
-      .select('id')
-      .or(`mac.eq.${mac},hostname.eq.${hostname}`)
-      .single();
+    // Buscar por hostname (queries separadas para evitar erro 406)
+    if (hostname) {
+      const { data } = await sb
+        .from('computadores')
+        .select('id')
+        .eq('hostname', hostname)
+        .maybeSingle();
+      if (data) existingId = data.id;
+    }
 
-    if (existing) {
+    // Buscar por MAC se não achou por hostname
+    if (!existingId && mac) {
+      const { data } = await sb
+        .from('computadores')
+        .select('id')
+        .eq('mac', mac)
+        .maybeSingle();
+      if (data) existingId = data.id;
+    }
+
+    const ts = new Date().toISOString();
+
+    if (existingId) {
       const { data, error } = await sb
         .from('computadores')
-        .update({ ...computer, ultimo_visto: new Date().toISOString() })
-        .eq('id', existing.id)
+        .update({ ...computer, ultimo_visto: ts })
+        .eq('id', existingId)
         .select()
         .single();
       if (error) throw error;
@@ -61,7 +76,7 @@ async function sbSaveComputer(computer) {
     } else {
       const { data, error } = await sb
         .from('computadores')
-        .insert({ ...computer, registrado_em: new Date().toISOString(), ultimo_visto: new Date().toISOString() })
+        .insert({ ...computer, registrado_em: ts, ultimo_visto: ts })
         .select()
         .single();
       if (error) throw error;
@@ -121,23 +136,11 @@ async function sbGetTickets() {
 async function sbCreateTicket(ticket) {
   if (!sb) return null;
   try {
-    // Gerar próximo ID para protocolo
-    const { data: last } = await sb
-      .from('tickets')
-      .select('id')
-      .order('id', { ascending: false })
-      .limit(1)
-      .single();
-
-    const nextNum = (last?.id || 100) + 1;
-    const protocolo = `#${String(nextNum).padStart(3, '0')}`;
-
     const { data, error } = await sb
       .from('tickets')
       .insert({
         ...ticket,
-        protocolo,
-        historico: JSON.stringify(ticket.historico || []),
+        historico: ticket.historico || [],
         criado_em: new Date().toISOString(),
         atualizado_em: new Date().toISOString(),
       })
@@ -154,9 +157,6 @@ async function sbCreateTicket(ticket) {
 async function sbUpdateTicket(id, updates) {
   if (!sb) return null;
   try {
-    if (updates.historico && typeof updates.historico !== 'string') {
-      updates.historico = JSON.stringify(updates.historico);
-    }
     updates.atualizado_em = new Date().toISOString();
     const { data, error } = await sb
       .from('tickets')
@@ -184,26 +184,12 @@ async function sbDeleteTicket(id) {
   }
 }
 
-// ── USUÁRIOS ──────────────────────────────────────────────────────
-async function sbGetUsuarios() {
-  if (!sb) return null;
-  try {
-    const { data, error } = await sb
-      .from('usuarios')
-      .select('id,username,nome,role,telefone,ativo,ultimo_login,criado_em');
-    if (error) throw error;
-    return data;
-  } catch (e) {
-    console.error("[Supabase] getUsuarios:", e);
-    return null;
-  }
-}
-
+// ── LOGIN ─────────────────────────────────────────────────────────
 async function sbLogin(username, password) {
   if (!sb) return null;
   try {
     const hashPass = async (str) => {
-      const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
     };
     const hash = await hashPass(password);
@@ -213,10 +199,9 @@ async function sbLogin(username, password) {
       .eq('username', username)
       .eq('password_hash', hash)
       .eq('ativo', true)
-      .single();
-    if (error || !data) return null;
-
-    // Atualizar último login
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return null;
     await sb.from('usuarios').update({ ultimo_login: new Date().toISOString() }).eq('id', data.id);
     return data;
   } catch (e) {
@@ -242,7 +227,7 @@ function sbSubscribeTickets(callback) {
     .subscribe();
 }
 
-// ── CARREGAR DADOS COM FALLBACK ────────────────────────────────────
+// ── CARREGAR DADOS ────────────────────────────────────────────────
 async function loadDataWithSupabase() {
   // Sempre buscar do Flask primeiro (fonte de verdade do agente)
   try {
@@ -253,29 +238,31 @@ async function loadDataWithSupabase() {
         computers = flaskData.map(c => ({
           ...c,
           localidade: c.localidade || 'escritorio',
-          status:     c.status || 'offline',
-          ws_port:    c.ws_port || 8765,
+          status:     c.status     || 'offline',
+          ws_port:    c.ws_port    || 8765,
         }));
         setServerStatus(true, 'Online');
 
-        // Sincronizar com Supabase em background
+        // Sincronizar com Supabase em background com delay
         if (sb) {
-          flaskData.forEach(c => sbSaveComputer(c).catch(() => {}));
+          setTimeout(() => {
+            flaskData.forEach(c => sbSaveComputer(c).catch(() => {}));
+          }, 3000);
         }
         return;
       }
     }
   } catch {}
 
-  // Tentar Supabase se Flask falhou
+  // Tentar Supabase direto se Flask falhou
   if (sb) {
     const data = await sbGetComputers();
     if (data && data.length > 0) {
       computers = data.map(c => ({
         ...c,
         localidade: c.localidade || 'escritorio',
-        status:     c.status || 'offline',
-        ws_port:    c.ws_port || 8765,
+        status:     c.status     || 'offline',
+        ws_port:    c.ws_port    || 8765,
       }));
       setServerStatus(true, 'Supabase');
       return;
@@ -292,7 +279,6 @@ async function saveComputerWithSupabase(data) {
     const result = await sbSaveComputer(data);
     if (result) return result;
   }
-  // Fallback Flask
   try {
     const r = await fetch(`${API_BASE}/api/register`, {
       method: 'POST',
@@ -305,10 +291,7 @@ async function saveComputerWithSupabase(data) {
 }
 
 async function updateComputerWithSupabase(id, data) {
-  if (sb) {
-    const result = await sbUpdateComputer(id, data);
-    if (result) return result;
-  }
+  if (sb) await sbUpdateComputer(id, data);
   try {
     await fetch(`${API_BASE}/api/computers/${id}`, {
       method: 'PUT',
@@ -323,16 +306,15 @@ async function deleteComputerWithSupabase(id) {
   try { await fetch(`${API_BASE}/api/computers/${id}`, { method: 'DELETE' }); } catch {}
 }
 
-// Tickets com Supabase
+// ── TICKETS ───────────────────────────────────────────────────────
 async function loadTicketsWithSupabase() {
   if (sb) {
     const data = await sbGetTickets();
     if (data) {
       tickets = data.map(t => ({
         ...t,
-        historico: typeof t.historico === 'string'
-          ? JSON.parse(t.historico || '[]')
-          : (t.historico || []),
+        historico: Array.isArray(t.historico) ? t.historico
+          : (typeof t.historico === 'string' ? JSON.parse(t.historico || '[]') : []),
         tags: t.tags || [],
       }));
       updateTicketBadge();
@@ -346,17 +328,15 @@ async function createTicketWithSupabase(ticket) {
   if (sb) {
     const result = await sbCreateTicket(ticket);
     if (result) {
-      result.historico = typeof result.historico === 'string'
-        ? JSON.parse(result.historico || '[]')
-        : (result.historico || []);
+      result.historico = Array.isArray(result.historico) ? result.historico
+        : JSON.parse(result.historico || '[]');
       tickets.unshift(result);
       updateTicketBadge();
       return result;
     }
   }
-  // Fallback localStorage
   const id  = nextTicketId++;
-  const novo = { id, protocolo:`#${id}`, ...ticket };
+  const novo = { id, protocolo: `#${id}`, ...ticket };
   tickets.unshift(novo);
   saveTickets();
   return novo;
@@ -364,7 +344,6 @@ async function createTicketWithSupabase(ticket) {
 
 async function updateTicketWithSupabase(id, updates) {
   if (sb) await sbUpdateTicket(id, updates);
-  // Atualizar local também
   const idx = tickets.findIndex(t => t.id === id);
   if (idx >= 0) Object.assign(tickets[idx], updates);
   updateTicketBadge();
