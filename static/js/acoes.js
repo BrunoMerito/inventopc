@@ -304,12 +304,20 @@ let wallpaperB64 = '';
 function previewWallpaper(input) {
   const file = input.files[0];
   if (!file) return;
+  wallpaperB64 = ''; // reset enquanto carrega
+  const btn = document.querySelector('#wallpaperModal .btn-primary');
+  if (btn) { btn.textContent = '⏳ Carregando...'; btn.disabled = true; }
   const reader = new FileReader();
   reader.onload = e => {
     wallpaperB64 = e.target.result.split(',')[1];
     const prev = document.getElementById('wallpaperPreview');
     prev.src = e.target.result;
     prev.style.display = 'block';
+    if (btn) { btn.innerHTML = '🎨 Aplicar'; btn.disabled = false; }
+  };
+  reader.onerror = () => {
+    toast('Erro ao ler arquivo.', 'error');
+    if (btn) { btn.innerHTML = '🎨 Aplicar'; btn.disabled = false; }
   };
   reader.readAsDataURL(file);
 }
@@ -347,7 +355,13 @@ try {
     return;
   }
 
-  toast('Informe uma URL ou selecione uma imagem.','error');
+  // Verificar se arquivo ainda está carregando
+  const fileInput = document.getElementById('wallpaperFile');
+  if (fileInput && fileInput.files.length > 0 && !wallpaperB64) {
+    toast('Aguarde o arquivo terminar de carregar.', 'error');
+  } else {
+    toast('Informe uma URL ou selecione uma imagem.', 'error');
+  }
 }
 
 async function sendWallpaperViaWS(pc, b64) {
