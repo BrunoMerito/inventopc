@@ -64,10 +64,13 @@ async function sbSaveComputer(computer) {
 
     const ts = new Date().toISOString();
 
+    // Remover campos que não existem no schema do Supabase
+    const { timestamp, agente_versao, so_versao, cpu_detalhes, ...cleanData } = computer;
+
     if (existingId) {
       const { data, error } = await sb
         .from('computadores')
-        .update({ ...computer, ultimo_visto: ts })
+        .update({ ...cleanData, ultimo_visto: ts })
         .eq('id', existingId)
         .select()
         .single();
@@ -76,7 +79,7 @@ async function sbSaveComputer(computer) {
     } else {
       const { data, error } = await sb
         .from('computadores')
-        .insert({ ...computer, registrado_em: ts, ultimo_visto: ts })
+        .insert({ ...cleanData, registrado_em: ts, ultimo_visto: ts })
         .select()
         .single();
       if (error) throw error;

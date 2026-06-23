@@ -136,15 +136,37 @@ async function init() {
   await loadTicketsWithSupabase();
   switchView("dashboard");
   if (typeof sb !== "undefined" && sb) {
-    sbSubscribeComputers(async () => { await loadDataWithSupabase(); render(); });
-    sbSubscribeTickets(async () => { await loadTicketsWithSupabase(); updateTicketBadge(); });
+    // Debounce para evitar múltiplas chamadas em sequência
+    let realtimeTimer = null;
+    sbSubscribeComputers(() => {
+      clearTimeout(realtimeTimer);
+      realtimeTimer = setTimeout(async () => {
+        await loadDataWithSupabase();
+        const active = document.activeElement;
+        const isTyping = active && ['INPUT','TEXTAREA','SELECT'].includes(active.tagName);
+        if (!isTyping) render();
+      }, 2000);
+    });
+    sbSubscribeTickets(() => {
+      setTimeout(async () => {
+        await loadTicketsWithSupabase();
+        updateTicketBadge();
+      }, 2000);
+    });
   }
   refreshTimer = setInterval(refreshData, REFRESH_INTERVAL);
 }
 
 async function refreshData() {
   await loadDataWithSupabase();
-  render();
+  // Não rerenderizar se usuário está com foco em algum input/textarea/select
+  const active = document.activeElement;
+  const isTyping = active && (
+    active.tagName === 'INPUT' ||
+    active.tagName === 'TEXTAREA' ||
+    active.tagName === 'SELECT'
+  );
+  if (!isTyping) render();
 }
 
 async function loadData() {
@@ -293,7 +315,8 @@ function openAddModal() {
   document.getElementById("modalTitle").textContent = "Adicionar Dispositivo";
   document.getElementById("modalSub").textContent   = "";
   ["hostname","ip","usuario","setor","so","cpu","ram","disco","fabricante","modelo","serial","mac","obs","patrimonio"].forEach(f => {
-    const el = document.getElementById("f-"+f); if(el) el.value = "";
+    const el = document.getElementById("f-"+f);
+    if(el) { el.value = ""; el.setAttribute("autocomplete","off"); }
   });
   const vnc=document.getElementById("f-vnc_port"); if(vnc) vnc.value="5900";
   const st =document.getElementById("f-status");   if(st)  st.value ="online";
