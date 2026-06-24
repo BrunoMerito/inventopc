@@ -1,0 +1,54 @@
+/* ════════════════════════════════════════════════════════════
+   TEMA B — "Petróleo"
+   Fundo papel quente · acento teal profundo · tipografia Hanken Grotesk.
+   Carregar DEPOIS de style.css (camada de override).
+   ════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --brand:      #0F5E58;
+  --brand-d:    #0A4641;
+  --brand-l:    #E5F0EE;
+  --brand-mid:  #B4D6D1;
+
+  --surface:    #FFFFFF;
+  --surface-2:  #F4F1E9;
+  --surface-3:  #ECE7DB;
+  --surface-4:  #DFD8C8;
+  --border:     #E6DFD1;
+  --border-d:   #CFC5B1;
+  --text:       #232019;
+  --text-2:     #5E574B;
+  --text-3:     #948C7C;
+  --text-4:     #C5BCA9;
+
+  --green:      #2F7A4F; --green-l:#E9F1E9; --green-b:#C3DBC4;
+  --red:        #B5503F; --red-l:  #F7ECE7; --red-b:  #E6C8BC;
+  --amber:      #A9762A; --amber-l:#F6EFE0; --amber-b:#E4D0A6;
+  --purple:     #5A5485; --purple-l:#EEEDF2; --purple-b:#D2CFE0;
+  --orange:     #AC5F2C; --orange-l:#F6ECE2; --orange-b:#E5CBB2;
+
+  --sans: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-sm: 6px;
+  --radius:    8px;
+  --radius-lg: 11px;
+  --radius-xl: 14px;
+
+  --shadow-sm: 0 1px 2px rgba(45,38,28,.05);
+  --shadow:    0 3px 10px rgba(45,38,28,.07);
+  --shadow-lg: 0 10px 26px rgba(45,38,28,.10);
+  --shadow-xl: 0 18px 44px rgba(45,38,28,.14);
+}
+
+/* Fundo papel também nas áreas claras */
+.sidebar{background:var(--surface)}
+.topbar{background:var(--surface)}
+.login-bg{background:var(--surface-2)}
+.login-bg::after{background:linear-gradient(180deg,#FFFCF6 0%,var(--surface-2) 100%)}
+
+/* Toques tipográficos mais editoriais */
+.login-logo h1,.topbar-title,.section-title,.stat-num,.brand-name{letter-spacing:-.3px}
+.stat-num{font-weight:700}
+.nav-section-label{letter-spacing:.13em}

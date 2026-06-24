@@ -199,10 +199,6 @@ function switchView(view) {
   if (addBtn) addBtn.style.display = noAdd.includes(view) ? "none" : "flex";
 
   render();
-
-  // micro-animação de entrada ao trocar de tela (não dispara no refresh silencioso)
-  const pc = document.getElementById("pageContent");
-  if (pc) { pc.classList.remove("view-enter"); void pc.offsetWidth; pc.classList.add("view-enter"); }
 }
 
 function render() {
@@ -280,13 +276,13 @@ function renderDashboard() {
     <div class="dash-grid">
       <div class="dash-card">
         <h3><i class="fa-solid fa-map-location-dot"></i> Por localidade</h3>
-        ${[["Stand","stand","#2E7D55"],["Escritório","escritorio","#2B5B8C"],["Obra","obra","#B0632F"]].map(([l,k,c])=>`
+        ${[["Stand","stand","#16A34A"],["Escritório","escritorio","#2563EB"],["Obra","obra","#EA580C"]].map(([l,k,c])=>`
           <div class="bar-item"><div class="bar-label"><span>${l}</span><span>${byLoc[k]} disp.</span></div>
           <div class="bar-track"><div class="bar-fill" style="width:${total?byLoc[k]/total*100:0}%;background:${c}"></div></div></div>`).join("")}
       </div>
       <div class="dash-card">
         <h3><i class="fa-solid fa-signal"></i> Status da frota</h3>
-        ${[["Online",online,"#2E7D55"],["Offline",offline,"#BF4A41"],["Manutenção",maint,"#AF7526"]].map(([l,count,c])=>`
+        ${[["Online",online,"#16A34A"],["Offline",offline,"#DC2626"],["Manutenção",maint,"#D97706"]].map(([l,count,c])=>`
           <div class="bar-item"><div class="bar-label"><span>${l}</span><span>${count} (${total?Math.round(count/total*100):0}%)</span></div>
           <div class="bar-track"><div class="bar-fill" style="width:${total?count/total*100:0}%;background:${c}"></div></div></div>`).join("")}
       </div>
@@ -454,13 +450,13 @@ function openDetail(id) {
         <i class="fa-solid fa-bolt" style="color:var(--amber)"></i> Ações Rápidas
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'bloquear')"><i class="fa-solid fa-lock"></i> Bloquear</button>
-        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'reiniciar')" style="color:var(--amber);border-color:var(--amber-b)"><i class="fa-solid fa-arrows-rotate"></i> Reiniciar</button>
-        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'desligar')" style="color:var(--red);border-color:var(--red-b)"><i class="fa-solid fa-power-off"></i> Desligar</button>
-        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'lixeira')"><i class="fa-solid fa-trash-can"></i> Lixeira</button>
-        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'temp')"><i class="fa-solid fa-broom"></i> Temp</button>
-        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'disco_info')"><i class="fa-solid fa-hard-drive"></i> Disco</button>
-        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'proc_list')"><i class="fa-solid fa-list"></i> Processos</button>
+        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'bloquear')">🔒 Bloquear</button>
+        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'reiniciar')" style="color:var(--amber);border-color:var(--amber-b)">🔄 Reiniciar</button>
+        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'desligar')" style="color:var(--red);border-color:var(--red-b)">⏻ Desligar</button>
+        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'lixeira')">🗑 Lixeira</button>
+        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'temp')">🧹 Temp</button>
+        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'disco_info')">💾 Disco</button>
+        <button class="row-btn" onclick="quickAction(${c.id},'${c.ip}',${c.ws_port||8765},'proc_list')">📊 Processos</button>
         <button class="row-btn success" onclick="closeDetail();openWebRemote(${c.id},'${c.hostname}','${c.ip}')">
           <i class="fa-solid fa-display"></i> Acessar Remoto
         </button>
@@ -605,7 +601,7 @@ function renderRelatorios() {
         <div onclick="${action}" style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow-sm)"
           onmouseover="this.style.borderColor='${color}';this.style.transform='translateY(-2px)'"
           onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
-          <div style="width:44px;height:44px;border-radius:11px;background:var(--surface-3);display:flex;align-items:center;justify-content:center;color:${color};font-size:20px;margin-bottom:14px"><i class="fa-solid ${icon}"></i></div>
+          <div style="width:44px;height:44px;border-radius:11px;background:${color}18;display:flex;align-items:center;justify-content:center;color:${color};font-size:20px;margin-bottom:14px"><i class="fa-solid ${icon}"></i></div>
           <div style="font-size:13.5px;font-weight:700;margin-bottom:5px">${title}</div>
           <div style="font-size:12px;color:var(--text-3)">${desc}</div>
         </div>`).join("")}

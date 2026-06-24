@@ -1,0 +1,223 @@
+/* ════════════════════════════════════════════════════════════
+   THEME PRO — System Mérito
+   Console de operações premium · rail grafite · tipografia engenheirada.
+   Monocromático; cor só onde é função. Carregar DEPOIS de style.css.
+   ════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --brand:      #1B1C1E;
+  --brand-d:    #000000;
+  --brand-l:    #EFEEEB;
+  --brand-mid:  #CDCAC3;
+
+  --surface:    #FFFFFF;
+  --surface-2:  #F4F3F0;
+  --surface-3:  #EAE8E2;
+  --surface-4:  #DEDBD3;
+  --border:     #E7E5E0;
+  --border-d:   #D4D1C9;
+  --text:       #1B1C1E;
+  --text-2:     #3F4248;
+  --text-3:     #6A6E74;
+  --text-4:     #9A9CA1;
+
+  --green:  #3E8E5E; --green-l:#EAF1EC; --green-b:#CBE2D2;
+  --red:    #BD4B43; --red-l:  #F8ECEB; --red-b:  #ECCDC9;
+  --amber:  #B07D2B; --amber-l:#F6F0E2; --amber-b:#E7D8B4;
+  --orange: #A85A28; --orange-l:#F4EAE1; --orange-b:#E2C7AE;
+  --purple: #4B4F5C; --purple-l:#ECEDEF; --purple-b:#CDD0D6;
+  --cyan:   #2E6E6A; --cyan-l:#E6F0EF; --cyan-b:#C2DCD9;
+
+  --sans: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-sm: 6px;
+  --radius:    8px;
+  --radius-lg: 11px;
+  --radius-xl: 13px;
+
+  --shadow-sm: 0 1px 2px rgba(20,20,20,.04);
+  --shadow:    0 2px 8px rgba(20,20,20,.06);
+  --shadow-lg: 0 8px 24px rgba(20,20,20,.10);
+  --shadow-xl: 0 18px 44px rgba(20,20,20,.16);
+}
+
+body{background:var(--surface-2);font-family:var(--sans)}
+
+/* ── animações ───────────────────────────────────────────── */
+@keyframes smrise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes smfade{from{opacity:0}to{opacity:1}}
+@keyframes smpulsePro{0%{box-shadow:0 0 0 0 rgba(62,142,94,.45)}70%{box-shadow:0 0 0 6px rgba(62,142,94,0)}100%{box-shadow:0 0 0 0 rgba(62,142,94,0)}}
+.page-content.view-enter{animation:smrise .4s cubic-bezier(.2,.7,.2,1)}
+
+/* ════════════════════════════════════════════════════════════
+   SIDEBAR — rail grafite escuro
+   ════════════════════════════════════════════════════════════ */
+.sidebar{background:#17181A;border-right:1px solid #000}
+.sidebar-header{border-bottom:1px solid #232427;padding:22px 16px 18px}
+
+/* Wordmark MÉRITO (preto → branco via invert) */
+.sidebar-header .brand{align-items:center;gap:11px}
+#sidebarLogoWrap.brand-icon{width:auto;height:auto;background:transparent;border-radius:0;overflow:visible;flex:0 0 auto}
+#sidebarLogoWrap.brand-icon img{height:23px;width:auto;object-fit:contain;padding:0;filter:invert(1)}
+#sidebarLogoWrap.brand-icon i{color:#F4F3F0;font-size:18px}
+.brand-name{color:#F4F3F0;font-weight:700;letter-spacing:-.2px}
+.brand-sub{color:#7A7C80;letter-spacing:.02em}
+
+.nav-section-label{color:#5E6064;letter-spacing:.14em;font-weight:600}
+.nav-link{color:#AFB1B5;font-weight:500;border-radius:7px;transition:background .12s,color .12s}
+.nav-link i{color:#7C7E82;transition:color .12s}
+.nav-link:hover{background:rgba(255,255,255,.05);color:#EDEDEE}
+.nav-link:hover i{color:#EDEDEE}
+.nav-link.active{background:rgba(255,255,255,.08);color:#F4F3F0;font-weight:600;box-shadow:inset 3px 0 0 #F4F3F0}
+.nav-link.active i{color:#F4F3F0}
+.nav-badge{background:var(--red);color:#fff;border-radius:6px}
+
+.sidebar-footer{border-top:1px solid #232427}
+.sidebar-user .user-name{color:#EDEDEE}
+.sidebar-user .user-role{color:#7A7C80}
+.sidebar-user .user-avatar{background:#2B2C30;color:#E7E7E9}
+.logout-btn{color:#7A7C80}
+.logout-btn:hover{color:#E08379;background:rgba(224,131,121,.12)}
+
+/* ════════════════════════════════════════════════════════════
+   TOPBAR
+   ════════════════════════════════════════════════════════════ */
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border)}
+.topbar-title{font-weight:700;font-size:15px;letter-spacing:-.2px}
+.search-box input{height:38px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border)}
+.search-box input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,28,30,.06)}
+.status-pill{border-radius:999px;background:var(--surface-2);border:1px solid var(--border);font-weight:500}
+.status-dot.online{animation:smpulsePro 2.4s infinite}
+.topbar-btn{border-radius:8px;border:1px solid var(--border);background:var(--surface);font-weight:500}
+.topbar-btn:hover{background:var(--surface-2);border-color:var(--border-d)}
+.topbar-btn.primary{background:var(--brand);border-color:var(--brand)}
+.topbar-btn.primary:hover{background:#000;border-color:#000}
+
+/* ════════════════════════════════════════════════════════════
+   KPI / STAT CARDS
+   ════════════════════════════════════════════════════════════ */
+.stat-card{border-radius:var(--radius-lg);border:1px solid var(--border);box-shadow:var(--shadow-sm);transition:box-shadow .16s,transform .16s,border-color .16s}
+.stat-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:var(--border-d)}
+.stat-label{text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;font-weight:600;color:var(--text-4)}
+.stat-num{font-family:var(--mono);font-weight:600;letter-spacing:-1.2px;font-variant-numeric:tabular-nums}
+.stat-icon-wrap{border-radius:var(--radius);background:var(--surface-3);color:var(--text-2)}
+.stat-card.green .stat-icon-wrap{background:var(--green-l);color:var(--green)}
+.stat-card.red .stat-icon-wrap{background:var(--red-l);color:var(--red)}
+.stat-card.amber .stat-icon-wrap{background:var(--amber-l);color:var(--amber)}
+.stat-card.blue .stat-icon-wrap{background:var(--surface-3);color:var(--text-2)}
+.stat-card.purple .stat-icon-wrap{background:var(--surface-3);color:var(--text-2)}
+.stat-card.cyan .stat-icon-wrap{background:var(--cyan-l);color:var(--cyan)}
+
+/* ════════════════════════════════════════════════════════════
+   CARDS / TABELAS / SEÇÕES
+   ════════════════════════════════════════════════════════════ */
+.card,.table-wrap,.dash-card,.config-section{border-radius:var(--radius-lg);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.section-title{font-weight:700;letter-spacing:-.2px}
+.section-count{border-radius:999px;font-family:var(--mono);background:var(--surface-3);border:1px solid var(--border);color:var(--text-3)}
+.dash-card h3{font-weight:700;letter-spacing:-.1px}
+thead th{text-transform:uppercase;letter-spacing:.07em;font-size:10.5px;color:var(--text-4);background:var(--surface-2)}
+.col-host span,.mono,.device-ip,.ticket-num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+tbody tr{transition:background .1s}
+
+/* Mini barras do dashboard */
+.bar-track{background:var(--surface-3);height:7px;border-radius:4px}
+.bar-fill{border-radius:4px}
+
+/* Botões */
+.btn-primary,.btn-login{background:var(--brand);border-color:var(--brand);border-radius:var(--radius)}
+.btn-primary:hover,.btn-login:hover{background:#000;border-color:#000}
+.btn-secondary{border-radius:var(--radius)}
+.row-btn{border-radius:var(--radius-sm)}
+.device-card{border-radius:var(--radius-lg);transition:box-shadow .16s,transform .16s,border-color .16s}
+.device-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+
+/* ════════════════════════════════════════════════════════════
+   LOGIN PRO — split escuro/claro
+   ════════════════════════════════════════════════════════════ */
+.login-screen{display:flex;inset:0;align-items:stretch;justify-content:flex-start}
+.login-bg{display:none}
+
+.login-pro-left{width:46%;flex-shrink:0;background:#16181A;color:#F4F3F0;display:flex;flex-direction:column;padding:46px;position:relative;overflow:hidden}
+.login-pro-left::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.025) 1.1px,transparent 0);background-size:22px 22px;pointer-events:none}
+#loginLogoWrap.login-pro-logo{position:relative;width:auto;height:auto;background:transparent;border-radius:0;margin:0;display:block;overflow:visible;animation:smrise .55s ease both}
+#loginLogoWrap.login-pro-logo img{height:30px;width:auto;object-fit:contain;padding:0;filter:invert(1)}
+.login-pro-hero{position:relative;margin-top:auto;animation:smrise .6s ease .08s both}
+.login-pro-eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A8C90;margin-bottom:22px}
+.login-pro-eyebrow span{width:18px;height:1px;background:#3A3C40}
+.login-pro-hero h1{font-size:33px;font-weight:600;line-height:1.12;letter-spacing:-.7px;max-width:420px;color:#F4F3F0}
+.login-pro-hero p{font-size:14px;line-height:1.7;color:#9A9CA0;margin-top:18px;max-width:380px}
+.login-pro-dots{display:flex;gap:5px;margin-top:30px}
+.login-pro-dots i{width:18px;height:6px;border-radius:2px;background:#3A3C40;display:block}
+.login-pro-dots i.on{width:34px;background:#F4F3F0}
+.login-pro-status{position:relative;margin-top:34px;display:flex;align-items:center;gap:9px;font-size:12px;color:#7C7E82;animation:smfade .8s ease .4s both}
+.login-pro-status .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:smpulsePro 2.4s infinite}
+.login-pro-status b{font-family:var(--mono);color:#AEB0B4;font-weight:500}
+
+.login-pro-right{flex:1;display:flex;align-items:center;justify-content:center;padding:32px;background:var(--surface-2)}
+.login-pro-form{width:100%;max-width:372px;animation:smrise .6s ease .15s both}
+.login-pro-head{margin-bottom:28px}
+.login-pro-head h2{font-size:24px;font-weight:600;letter-spacing:-.4px;color:var(--text)}
+.login-pro-head p{font-size:13.5px;color:var(--text-3);margin-top:7px}
+.login-pro-right .field-group{margin-bottom:16px}
+.login-pro-right .field-group label{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:7px}
+.login-pro-right .input-icon input{height:44px;border-radius:9px;background:var(--surface);border:1px solid var(--border-d)}
+.login-pro-right .input-icon input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,28,30,.07);background:var(--surface)}
+.login-pro-right .btn-login{height:46px;border-radius:9px;font-size:14px;gap:8px}
+.login-pro-foot{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;color:var(--text-4);margin-top:22px}
+.login-pro-divider{display:flex;align-items:center;gap:12px;margin:22px 0}
+.login-pro-divider span{flex:1;height:1px;background:var(--border-d)}
+.login-pro-divider em{font-style:normal;font-size:11px;color:var(--text-4);font-family:var(--mono);letter-spacing:.05em}
+
+@media(max-width:860px){
+  .login-pro-left{display:none}
+  .login-pro-right{width:100%}
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODO ESCURO — body.dark
+   ════════════════════════════════════════════════════════════ */
+body.dark{
+  --surface:    #1B1E24;
+  --surface-2:  #14161B;
+  --surface-3:  #22262D;
+  --surface-4:  #2C313A;
+  --border:     #2A2F38;
+  --border-d:   #3A414B;
+  --text:       #ECEEF2;
+  --text-2:     #AEB6C1;
+  --text-3:     #7A828E;
+  --text-4:     #525A65;
+
+  --brand:      #ECEEF2;
+  --brand-d:    #FFFFFF;
+  --brand-l:    #22262D;
+  --brand-mid:  #3A414B;
+
+  --green:  #57C28C; --green-l:#16241D; --green-b:#264634;
+  --red:    #E08379; --red-l:  #271917; --red-b:  #4A2C28;
+  --amber:  #D6A552; --amber-l:#241E12; --amber-b:#463A20;
+  --orange: #D58A55; --orange-l:#251B12; --orange-b:#46331F;
+  --purple: #9EA2C4; --purple-l:#1E2029; --purple-b:#383C4C;
+
+  background:#14161B;
+}
+body.dark .login-pro-right{background:var(--surface-2)}
+body.dark .btn-login,
+body.dark .btn-primary,
+body.dark .topbar-btn.primary{background:var(--brand);color:#15171B;border-color:var(--brand)}
+body.dark .btn-login:hover,
+body.dark .btn-primary:hover,
+body.dark .topbar-btn.primary:hover{background:#fff;border-color:#fff}
+body.dark .stat-num{color:var(--text)}
+body.dark .stat-card .stat-icon-wrap,
+body.dark .stat-card.blue .stat-icon-wrap,
+body.dark .stat-card.purple .stat-icon-wrap{background:var(--surface-3);color:var(--text-2)}
+body.dark .search-box input:focus,
+body.dark .login-pro-right .input-icon input:focus,
+body.dark .form-field input:focus,
+body.dark .form-field select:focus,
+body.dark .form-field textarea:focus{box-shadow:0 0 0 3px rgba(236,238,242,.10)}
+/* No escuro o app já é grafite; rail fica levemente mais escuro que as superfícies */
+body.dark .sidebar{background:#101216;border-right:1px solid #000}

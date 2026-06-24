@@ -3,46 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <title>Acesso Remoto — System Mérito</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',sans-serif;color:#D8DEE7;overflow:hidden;-webkit-font-smoothing:antialiased}
+html,body{height:100%;background:#0a0f1e;font-family:'Segoe UI',sans-serif;color:#e2e8f0;overflow:hidden}
 
 /* TOPBAR */
 .bar{position:fixed;top:0;left:0;right:0;height:48px;
-  background:#16202F;border-bottom:1px solid rgba(255,255,255,.07);
-  display:flex;align-items:center;gap:10px;padding:0 14px;z-index:100}
-.bar-logo{font-size:13.5px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px;letter-spacing:.01em}
-.bar-logo svg{opacity:.9}
-.bar-logo span{background:rgba(255,255,255,.08);padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600;letter-spacing:.08em;color:#9FB0C4}
-.bar-sep{width:1px;height:20px;background:rgba(255,255,255,.12)}
-.bar-host{font-size:13px;font-weight:600;color:#C3D2E2}
-.bar-ip{font-size:11px;color:rgba(255,255,255,.4);font-family:'IBM Plex Mono',monospace}
+  background:linear-gradient(90deg,#1e3a8a,#1e40af);
+  display:flex;align-items:center;gap:10px;padding:0 14px;
+  z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.bar-logo{font-size:14px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+.bar-logo span{background:rgba(255,255,255,.15);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.bar-sep{width:1px;height:20px;background:rgba(255,255,255,.2)}
+.bar-host{font-size:13px;font-weight:600;color:#bfdbfe}
+.bar-ip{font-size:11px;color:rgba(255,255,255,.45);font-family:monospace}
 .bar-right{margin-left:auto;display:flex;align-items:center;gap:7px}
 
-.pill{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;
-  background:rgba(255,255,255,.06);font-size:11px;color:rgba(255,255,255,.78)}
-.dot{width:7px;height:7px;border-radius:50%;background:#8B95A1}
-.dot.ok{background:#3FA372}
-.dot.err{background:#C95B52}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
-.dot.blink{background:#C49A4A;animation:blink 1.2s ease-in-out infinite}
+.pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;
+  background:rgba(255,255,255,.1);font-size:11px;color:rgba(255,255,255,.8)}
+.dot{width:7px;height:7px;border-radius:50%;background:#94a3b8}
+.dot.ok{background:#22c55e;box-shadow:0 0 8px #22c55e}
+.dot.err{background:#ef4444}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.dot.blink{background:#f59e0b;animation:blink 1s infinite}
 
-.btn{padding:5px 11px;border-radius:6px;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);color:#D8DEE7;font-size:12px;font-weight:500;
-  cursor:pointer;transition:background .15s,border-color .15s;display:flex;align-items:center;gap:6px;white-space:nowrap}
-.btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)}
-.btn svg{width:14px;height:14px}
-.btn.red{background:rgba(201,91,82,.14);border-color:rgba(201,91,82,.3);color:#E3A39C}
-.btn.red:hover{background:rgba(201,91,82,.26)}
-.btn.green{background:rgba(63,163,114,.13);border-color:rgba(63,163,114,.3);color:#9CCFB3}
-.btn.green:hover{background:rgba(63,163,114,.24)}
+.btn{padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);color:#fff;font-size:12px;
+  cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.22)}
+.btn.red{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.4)}
+.btn.red:hover{background:rgba(239,68,68,.38)}
+.btn.green{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35)}
 
 /* Monitor selector */
-.monitor-select{padding:5px 9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
-  border-radius:6px;color:#D8DEE7;font-size:12px;font-family:inherit;cursor:pointer;min-width:104px}
-.monitor-select option{background:#16202F;color:#D8DEE7}
+.monitor-select{padding:4px 8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  border-radius:7px;color:#fff;font-size:12px;cursor:pointer;min-width:100px}
+.monitor-select option{background:#1e3a8a;color:#fff}
 
 /* LAYOUT */
 #main{position:fixed;inset:48px 0 0 0;display:flex;display:none}
@@ -55,43 +51,41 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
   filter:drop-shadow(0 0 2px rgba(0,0,0,.9));z-index:10}
 
 /* PAINEL LATERAL */
-#side{width:300px;flex-shrink:0;background:#121A27;
+#side{width:300px;flex-shrink:0;background:#0f172a;
   border-left:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column}
 .tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.06)}
-.tab{flex:1;padding:10px 6px;text-align:center;font-size:11.5px;font-weight:500;
-  color:rgba(255,255,255,.42);border:none;background:none;cursor:pointer;
-  border-bottom:2px solid transparent;transition:all .15s;
-  display:flex;align-items:center;justify-content:center;gap:6px}
-.tab svg{width:14px;height:14px}
-.tab.active{color:#D6DBE1;border-bottom-color:#C9CED5;background:rgba(255,255,255,.08)}
-.tab:hover:not(.active){color:rgba(255,255,255,.66)}
+.tab{flex:1;padding:9px 6px;text-align:center;font-size:11.5px;font-weight:600;
+  color:rgba(255,255,255,.35);border:none;background:none;cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .15s}
+.tab.active{color:#60a5fa;border-bottom-color:#60a5fa;background:rgba(96,165,250,.06)}
+.tab:hover:not(.active){color:rgba(255,255,255,.6)}
 
 /* TERMINAL */
-#terminal{flex:1;overflow-y:auto;padding:12px;
-  font-family:'IBM Plex Mono','Consolas',monospace;font-size:11.5px;line-height:1.8;
-  background:#0B111B}
+#terminal{flex:1;overflow-y:auto;padding:10px;
+  font-family:'Cascadia Code','Consolas',monospace;font-size:11.5px;line-height:1.8;
+  background:#030712}
 .tl{margin-bottom:1px}
-.tp{color:#D6DBE1;font-weight:600}
-.to{color:#8FC9AB;white-space:pre-wrap;word-break:break-all}
-.te{color:#E3A39C;white-space:pre-wrap}
-.ti{color:#67727F}
-.tinput{display:flex;align-items:center;gap:8px;padding:9px 10px;
-  border-top:1px solid rgba(255,255,255,.06);background:#121A27;flex-shrink:0}
-.tinput span{color:#D6DBE1;font-weight:600;font-family:'IBM Plex Mono',monospace;font-size:11.5px;white-space:nowrap}
-.tinput input{flex:1;background:none;border:none;color:#D8DEE7;
-  font-family:'IBM Plex Mono',monospace;font-size:11.5px;outline:none}
-.tsend{padding:5px 10px;border-radius:5px;background:#3A414B;
-  border:none;color:#fff;font-size:11px;cursor:pointer;transition:background .15s}
-.tsend:hover{background:#4A515C}
+.tp{color:#3b82f6;font-weight:700}
+.to{color:#86efac;white-space:pre-wrap;word-break:break-all}
+.te{color:#f87171;white-space:pre-wrap}
+.ti{color:#64748b}
+.tinput{display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border-top:1px solid rgba(255,255,255,.06);background:#0f172a;flex-shrink:0}
+.tinput span{color:#3b82f6;font-weight:700;font-family:monospace;font-size:11.5px;white-space:nowrap}
+.tinput input{flex:1;background:none;border:none;color:#e2e8f0;
+  font-family:monospace;font-size:11.5px;outline:none}
+.tsend{padding:4px 10px;border-radius:5px;background:#1e40af;
+  border:none;color:#fff;font-size:11px;cursor:pointer}
+.tsend:hover{background:#2563eb}
 
 /* ARQUIVOS */
 #filesPanel{display:none;flex:1;flex-direction:column;overflow:hidden}
-.drop-zone{margin:12px;border:1.5px dashed rgba(111,160,204,.32);border-radius:10px;
+.drop-zone{margin:12px;border:2px dashed rgba(96,165,250,.3);border-radius:10px;
   padding:24px;text-align:center;cursor:pointer;transition:all .2s;flex-shrink:0}
-.drop-zone:hover,.drop-zone.drag{border-color:#C9CED5;background:rgba(255,255,255,.07)}
-.drop-zone svg{width:30px;height:30px;color:#98A1AB;display:block;margin:0 auto 10px;stroke-width:1.6}
-.drop-zone p{font-size:12.5px;color:#67727F;line-height:1.6}
-.drop-zone strong{color:#AEB6C1;font-weight:600}
+.drop-zone:hover,.drop-zone.drag{border-color:#60a5fa;background:rgba(96,165,250,.06)}
+.drop-zone i{font-size:28px;color:#3b82f6;display:block;margin-bottom:8px}
+.drop-zone p{font-size:12.5px;color:#64748b;line-height:1.6}
+.drop-zone strong{color:#93c5fd}
 .drop-zone input{display:none}
 .file-list{flex:1;overflow-y:auto;padding:0 12px 12px}
 .file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;
@@ -99,58 +93,57 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
   border-radius:8px;margin-bottom:8px;font-size:12px}
 .file-icon{font-size:20px;flex-shrink:0}
 .file-info{flex:1;min-width:0}
-.file-name{font-weight:600;color:#D8DEE7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-size{font-size:11px;color:#67727F;margin-top:2px}
+.file-name{font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-size{font-size:11px;color:#64748b;margin-top:2px}
 .file-prog{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:6px;overflow:hidden}
-.file-prog-bar{height:100%;background:#C9CED5;border-radius:2px;transition:width .3s}
+.file-prog-bar{height:100%;background:#3b82f6;border-radius:2px;transition:width .3s}
 .file-status{font-size:11px;margin-top:4px}
-.file-status.ok{color:#3FA372}
-.file-status.err{color:#C95B52}
-.file-status.sending{color:#C49A4A}
-.dest-input{margin:12px 12px 10px;display:flex;gap:8px;flex-shrink:0}
+.file-status.ok{color:#22c55e}
+.file-status.err{color:#ef4444}
+.file-status.sending{color:#f59e0b}
+.dest-input{margin:0 12px 10px;display:flex;gap:8px;flex-shrink:0}
 .dest-input input{flex:1;padding:7px 10px;background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.1);border-radius:7px;
-  color:#D8DEE7;font-size:12px;outline:none;font-family:'IBM Plex Mono',monospace}
-.dest-input input:focus{border-color:#C9CED5}
+  color:#e2e8f0;font-size:12px;outline:none;font-family:monospace}
+.dest-input input:focus{border-color:#3b82f6}
 
 /* INFO */
-#infoPanel{display:none;flex:1;overflow-y:auto;padding:14px}
-.isec{margin-bottom:16px}
-.ititle{font-size:10px;font-weight:600;text-transform:uppercase;
-  letter-spacing:.1em;color:#52606E;margin-bottom:8px}
-.irow{display:flex;justify-content:space-between;padding:6px 0;
-  border-bottom:1px solid rgba(255,255,255,.05);font-size:12px}
-.ikey{color:#67727F}
-.ival{color:#D8DEE7;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+#infoPanel{display:none;flex:1;overflow-y:auto;padding:12px}
+.isec{margin-bottom:14px}
+.ititle{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:#334155;margin-bottom:7px}
+.irow{display:flex;justify-content:space-between;padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.ikey{color:#475569}
+.ival{color:#e2e8f0;font-family:monospace;font-size:11.5px}
 
 /* LOADING */
-#load{position:fixed;inset:48px 0 0 0;background:#0E1420;
+#load{position:fixed;inset:48px 0 0 0;background:#0a0f1e;
   display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50}
-.spin{width:40px;height:40px;border:3px solid #1E2A3B;border-top-color:#C9CED5;
-  border-radius:50%;animation:spin .8s linear infinite;margin-bottom:22px}
+.spin{width:44px;height:44px;border:3px solid #1e293b;border-top-color:#3b82f6;
+  border-radius:50%;animation:spin .8s linear infinite;margin-bottom:20px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.lh{font-size:16px;font-weight:600;margin-bottom:6px;color:#E4EAF1}
-.ls{font-size:13px;color:#67727F;text-align:center;max-width:360px;line-height:1.7}
-.lsteps{margin-top:18px;font-size:12px;color:#52606E;line-height:2.6}
-.step.done{color:#3FA372}.step.active{color:#C49A4A}.step.error{color:#C95B52}
-.ecard{background:rgba(201,91,82,.08);border:1px solid rgba(201,91,82,.22);
-  border-radius:10px;padding:20px 24px;text-align:center;max-width:440px;margin-top:12px}
-.ecard h3{color:#D4756C;margin-bottom:8px;font-weight:600}
-.ecard p{font-size:13px;color:#8C96A2;line-height:1.8}
-.ecard code{background:#1B2533;padding:2px 7px;border-radius:4px;font-size:11.5px;color:#D8DEE7;font-family:'IBM Plex Mono',monospace}
-.retry{margin-top:14px;padding:8px 22px;border-radius:7px;
-  background:#3A414B;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:600}
-.retry:hover{background:#4A515C}
+.lh{font-size:17px;font-weight:700;margin-bottom:6px}
+.ls{font-size:13px;color:#64748b;text-align:center;max-width:360px;line-height:1.7}
+.lsteps{margin-top:16px;font-size:12px;color:#475569;line-height:2.6}
+.step.done{color:#22c55e}.step.active{color:#f59e0b}.step.error{color:#ef4444}
+.ecard{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
+  border-radius:12px;padding:20px 24px;text-align:center;max-width:440px;margin-top:12px}
+.ecard h3{color:#ef4444;margin-bottom:8px}
+.ecard p{font-size:13px;color:#94a3b8;line-height:1.8}
+.ecard code{background:#1e293b;padding:2px 7px;border-radius:4px;font-size:11.5px;color:#e2e8f0}
+.retry{margin-top:14px;padding:8px 22px;border-radius:8px;
+  background:#3b82f6;border:none;color:#fff;font-size:13px;cursor:pointer;font-weight:600}
 
 /* TOAST */
 #toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
   z-index:999;display:flex;flex-direction:column;gap:8px;align-items:center}
-.toast{padding:9px 18px;background:#1B2533;border:1px solid rgba(255,255,255,.1);
-  border-radius:8px;font-size:12.5px;color:#D8DEE7;
-  animation:tfade .2s ease;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast{padding:9px 18px;background:#1e293b;border:1px solid rgba(255,255,255,.1);
+  border-radius:99px;font-size:12.5px;color:#e2e8f0;
+  animation:tfade .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 @keyframes tfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.toast.ok{border-color:rgba(63,163,114,.4);color:#8FC9AB}
-.toast.err{border-color:rgba(201,91,82,.4);color:#E3A39C}
+.toast.ok{border-color:rgba(34,197,94,.4);color:#86efac}
+.toast.err{border-color:rgba(239,68,68,.4);color:#f87171}
 </style>
 </head>
 <body>
@@ -158,9 +151,10 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
 <!-- TOPBAR -->
 <div class="bar">
   <div class="bar-logo">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C3D2E2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
       <rect x="2" y="3" width="20" height="14" rx="2"/>
-      <path d="M8 21h8M12 17v4"/>
+      <line x1="8" y1="21" x2="16" y2="21"/>
+      <line x1="12" y1="17" x2="12" y2="21"/>
     </svg>
     System Mérito <span>REMOTO</span>
   </div>
@@ -170,7 +164,7 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
   <div class="bar-right">
     <!-- Seletor de monitor -->
     <select class="monitor-select" id="monitorSel" onchange="changeMonitor()" title="Selecionar monitor">
-      <option value="0">Monitor 1</option>
+      <option value="0">🖥 Monitor 1</option>
     </select>
 
     <div class="pill">
@@ -179,17 +173,9 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
     </div>
 
     <button class="btn" onclick="sendCad()" title="Ctrl+Alt+Del">CAD</button>
-    <button class="btn" onclick="toggleFS()" title="Tela cheia">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-    </button>
-    <button class="btn green" onclick="showTab('files')" title="Enviar arquivo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h3l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>
-      Arquivos
-    </button>
-    <button class="btn red" onclick="disconnect()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      Fechar
-    </button>
+    <button class="btn" onclick="toggleFS()" title="Tela cheia">⛶</button>
+    <button class="btn green" onclick="showTab('files')" title="Enviar arquivo">📁 Arquivos</button>
+    <button class="btn red" onclick="disconnect()">✕ Fechar</button>
   </div>
 </div>
 
@@ -199,9 +185,9 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
   <div class="lh" id="lTitle">Iniciando sessão remota...</div>
   <div class="ls" id="lSub">Conectando ao agente System Mérito</div>
   <div class="lsteps">
-    <div class="step" id="s1">Localizando agente...</div>
-    <div class="step" id="s2" style="opacity:.4">Abrindo conexão...</div>
-    <div class="step" id="s3" style="opacity:.4">Iniciando captura de tela...</div>
+    <div class="step" id="s1">⏳ Localizando agente...</div>
+    <div class="step" id="s2" style="opacity:.4">⏳ Abrindo conexão...</div>
+    <div class="step" id="s3" style="opacity:.4">⏳ Iniciando captura de tela...</div>
   </div>
 </div>
 
@@ -216,18 +202,9 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
   <!-- PAINEL -->
   <div id="side">
     <div class="tabs">
-      <button class="tab active" onclick="showTab('terminal')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 6-6-6-6M12 19h8"/></svg>
-        Terminal
-      </button>
-      <button class="tab" onclick="showTab('files')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h3l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>
-        Arquivos
-      </button>
-      <button class="tab" onclick="showTab('info')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-        Info
-      </button>
+      <button class="tab active" onclick="showTab('terminal')">⌨ Terminal</button>
+      <button class="tab"        onclick="showTab('files')">📁 Arquivos</button>
+      <button class="tab"        onclick="showTab('info')">ℹ Info</button>
     </div>
 
     <!-- TERMINAL -->
@@ -257,7 +234,7 @@ html,body{height:100%;background:#0E1420;font-family:'IBM Plex Sans','Segoe UI',
            ondragover="dragOver(event)" ondragleave="dragLeave(event)"
            ondrop="dropFile(event)" onclick="document.getElementById('fileInput').click()">
         <input type="file" id="fileInput" multiple onchange="filesSelected(this.files)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8M8 17l4 4 4-4"/><path d="M20 16.7A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 15.2"/></svg>
+        <i>📂</i>
         <p>Arraste arquivos aqui ou <strong>clique para selecionar</strong></p>
         <p style="margin-top:6px;font-size:11px">Múltiplos arquivos suportados</p>
       </div>
@@ -300,6 +277,8 @@ function step(n, s) {
   if (!el) return;
   el.style.opacity = '1';
   el.className = 'step ' + s;
+  const ic = {done:'✅',active:'🔄',error:'❌'};
+  el.textContent = el.textContent.replace(/[⏳✅🔄❌]/u, ic[s]||'⏳');
 }
 
 function setStatus(type, txt) {
@@ -353,10 +332,10 @@ function sendPS() {
   const inp = document.getElementById('psIn');
   const cmd = inp.value.trim();
   if (!cmd || !ws || !connected) return;
-  tl(`<span class="tp">PS&gt; </span><span style="color:#D8DEE7">${esc(cmd)}</span>`);
+  tl(`<span class="tp">PS&gt; </span><span style="color:#e2e8f0">${esc(cmd)}</span>`);
   psHist.unshift(cmd); psIdx = -1; inp.value = '';
   const id = ++reqId;
-  tl(`<span class="ti" id="pr${id}">Executando...</span>`);
+  tl(`<span class="ti" id="pr${id}">⏳ Executando...</span>`);
   ws.send(JSON.stringify({type:'powershell', cmd, id}));
 }
 
@@ -378,10 +357,10 @@ function updateMonitorList(list) {
   monitors = list || [];
   const sel = document.getElementById('monitorSel');
   sel.innerHTML = monitors.map((m,i) =>
-    `<option value="${i}">Monitor ${i+1}${m.primary?' (principal)':''} ${m.width&&m.height?`· ${m.width}x${m.height}`:''}</option>`
+    `<option value="${i}">🖥 Monitor ${i+1}${m.primary?' (principal)':''} ${m.width||''}x${m.height||''}</option>`
   ).join('');
   if (!monitors.length) {
-    sel.innerHTML = '<option value="0">Monitor 1</option>';
+    sel.innerHTML = '<option value="0">🖥 Monitor 1</option>';
   }
 }
 
@@ -474,9 +453,9 @@ function sendFile(file) {
     <div class="file-icon">${getFileIcon(file.name)}</div>
     <div class="file-info">
       <div class="file-name">${esc(file.name)}</div>
-      <div class="file-size">${formatSize(file.size)} → <span style="color:#AEB6C1;font-size:10.5px">${esc(dest)}</span></div>
+      <div class="file-size">${formatSize(file.size)} → <span style="color:#93c5fd;font-size:10.5px">${esc(dest)}</span></div>
       <div class="file-prog"><div class="file-prog-bar" id="pb${fileId}" style="width:0%"></div></div>
-      <div class="file-status sending" id="st${fileId}">Preparando...</div>
+      <div class="file-status sending" id="st${fileId}">⏳ Preparando...</div>
     </div>`;
   list.insertBefore(card, list.firstChild);
 
@@ -487,7 +466,7 @@ function sendFile(file) {
     const chunkSz = 64 * 1024; // 64KB por chunk
     const total   = Math.ceil(data.length / chunkSz);
 
-    document.getElementById(`st${fileId}`).textContent = 'Enviando...';
+    document.getElementById(`st${fileId}`).textContent = '📤 Enviando...';
 
     let chunk = 0;
     function sendChunk() {
@@ -552,7 +531,7 @@ function connect() {
         document.getElementById('load').style.display = 'none';
         document.getElementById('main').style.display = 'flex';
         setStatus('ok', `Conectado — ${HOST}`);
-        tl(`<span class="ti">Conectado | Agente v${msg.version||'?'} | ${msg.hostname||HOST}</span>`);
+        tl(`<span class="ti">✅ Conectado | Agente v${msg.version||'?'} | ${msg.hostname||HOST}</span>`);
         tl(`<span class="ti">────────────────────────────────</span>`);
         ws.send(JSON.stringify({type:'start_stream', monitor: curMonitor}));
         ws.send(JSON.stringify({type:'get_monitors'}));
@@ -583,11 +562,11 @@ function connect() {
         if (st) {
           if (msg.done) {
             st.className = 'file-status ok';
-            st.textContent = 'Enviado com sucesso';
+            st.textContent = '✅ Enviado com sucesso!';
             toast(`${msg.filename} enviado!`, 'ok');
           } else if (msg.error) {
             st.className = 'file-status err';
-            st.textContent = 'Erro: ' + msg.error;
+            st.textContent = '❌ Erro: ' + msg.error;
             toast(`Erro ao enviar ${msg.filename}`, 'err');
           }
         }
@@ -605,7 +584,7 @@ function connect() {
       if (connected) {
         connected = false;
         setStatus('err','Desconectado');
-        tl('<span class="te">Conexão encerrada.</span>');
+        tl('<span class="te">❌ Conexão encerrada.</span>');
         document.getElementById('load').style.display = 'flex';
         document.getElementById('main').style.display = 'none';
         showErr('Sessão encerrada','A conexão com o agente foi interrompida.');

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Mérito — Novo visual (preview)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link id="themeLink" rel="stylesheet">
+<script>
+  (function(){
+    var t = localStorage.getItem('smTheme');
+    if (t === null) t = 'grafite';
+    document.getElementById('themeLink').href = t ? 'css/theme-'+t+'.css' : '';
+  })();
+</script>
+<style>
+  .preview-toggle{position:fixed;top:14px;right:16px;z-index:300;display:flex;gap:6px;
+    background:#fff;border:1px solid #e2e6eb;border-radius:99px;padding:4px;box-shadow:0 4px 12px rgba(20,28,40,.1)}
+  .preview-toggle button{border:none;background:none;padding:6px 14px;border-radius:99px;font-size:12px;
+    font-weight:600;color:#444e5a;cursor:pointer;font-family:system-ui,sans-serif}
+  .preview-toggle button.on{background:#157082;color:#fff}
+  .theme-switch{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:300;display:flex;gap:4px;
+    background:#fff;border:1px solid #e2e6eb;border-radius:99px;padding:4px;box-shadow:0 4px 12px rgba(20,28,40,.1)}
+  .theme-switch button{border:none;background:none;padding:7px 16px;border-radius:99px;font-size:12px;
+    font-weight:600;color:#444e5a;cursor:pointer;font-family:system-ui,sans-serif;white-space:nowrap}
+  .theme-switch button.on{background:#161b22;color:#fff}
+  .theme-switch .sep{width:1px;background:#e2e6eb;margin:3px 2px}
+</style>
+</head>
+<body>
+
+<div class="theme-switch">
+  <button data-theme="console"  onclick="setTheme('console')">A · Console</button>
+  <button data-theme="petroleo" onclick="setTheme('petroleo')">B · Petróleo</button>
+  <button data-theme="grafite"  onclick="setTheme('grafite')">C · Grafite</button>
+  <div class="sep"></div>
+  <button data-theme="" onclick="setTheme('')">Base v1</button>
+</div>
+
+<div class="preview-toggle">
+  <button id="tApp" class="on" onclick="showApp()">App</button>
+  <button id="tLogin" onclick="showLogin()">Login</button>
+  <div class="sep" style="width:1px;background:#e2e6eb;margin:3px 2px"></div>
+  <button id="tDark" onclick="toggleDarkPv()">🌙 Escuro</button>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="login-screen" style="display:none">
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-mark"><i class="fa-solid fa-laptop-code"></i></div>
+      <h1>System Mérito</h1>
+      <p>Gestão de TI</p>
+    </div>
+    <div class="field-group">
+      <label>Usuário</label>
+      <div class="input-icon"><i class="fa-solid fa-user"></i><input type="text" value="admin"></div>
+    </div>
+    <div class="field-group">
+      <label>Senha</label>
+      <div class="input-icon"><i class="fa-solid fa-lock"></i><input type="password" value="123456"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+      <input type="checkbox" checked style="accent-color:var(--brand);width:15px;height:15px">
+      <label style="font-size:12.5px;color:var(--text-2);font-weight:500">Lembrar senha</label>
+    </div>
+    <button class="btn-login">Entrar <i class="fa-solid fa-arrow-right"></i></button>
+    <div class="login-hint">Padrão: admin / admin123</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-laptop-code"></i></div>
+        <div>
+          <div class="brand-name">System Mérito</div>
+          <div class="brand-sub">Gestão de TI</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+      <a class="nav-link active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <div class="nav-section-label">Inventário</div>
+      <a class="nav-link"><i class="fa-solid fa-store"></i> Stand</a>
+      <a class="nav-link"><i class="fa-solid fa-building"></i> Escritório</a>
+      <a class="nav-link"><i class="fa-solid fa-hard-hat"></i> Obra</a>
+      <a class="nav-link"><i class="fa-solid fa-network-wired"></i> Rede / Dispositivos</a>
+      <div class="nav-section-label">Helpdesk</div>
+      <a class="nav-link"><i class="fa-solid fa-headset"></i> Tickets <span class="nav-badge">3</span></a>
+      <a class="nav-link"><i class="fa-solid fa-plus-circle"></i> Novo Ticket</a>
+      <div class="nav-section-label">Sistema</div>
+      <a class="nav-link"><i class="fa-solid fa-bolt"></i> Ações Remotas</a>
+      <a class="nav-link"><i class="fa-solid fa-chart-bar"></i> Relatórios</a>
+      <a class="nav-link"><i class="fa-solid fa-gear"></i> Configurações</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">A</div>
+        <div><div class="user-name">Administrador</div><div class="user-role">Admin</div></div>
+        <button class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Buscar dispositivo, IP, usuário..."></div>
+        <div class="status-pill"><div class="status-dot online"></div><span>Online (Supabase)</span></div>
+        <button class="topbar-btn"><i class="fa-solid fa-rotate"></i></button>
+        <button class="topbar-btn primary"><i class="fa-solid fa-plus"></i> Adicionar</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="stats-grid" style="grid-template-columns:repeat(5,1fr)">
+        <div class="stat-card blue"><div class="stat-icon-wrap"><i class="fa-solid fa-desktop"></i></div><div class="stat-label">Total dispositivos</div><div class="stat-num">6</div></div>
+        <div class="stat-card green"><div class="stat-icon-wrap"><i class="fa-solid fa-circle-check"></i></div><div class="stat-label">Online</div><div class="stat-num">5</div><div class="stat-sub">83% da frota</div></div>
+        <div class="stat-card red"><div class="stat-icon-wrap"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-label">Offline</div><div class="stat-num">1</div></div>
+        <div class="stat-card amber"><div class="stat-icon-wrap"><i class="fa-solid fa-wrench"></i></div><div class="stat-label">Manutenção</div><div class="stat-num">0</div></div>
+        <div class="stat-card purple"><div class="stat-icon-wrap"><i class="fa-solid fa-headset"></i></div><div class="stat-label">Tickets abertos</div><div class="stat-num">3</div></div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-card">
+          <h3><i class="fa-solid fa-map-location-dot"></i> Por localidade</h3>
+          <div class="bar-item"><div class="bar-label"><span>Stand</span><span>2 disp.</span></div><div class="bar-track"><div class="bar-fill" style="width:33%;background:#2E7D55"></div></div></div>
+          <div class="bar-item"><div class="bar-label"><span>Escritório</span><span>3 disp.</span></div><div class="bar-track"><div class="bar-fill" style="width:50%;background:#2B5B8C"></div></div></div>
+          <div class="bar-item"><div class="bar-label"><span>Obra</span><span>1 disp.</span></div><div class="bar-track"><div class="bar-fill" style="width:17%;background:#B0632F"></div></div></div>
+        </div>
+        <div class="dash-card">
+          <h3><i class="fa-solid fa-signal"></i> Status da frota</h3>
+          <div class="bar-item"><div class="bar-label"><span>Online</span><span>5 (83%)</span></div><div class="bar-track"><div class="bar-fill" style="width:83%;background:#2E7D55"></div></div></div>
+          <div class="bar-item"><div class="bar-label"><span>Offline</span><span>1 (17%)</span></div><div class="bar-track"><div class="bar-fill" style="width:17%;background:#BF4A41"></div></div></div>
+          <div class="bar-item"><div class="bar-label"><span>Manutenção</span><span>0 (0%)</span></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:#AF7526"></div></div></div>
+        </div>
+        <div class="dash-card">
+          <h3><i class="fa-solid fa-triangle-exclamation"></i> Atenção necessária</h3>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span class="badge badge-offline"><span class="badge-dot"></span>Offline</span>
+            <div style="flex:1"><div style="font-size:12.5px;font-weight:600">NB-STAND-RJ01</div><div style="font-size:11px;color:var(--text-3)">Stand Rio de Janeiro · 2h atrás</div></div>
+            <button class="row-btn"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="dash-card">
+          <h3><i class="fa-solid fa-ticket"></i> Últimos tickets</h3>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span class="badge badge-alta" style="font-size:10.5px"><i class="fa-solid fa-arrow-up"></i>Alta</span>
+            <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:600">Impressora não conecta na rede</div><div style="font-size:11px;color:var(--text-3)">Ana Souza · 1h atrás</div></div>
+            <span class="badge badge-aberto" style="font-size:10.5px">Aberto</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span class="badge badge-media" style="font-size:10.5px"><i class="fa-solid fa-minus"></i>Média</span>
+            <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:600">Solicitação de novo notebook</div><div style="font-size:11px;color:var(--text-3)">Carlos Lima · 3h atrás</div></div>
+            <span class="badge badge-andamento" style="font-size:10.5px">Em andamento</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-top:24px">
+        <div class="section-title">Inventário — Escritório</div>
+        <span class="section-count">3 dispositivos</span>
+        <div class="section-actions">
+          <select class="filter-select"><option>Todos os status</option></select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Host</th><th>IP</th><th>Usuário</th><th>Localidade</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="col-host"><strong>PC-FINANCEIRO-01</strong><span>Dell OptiPlex</span></td>
+              <td class="mono">192.168.1.10</td>
+              <td>Ana Souza</td>
+              <td><span class="loc-tag loc-escritorio"><i class="fa-solid fa-building"></i> Escritório</span></td>
+              <td><span class="badge badge-online"><span class="badge-dot"></span>Online</span></td>
+              <td><div class="row-actions"><button class="row-btn"><i class="fa-solid fa-eye"></i></button><button class="row-btn"><i class="fa-solid fa-pen"></i></button><button class="row-btn danger"><i class="fa-solid fa-trash"></i></button></div></td>
+            </tr>
+            <tr>
+              <td class="col-host"><strong>NB-RH-01</strong><span>HP ProBook</span></td>
+              <td class="mono">192.168.1.15</td>
+              <td>Carlos Lima</td>
+              <td><span class="loc-tag loc-escritorio"><i class="fa-solid fa-building"></i> Escritório</span></td>
+              <td><span class="badge badge-online"><span class="badge-dot"></span>Online</span></td>
+              <td><div class="row-actions"><button class="row-btn"><i class="fa-solid fa-eye"></i></button><button class="row-btn"><i class="fa-solid fa-pen"></i></button><button class="row-btn danger"><i class="fa-solid fa-trash"></i></button></div></td>
+            </tr>
+            <tr>
+              <td class="col-host"><strong>SRV-TI-01</strong><span>Dell PowerEdge</span></td>
+              <td class="mono">192.168.1.1</td>
+              <td>TI</td>
+              <td><span class="loc-tag loc-escritorio"><i class="fa-solid fa-building"></i> Escritório</span></td>
+              <td><span class="badge badge-manutencao"><span class="badge-dot"></span>Manutenção</span></td>
+              <td><div class="row-actions"><button class="row-btn"><i class="fa-solid fa-eye"></i></button><button class="row-btn"><i class="fa-solid fa-pen"></i></button><button class="row-btn danger"><i class="fa-solid fa-trash"></i></button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-header" style="margin-top:24px">
+        <div class="section-title">Rede &amp; Dispositivos</div>
+        <span class="section-count">4 online</span>
+      </div>
+      <div class="network-grid">
+        <div class="device-card online"><div class="device-icon desktop"><i class="fa-solid fa-desktop"></i></div><div class="device-hostname">PC-FINANCEIRO-01</div><div class="device-ip">192.168.1.10</div><span class="badge badge-online"><span class="badge-dot"></span>Online</span></div>
+        <div class="device-card online"><div class="device-icon notebook"><i class="fa-solid fa-laptop"></i></div><div class="device-hostname">NB-RH-01</div><div class="device-ip">192.168.1.15</div><span class="badge badge-online"><span class="badge-dot"></span>Online</span></div>
+        <div class="device-card online"><div class="device-icon servidor"><i class="fa-solid fa-server"></i></div><div class="device-hostname">SRV-TI-01</div><div class="device-ip">192.168.1.1</div><span class="badge badge-online"><span class="badge-dot"></span>Online</span></div>
+        <div class="device-card offline"><div class="device-icon notebook"><i class="fa-solid fa-laptop"></i></div><div class="device-hostname">NB-STAND-RJ01</div><div class="device-ip">192.168.2.15</div><span class="badge badge-offline"><span class="badge-dot"></span>Offline</span></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+  function showApp(){
+    document.getElementById('app').style.display='flex';
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('tApp').classList.add('on');
+    document.getElementById('tLogin').classList.remove('on');
+  }
+  function showLogin(){
+    document.getElementById('app').style.display='none';
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('tLogin').classList.add('on');
+    document.getElementById('tApp').classList.remove('on');
+  }
+  function setTheme(name){
+    localStorage.setItem('smTheme', name);
+    location.reload();
+  }
+  // marca o botão ativo conforme o tema carregado
+  (function(){
+    var t = localStorage.getItem('smTheme');
+    if (t === null) t = 'grafite';
+    document.querySelectorAll('.theme-switch button').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-theme') === t);
+    });
+  })();
+  // modo escuro do preview (persistente)
+  function toggleDarkPv(){
+    var on = document.body.classList.toggle('dark');
+    localStorage.setItem('sm_dark', on ? '1' : '0');
+    document.getElementById('tDark').classList.toggle('on', on);
+    document.getElementById('tDark').textContent = on ? '☀️ Claro' : '🌙 Escuro';
+  }
+  (function(){
+    if (localStorage.getItem('sm_dark') === '1') {
+      document.body.classList.add('dark');
+      var d = document.getElementById('tDark');
+      d.classList.add('on'); d.textContent = '☀️ Claro';
+    }
+  })();
+</script>
+</body>
+</html>

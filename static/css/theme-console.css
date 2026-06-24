@@ -1,0 +1,66 @@
+/* ════════════════════════════════════════════════════════════
+   TEMA A — "Console"
+   Rail lateral escuro · cantos retos · acento teal · workspace claro.
+   Carregar DEPOIS de style.css (camada de override).
+   ════════════════════════════════════════════════════════════ */
+:root{
+  --brand:      #157082;
+  --brand-d:    #105663;
+  --brand-l:    #E6F1F3;
+  --brand-mid:  #B6D6DC;
+
+  --surface:    #FFFFFF;
+  --surface-2:  #F4F6F8;
+  --surface-3:  #EAEDF1;
+  --surface-4:  #DDE2E8;
+  --border:     #E2E6EB;
+  --border-d:   #C8CFD7;
+  --text:       #161B22;
+  --text-2:     #444E5A;
+  --text-3:     #828D9A;
+  --text-4:     #B6BEC8;
+
+  --green:      #2E8259; --green-l:#E9F3ED; --green-b:#C2DDCC;
+  --red:        #C24B41; --red-l:  #FAEDEC; --red-b:  #EBC9C5;
+  --amber:      #B07722; --amber-l:#F8F2E6; --amber-b:#E6D2A6;
+
+  --radius-sm: 2px;
+  --radius:    3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+
+  --shadow-sm: 0 1px 1px rgba(20,28,40,.05);
+  --shadow:    0 1px 4px rgba(20,28,40,.07);
+  --shadow-lg: 0 6px 18px rgba(20,28,40,.10);
+  --shadow-xl: 0 14px 36px rgba(20,28,40,.16);
+}
+
+/* — Rail lateral escuro — */
+.sidebar{background:#161B23;border-right:1px solid #232A33}
+.sidebar-header{border-bottom:1px solid #232A33}
+.brand-icon{background:var(--brand);border-radius:3px}
+.brand-name{color:#E9EDF2}
+.brand-sub{color:#7B8693}
+.nav-section-label{color:#5A6471;letter-spacing:.12em}
+.nav-link{color:#A7B1BD;border-radius:2px}
+.nav-link i{color:#6C7682}
+.nav-link:hover{background:rgba(255,255,255,.055);color:#EDF1F5}
+.nav-link:hover i{color:#A7B1BD}
+.nav-link.active{background:rgba(21,112,130,.22);color:#56C2D4;box-shadow:inset 2px 0 0 var(--brand);font-weight:600}
+.nav-link.active i{color:#56C2D4}
+.sidebar-footer{border-top:1px solid #232A33}
+.user-avatar{background:var(--brand)}
+.user-name{color:#E9EDF2}
+.user-role{color:#7B8693}
+.logout-btn{color:#7B8693}
+.logout-btn:hover{color:#E08A82;background:rgba(194,75,65,.14)}
+
+/* — Workspace claro, denso, reto — */
+.topbar{border-bottom:1px solid var(--border)}
+.topbar-title{font-weight:600;letter-spacing:0}
+.nav-badge{border-radius:3px}
+.stat-num{font-weight:700;letter-spacing:-.6px}
+.search-box input,.status-pill{border-radius:3px}
+.badge,.section-count{border-radius:3px}
+.btn-login{border-radius:3px}
+.login-logo-mark{border-radius:5px}

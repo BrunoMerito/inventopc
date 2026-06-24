@@ -1,0 +1,130 @@
+/* ════════════════════════════════════════════════════════════
+   TEMA C — "Grafite"
+   Monocromático industrial · preto sólido · cantos vivos · Archivo.
+   Cor só onde é função (status). Carregar DEPOIS de style.css.
+   ════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --brand:      #1A1C20;
+  --brand-d:    #000000;
+  --brand-l:    #EDEEF0;
+  --brand-mid:  #C7CACF;
+
+  --surface:    #FFFFFF;
+  --surface-2:  #EDEEF1;
+  --surface-3:  #E3E5E9;
+  --surface-4:  #D5D8DD;
+  --border:     #DBDEE3;
+  --border-d:   #BFC4CB;
+  --text:       #15171B;
+  --text-2:     #474C54;
+  --text-3:     #868C95;
+  --text-4:     #B3B9C1;
+
+  --green:      #2D7A50; --green-l:#E8F1EC; --green-b:#C0DAC7;
+  --red:        #BC463D; --red-l:  #F8ECEB; --red-b:  #E8C7C3;
+  --amber:      #9C6E1E; --amber-l:#F4EEDF; --amber-b:#E0CC9E;
+  --orange:     #A85A28; --orange-l:#F4EAE1; --orange-b:#E2C7AE;
+  --purple:     #4B4F5C; --purple-l:#ECEDEF; --purple-b:#CDD0D6;
+
+  --sans: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-sm: 2px;
+  --radius:    2px;
+  --radius-lg: 3px;
+  --radius-xl: 4px;
+
+  --shadow-sm: 0 1px 1px rgba(20,23,27,.05);
+  --shadow:    0 1px 3px rgba(20,23,27,.08);
+  --shadow-lg: 0 6px 16px rgba(20,23,27,.11);
+  --shadow-xl: 0 14px 32px rgba(20,23,27,.16);
+}
+
+/* Sidebar branca com borda forte */
+.sidebar{background:var(--surface);border-right:1px solid var(--border-d)}
+.brand-icon{background:var(--brand);border-radius:2px}
+
+/* Tipografia industrial: títulos firmes, micro-labels em caixa-alta */
+.brand-name{font-weight:700;letter-spacing:-.2px}
+.topbar-title,.section-title{font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:13px}
+.section-title{font-size:12px}
+.nav-section-label{letter-spacing:.16em;color:var(--text-4)}
+.nav-link{font-weight:500}
+.nav-link.active{font-weight:700}
+.stat-label{text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;font-weight:600}
+.stat-num{font-weight:700;letter-spacing:-1px}
+.thead th,thead th{letter-spacing:.07em}
+
+/* Ícone de stat: chip monocromático por padrão, cor só em status */
+.stat-card .stat-icon-wrap{background:var(--surface-3);color:var(--text-2);border-radius:2px}
+.stat-card.green .stat-icon-wrap{background:var(--green-l);color:var(--green)}
+.stat-card.red .stat-icon-wrap{background:var(--red-l);color:var(--red)}
+.stat-card.amber .stat-icon-wrap{background:var(--amber-l);color:var(--amber)}
+.stat-card.blue .stat-icon-wrap{background:var(--surface-3);color:var(--text-2)}
+.stat-card.purple .stat-icon-wrap{background:var(--surface-3);color:var(--text-2)}
+
+/* Botões pretos, cantos vivos */
+.btn-login,.btn-primary,.topbar-btn.primary{background:var(--brand);border-color:var(--brand)}
+.btn-login:hover,.btn-primary:hover,.topbar-btn.primary:hover{background:#000;border-color:#000}
+.login-logo-mark{border-radius:3px}
+
+/* ════════════════════════════════════════════════════════════
+   MODO ESCURO — body.dark  (Grafite invertido: "tinta" clara sobre grafite)
+   ════════════════════════════════════════════════════════════ */
+body.dark{
+  --surface:    #1B1E24;
+  --surface-2:  #14161B;
+  --surface-3:  #22262D;
+  --surface-4:  #2C313A;
+  --border:     #2A2F38;
+  --border-d:   #3A414B;
+  --text:       #ECEEF2;
+  --text-2:     #AEB6C1;
+  --text-3:     #7A828E;
+  --text-4:     #525A65;
+
+  --brand:      #ECEEF2;
+  --brand-d:    #FFFFFF;
+  --brand-l:    #22262D;
+  --brand-mid:  #3A414B;
+
+  --green:      #57C28C; --green-l:#16241D; --green-b:#264634;
+  --red:        #E08379; --red-l:  #271917; --red-b:  #4A2C28;
+  --amber:      #D6A552; --amber-l:#241E12; --amber-b:#463A20;
+  --orange:     #D58A55; --orange-l:#251B12; --orange-b:#46331F;
+  --purple:     #9EA2C4; --purple-l:#1E2029; --purple-b:#383C4C;
+
+  background:#14161B;
+}
+
+/* Chrome no escuro */
+body.dark .login-bg{background:var(--surface-2)}
+body.dark .login-bg::after{background:linear-gradient(180deg,#1B1E24 0%,#14161B 100%)}
+
+/* Botões/primário: "tinta" clara sobre superfície escura, texto grafite */
+body.dark .btn-login,
+body.dark .btn-primary,
+body.dark .topbar-btn.primary{background:var(--brand);color:#15171B;border-color:var(--brand)}
+body.dark .btn-login:hover,
+body.dark .btn-primary:hover,
+body.dark .topbar-btn.primary:hover{background:#fff;border-color:#fff}
+
+/* Marca e avatares legíveis no escuro */
+body.dark .login-logo-mark,
+body.dark .brand-icon{background:var(--text);color:var(--surface)}
+body.dark .user-avatar,
+body.dark .ticket-avatar,
+body.dark .ticket-email-avatar{background:var(--surface-4);color:var(--text)}
+
+/* Chip de stat neutro no escuro */
+body.dark .stat-card .stat-icon-wrap,
+body.dark .stat-card.blue .stat-icon-wrap,
+body.dark .stat-card.purple .stat-icon-wrap{background:var(--surface-3);color:var(--text-2)}
+
+/* Inputs/realces */
+body.dark .input-icon input:focus,
+body.dark .form-field input:focus,
+body.dark .form-field select:focus,
+body.dark .form-field textarea:focus{box-shadow:0 0 0 3px rgba(236,238,242,.10)}

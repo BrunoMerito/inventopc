@@ -6,9 +6,8 @@
 <title id="pageTitle">System Mérito</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/theme-pro.css">
 <style>
-/* Logo — fundo sólido, sem gradiente */
+/* Fix logo — sem fundo azul por cima da imagem */
 .login-logo-mark img,
 .brand-icon img {
   width: 100%;
@@ -17,15 +16,18 @@
   padding: 6px;
   background: transparent !important;
 }
-.login-logo-mark,
-.brand-icon {
+.login-logo-mark {
+  background: linear-gradient(135deg, #1e3a8a, #2563EB) !important;
   overflow: hidden;
 }
-/* Quando tem logo carregado, mostrar só a imagem em fundo branco */
+.brand-icon {
+  background: linear-gradient(135deg, #1e3a8a, #2563EB) !important;
+  overflow: hidden;
+}
+/* Quando tem logo, remover gradiente e mostrar só a imagem */
 .login-logo-mark.has-logo,
 .brand-icon.has-logo {
-  background: #fff !important;
-  border: 1px solid var(--border);
+  background: white !important;
   padding: 2px;
 }
 </style>
@@ -34,54 +36,41 @@
 
 <!-- ═══════════════════ LOGIN ═══════════════════ -->
 <div id="loginScreen" class="login-screen">
-  <!-- painel de marca -->
-  <div class="login-pro-left">
-    <div id="loginLogoWrap" class="login-pro-logo">
-      <img src="assets/merito-logo.png" alt="Mérito">
-    </div>
-    <div class="login-pro-hero">
-      <div class="login-pro-eyebrow"><span></span>Plataforma de gestão</div>
-      <h1>System Mérito</h1>
-      <p>Inventário, helpdesk e acesso remoto em um só lugar — com visibilidade total da frota em tempo real.</p>
-      <div class="login-pro-dots"><i class="on"></i><i></i><i></i></div>
-    </div>
-    <div class="login-pro-status"><span class="dot"></span>Sistemas operacionais · <b>132</b> dispositivos monitorados</div>
-  </div>
-
-  <!-- formulário -->
-  <div class="login-pro-right">
-    <div class="login-pro-form">
-      <div class="login-pro-head">
-        <h2>Acessar o painel</h2>
-        <p>Entre com suas credenciais corporativas.</p>
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div id="loginLogoWrap" class="login-logo-mark">
+        <i class="fa-solid fa-laptop-code"></i>
       </div>
-      <form onsubmit="doLogin(event)">
-        <div class="field-group">
-          <label>Usuário</label>
-          <div class="input-icon">
-            <i class="fa-solid fa-user"></i>
-            <input type="text" id="loginUser" placeholder="Digite seu usuário" autocomplete="username">
-          </div>
-        </div>
-        <div class="field-group">
-          <label>Senha</label>
-          <div class="input-icon">
-            <i class="fa-solid fa-lock"></i>
-            <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
-          </div>
-        </div>
-        <label style="display:flex;align-items:center;gap:8px;margin:4px 0 20px;cursor:pointer">
-          <input type="checkbox" id="rememberMe" checked style="accent-color:var(--brand);width:15px;height:15px;cursor:pointer">
-          <span style="font-size:12.5px;color:var(--text-3);font-weight:500">Manter sessão neste dispositivo</span>
-        </label>
-        <div id="loginError" class="login-error" style="display:none">
-          <i class="fa-solid fa-circle-exclamation"></i> Usuário ou senha incorretos.
-        </div>
-        <button type="submit" class="btn-login">Entrar <i class="fa-solid fa-arrow-right"></i></button>
-      </form>
-      <div class="login-pro-divider"><span></span><em>ACESSO RESTRITO</em><span></span></div>
-      <div class="login-pro-foot"><i class="fa-solid fa-shield-halved"></i> Conexão segura · System Mérito v8.2</div>
+      <h1 id="loginTitle">System Mérito</h1>
+      <p id="loginSubtitle">Gestão de TI</p>
     </div>
+    <form onsubmit="doLogin(event)">
+      <div class="field-group">
+        <label>Usuário</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="loginUser" placeholder="Digite seu usuário" autocomplete="username">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Senha</label>
+        <div class="input-icon">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <!-- Lembrar senha -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <input type="checkbox" id="rememberMe" style="accent-color:var(--brand);width:15px;height:15px;cursor:pointer">
+        <label for="rememberMe" style="font-size:12.5px;color:var(--text-2);cursor:pointer;font-weight:500">Lembrar senha</label>
+      </div>
+      <div id="loginError" class="login-error" style="display:none">
+        <i class="fa-solid fa-circle-exclamation"></i> Usuário ou senha incorretos.
+      </div>
+      <button type="submit" class="btn-login">Entrar <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="login-hint">Padrão: admin / admin123</div>
   </div>
 </div>
 
@@ -93,10 +82,10 @@
     <div class="sidebar-header">
       <div class="brand" id="brandWrap">
         <div class="brand-icon" id="sidebarLogoWrap">
-          <img src="assets/merito-logo.png" alt="Mérito">
+          <i class="fa-solid fa-laptop-code"></i>
         </div>
         <div>
-          <div class="brand-name" id="brandName" style="display:none">System Mérito</div>
+          <div class="brand-name" id="brandName">System Mérito</div>
           <div class="brand-sub" id="brandSub">Gestão de TI</div>
         </div>
       </div>
@@ -171,7 +160,6 @@
           <div class="status-dot" id="serverDot"></div>
           <span id="serverStatusText">Conectando...</span>
         </div>
-        <button class="topbar-btn" id="darkToggle" onclick="toggleDark()" title="Modo escuro"><i class="fa-solid fa-moon"></i></button>
         <button class="topbar-btn" onclick="refreshData()" title="Atualizar"><i class="fa-solid fa-rotate"></i></button>
         <button class="topbar-btn primary" id="topAddBtn" onclick="openAddModal()">
           <i class="fa-solid fa-plus"></i> Adicionar
@@ -227,7 +215,7 @@
         </select>
       </div>
       <div class="form-field span2" id="field-patrimonio" style="display:none">
-        <label><i class="fa-solid fa-tag" style="color:var(--purple);margin-right:5px"></i>Nº Patrimônio <span class="badge-patrimonio-label">Notebook</span></label>
+        <label><i class="fa-solid fa-tag" style="color:#7C3AED;margin-right:5px"></i>Nº Patrimônio <span class="badge-patrimonio-label">Notebook</span></label>
         <input type="text" id="f-patrimonio" placeholder="PAT-000001" style="font-family:monospace;font-weight:600">
       </div>
       <div class="form-field span2"><label>Sistema Operacional</label><input type="text" id="f-so" placeholder="Windows 11 Pro"></div>
@@ -287,21 +275,5 @@
 <script src="js/rede.js"></script>
 <script src="js/configuracoes.js"></script>
 <script src="js/acoes.js"></script>
-<script>
-// Modo escuro (persistente)
-function toggleDark(){
-  const on = document.body.classList.toggle('dark');
-  localStorage.setItem('sm_dark', on ? '1' : '0');
-  const i = document.querySelector('#darkToggle i');
-  if (i) i.className = 'fa-solid ' + (on ? 'fa-sun' : 'fa-moon');
-}
-(function(){
-  if (localStorage.getItem('sm_dark') === '1') {
-    document.body.classList.add('dark');
-    const i = document.querySelector('#darkToggle i');
-    if (i) i.className = 'fa-solid fa-sun';
-  }
-})();
-</script>
 </body>
 </html>

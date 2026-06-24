@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@keyframes smrise{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:none}}
+@keyframes smpulse{0%{box-shadow:0 0 0 0 rgba(62,142,94,.45)}70%{box-shadow:0 0 0 5px rgba(62,142,94,0)}100%{box-shadow:0 0 0 0 rgba(62,142,94,0)}}
+@keyframes smBackdrop{from{opacity:0}to{opacity:1}}
+@keyframes smDrawerIn{from{transform:translateX(44px);opacity:0}to{transform:none;opacity:1}}
+.sm-drawer-act:hover{background:#F1EFEA!important;border-color:#D4D1C9!important;color:#1B1C1E!important}
+.sm-drawer-close:hover{background:#F1EFEA!important;color:#1B1C1E!important}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#D6D4CE;border-radius:10px;border:2px solid #F4F3F0}
+::-webkit-scrollbar-track{background:transparent}
+.sm-navlink:hover{background:rgba(255,255,255,.045)!important;color:#EDEDEE!important}
+.sm-row:hover{background:#FAF9F7!important}
+.sm-icbtn:hover{background:#F1EFEA!important;color:#1B1C1E!important}
+</style>
+</helmet>
+
+<div data-screen-label="Dashboard" style="display:flex;height:100vh;width:100%;background:#F4F3F0;color:#1B1C1E;overflow:hidden">
+
+  <!-- ░░ SIDEBAR ░░ -->
+  <aside style="width:248px;flex-shrink:0;background:#17181A;display:flex;flex-direction:column;border-right:1px solid #000">
+    <div style="padding:24px 18px 20px;display:flex;flex-direction:column;gap:9px;animation:smrise .5s ease both">
+      <img src="assets/merito-logo.png" alt="Mérito" style="height:25px;width:auto;align-self:flex-start;filter:invert(1)">
+      <div style="font-size:9.5px;color:#7A7C80;letter-spacing:.18em;text-transform:uppercase;padding-left:2px">Gestão de TI</div>
+    </div>
+
+    <nav style="flex:1;padding:6px 12px;overflow-y:auto">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Principal</div>
+      <a class="sm-navlink" style="position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:600;color:#F4F3F0;background:rgba(255,255,255,.07);margin-bottom:2px">
+        <div style="{{ navBarStyle }}"></div>
+        <span style="display:inline-flex;color:#F4F3F0"><i data-lucide="layout-dashboard"></i></span> Visão geral
+      </a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Inventário</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="store"></i></span> Stand</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="building-2"></i></span> Escritório</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="hard-hat"></i></span> Obra</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="network"></i></span> Rede &amp; dispositivos</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Helpdesk</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="life-buoy"></i></span> Tickets <span style="margin-left:auto;min-width:19px;height:19px;padding:0 5px;border-radius:6px;background:#BD4B43;color:#fff;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center">7</span></a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="plus-circle"></i></span> Novo ticket</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Sistema</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="zap"></i></span> Ações remotas</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="bar-chart-3"></i></span> Relatórios</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="settings"></i></span> Configurações</a>
+    </nav>
+
+    <div style="padding:12px;border-top:1px solid #232427">
+      <div style="display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:7px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#2B2C30;color:#E7E7E9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0">RA</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12.5px;font-weight:600;color:#EDEDEE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Ricardo Alves</div>
+          <div style="font-size:10.5px;color:#7A7C80">Administrador</div>
+        </div>
+        <span style="display:inline-flex;color:#6A6C70"><i data-lucide="chevron-down"></i></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ░░ MAIN ░░ -->
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden">
+
+    <!-- topbar -->
+    <header style="height:60px;flex-shrink:0;background:#FFFFFF;border-bottom:1px solid #E7E5E0;display:flex;align-items:center;gap:16px;padding:0 28px">
+      <div style="position:relative;flex:1;max-width:440px">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9A9CA1;display:inline-flex"><i data-lucide="search"></i></span>
+        <input placeholder="Buscar dispositivo, IP, usuário, ticket…" style="width:100%;height:38px;padding:0 64px 0 38px;border:1px solid #E7E5E0;border-radius:8px;background:#FAF9F7;font-size:13px;font-family:inherit;color:#1B1C1E;outline:none">
+        <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);display:inline-flex;gap:3px">
+          <kbd style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6A6E74;background:#F1EFEA;border:1px solid #E4E2DC;border-radius:4px;padding:1px 5px">⌘</kbd>
+          <kbd style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6A6E74;background:#F1EFEA;border:1px solid #E4E2DC;border-radius:4px;padding:1px 5px">K</kbd>
+        </span>
+      </div>
+
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:#5F6268;font-weight:500">
+          <span style="width:7px;height:7px;border-radius:50%;background:#3E8E5E;animation:smpulse 2.4s infinite"></span>
+          Sincronizado há 2 min
+        </div>
+        <div style="width:1px;height:22px;background:#E7E5E0"></div>
+        <button class="sm-icbtn" style="width:36px;height:36px;border-radius:8px;border:1px solid #E7E5E0;background:#fff;color:#5F6268;display:flex;align-items:center;justify-content:center;cursor:pointer"><i data-lucide="refresh-cw"></i></button>
+        <button class="sm-icbtn" style="width:36px;height:36px;border-radius:8px;border:1px solid #E7E5E0;background:#fff;color:#5F6268;display:flex;align-items:center;justify-content:center;cursor:pointer"><i data-lucide="bell"></i></button>
+        <button style="{{ primaryStyle }}"><i data-lucide="plus"></i> Adicionar dispositivo</button>
+      </div>
+    </header>
+
+    <!-- content -->
+    <main style="flex:1;overflow-y:auto;padding:28px 28px 36px">
+
+      <!-- page header -->
+      <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:22px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:6px">Sistema · Visão geral</div>
+          <h1 style="font-size:25px;font-weight:600;letter-spacing:-.5px;line-height:1">Painel de operações</h1>
+          <p style="font-size:13px;color:#62656B;margin-top:7px">Quarta, 24 de junho · 132 dispositivos sob gestão em 3 localidades</p>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #E7E5E0;border-radius:9px;padding:4px">
+          <button style="padding:6px 14px;border-radius:6px;border:none;background:#1B1C1E;color:#fff;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer">7 dias</button>
+          <button style="padding:6px 14px;border-radius:6px;border:none;background:transparent;color:#6A6E74;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer">30 dias</button>
+          <button style="padding:6px 14px;border-radius:6px;border:none;background:transparent;color:#6A6E74;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer">Trimestre</button>
+        </div>
+      </div>
+
+      <!-- KPI strip -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;animation:smrise .55s cubic-bezier(.2,.7,.2,1) .05s both">
+
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">Dispositivos</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">132</div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:13px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:18px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:12px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:21px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:16px;background:#DAD8D2;border-radius:1px"></span><span style="width:5px;height:24px;background:#C8C6BF;border-radius:1px"></span><span style="width:5px;height:28px;background:#1B1C1E;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#3E8E5E;font-weight:600">▲ 4</span> nesta semana</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">Online agora</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">124</div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:20px;background:#D6E5DB;border-radius:1px"></span><span style="width:5px;height:23px;background:#D6E5DB;border-radius:1px"></span><span style="width:5px;height:19px;background:#D6E5DB;border-radius:1px"></span><span style="width:5px;height:25px;background:#C2DBCB;border-radius:1px"></span><span style="width:5px;height:22px;background:#C2DBCB;border-radius:1px"></span><span style="width:5px;height:27px;background:#7FB89A;border-radius:1px"></span><span style="width:5px;height:29px;background:#3E8E5E;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#3E8E5E;font-weight:600">94%</span> da frota disponível</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">Tickets abertos</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">7</div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:14px;background:#EFE2C7;border-radius:1px"></span><span style="width:5px;height:11px;background:#EFE2C7;border-radius:1px"></span><span style="width:5px;height:19px;background:#EFE2C7;border-radius:1px"></span><span style="width:5px;height:15px;background:#E7D4A8;border-radius:1px"></span><span style="width:5px;height:22px;background:#E7D4A8;border-radius:1px"></span><span style="width:5px;height:17px;background:#D6B670;border-radius:1px"></span><span style="width:5px;height:20px;background:#B07D2B;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#BD4B43;font-weight:600">2 críticos</span> · SLA em risco</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">Tempo médio de resolução</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">3.2<span style="font-size:16px;color:#9A9CA1;letter-spacing:0"> h</span></div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:28px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:24px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:26px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:20px;background:#DAD8D2;border-radius:1px"></span><span style="width:5px;height:21px;background:#DAD8D2;border-radius:1px"></span><span style="width:5px;height:16px;background:#C8C6BF;border-radius:1px"></span><span style="width:5px;height:13px;background:#1B1C1E;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#3E8E5E;font-weight:600">▼ 0.4 h</span> vs. semana passada</div>
+        </div>
+      </div>
+
+      <!-- two columns -->
+      <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:start;animation:smrise .55s cubic-bezier(.2,.7,.2,1) .13s both">
+
+        <!-- Frota -->
+        <section style="background:#fff;border:1px solid #E7E5E0;border-radius:12px;box-shadow:0 1px 2px rgba(20,20,20,.03);overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid #EFEDE9">
+            <h2 style="font-size:14px;font-weight:600;letter-spacing:-.2px">Frota</h2>
+            <span style="font-size:11px;font-weight:600;color:#6A6E74;background:#F1EFEA;border:1px solid #E7E5E0;padding:2px 9px;border-radius:999px;font-family:'IBM Plex Mono',monospace">{{ count }}/{{ totalAll }}</span>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:3px;background:#F4F3F0;border:1px solid #E7E5E0;border-radius:9px;padding:3px">
+              <button style="{{ fTodos }}" onClick="{{ setTodos }}">Todos</button>
+              <button style="{{ fOnline }}" onClick="{{ setOnline }}">Online</button>
+              <button style="{{ fOutros }}" onClick="{{ setOutros }}">Atenção</button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:2.3fr 1.2fr 1.5fr 0.95fr 0.85fr;gap:12px;padding:11px 20px;border-bottom:1px solid #EFEDE9;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9CA1">
+            <div>Dispositivo</div><div>Endereço IP</div><div>Responsável</div><div>Visto</div><div>Status</div>
+          </div>
+
+          <sc-for list="{{ devices }}" as="d" hint-placeholder-count="7">
+            <div class="sm-row" onClick="{{ d.open }}" style="display:grid;grid-template-columns:2.3fr 1.2fr 1.5fr 0.95fr 0.85fr;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #F2F0EC;cursor:pointer">
+              <div style="display:flex;align-items:center;gap:11px;min-width:0">
+                <div style="width:32px;height:32px;border-radius:7px;background:#F4F3F0;border:1px solid #EAE8E2;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#6A6E74"><i data-lucide="{{ d.icon }}"></i></div>
+                <div style="min-width:0">
+                  <div style="font-size:13px;font-weight:600;color:#1B1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.host }}</div>
+                  <div style="font-size:11px;color:#9A9CA1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.model }} · {{ d.local }}</div>
+                </div>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#5F6268;font-variant-numeric:tabular-nums">{{ d.ip }}</div>
+              <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                <div style="width:26px;height:26px;border-radius:50%;background:#EDEAE3;color:#5F6268;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:600;flex-shrink:0">{{ d.initials }}</div>
+                <span style="font-size:12.5px;color:#3F4248;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.owner }}</span>
+              </div>
+              <div style="font-size:12.5px;color:#8A8D93">{{ d.seen }}</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="{{ d.badgeStyle }}"><span style="{{ d.dotStyle }}"></span>{{ d.stLabel }}</span><i data-lucide="chevron-right" style="width:15px;height:15px;color:#C6C4BE;flex-shrink:0"></i></div>
+            </div>
+          </sc-for>
+
+          <div style="padding:12px 20px;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:#9A9CA1">Mostrando {{ count }} de {{ totalAll }} dispositivos</span>
+            <a style="font-size:12.5px;font-weight:600;color:#1B1C1E;display:inline-flex;align-items:center;gap:5px;cursor:pointer">Ver inventário completo <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+          </div>
+        </section>
+
+        <!-- right column -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+
+          <!-- Saúde -->
+          <section style="background:#fff;border:1px solid #E7E5E0;border-radius:12px;box-shadow:0 1px 2px rgba(20,20,20,.03);padding:20px">
+            <h2 style="font-size:14px;font-weight:600;letter-spacing:-.2px;margin-bottom:18px">Saúde da frota</h2>
+            <div style="display:flex;align-items:center;gap:22px">
+              <div style="width:118px;height:118px;border-radius:50%;background:conic-gradient(#3E8E5E 0 94%, #BD4B43 94% 97%, #B07D2B 97% 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <div style="width:84px;height:84px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;letter-spacing:-1px;line-height:1">94%</div>
+                  <div style="font-size:10px;color:#9A9CA1;letter-spacing:.04em;text-transform:uppercase;margin-top:2px">Saudável</div>
+                </div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:11px">
+                <div style="display:flex;align-items:center;gap:9px">
+                  <span style="width:8px;height:8px;border-radius:2px;background:#3E8E5E"></span>
+                  <span style="font-size:12.5px;color:#3F4248;flex:1">Online</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#1B1C1E">124</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:9px">
+                  <span style="width:8px;height:8px;border-radius:2px;background:#BD4B43"></span>
+                  <span style="font-size:12.5px;color:#3F4248;flex:1">Offline</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#1B1C1E">5</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:9px">
+                  <span style="width:8px;height:8px;border-radius:2px;background:#B07D2B"></span>
+                  <span style="font-size:12.5px;color:#3F4248;flex:1">Manutenção</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#1B1C1E">3</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Tickets -->
+          <section style="background:#fff;border:1px solid #E7E5E0;border-radius:12px;box-shadow:0 1px 2px rgba(20,20,20,.03);overflow:hidden">
+            <div style="display:flex;align-items:center;padding:16px 20px 14px">
+              <h2 style="font-size:14px;font-weight:600;letter-spacing:-.2px">Tickets recentes</h2>
+              <a style="margin-left:auto;font-size:12px;font-weight:600;color:#6A6E74;cursor:pointer">Ver todos</a>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:11px;padding:12px 20px;border-top:1px solid #F2F0EC">
+              <span style="width:7px;height:7px;border-radius:50%;background:#BD4B43;margin-top:5px;flex-shrink:0"></span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600;color:#1B1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Servidor de arquivos sem resposta</div>
+                <div style="font-size:11.5px;color:#9A9CA1;margin-top:2px">Infra TI · há 12 min</div>
+              </div>
+              <span style="font-size:10.5px;font-weight:600;color:#A33F38;background:#F8ECEB;border:1px solid #ECCDC9;padding:2px 8px;border-radius:999px;white-space:nowrap">Crítico</span>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:11px;padding:12px 20px;border-top:1px solid #F2F0EC">
+              <span style="width:7px;height:7px;border-radius:50%;background:#B07D2B;margin-top:5px;flex-shrink:0"></span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600;color:#1B1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Impressora não conecta na rede</div>
+                <div style="font-size:11.5px;color:#9A9CA1;margin-top:2px">Ana Souza · há 1 h</div>
+              </div>
+              <span style="font-size:10.5px;font-weight:600;color:#8F6722;background:#F6F0E2;border:1px solid #E7D8B4;padding:2px 8px;border-radius:999px;white-space:nowrap">Em aberto</span>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:11px;padding:12px 20px;border-top:1px solid #F2F0EC">
+              <span style="width:7px;height:7px;border-radius:50%;background:#9A9CA1;margin-top:5px;flex-shrink:0"></span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600;color:#1B1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Solicitação de novo notebook</div>
+                <div style="font-size:11.5px;color:#9A9CA1;margin-top:2px">Carlos Lima · há 3 h</div>
+              </div>
+              <span style="font-size:10.5px;font-weight:600;color:#2F7350;background:#EAF1EC;border:1px solid #CBE2D2;padding:2px 8px;border-radius:999px;white-space:nowrap">Andamento</span>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:11px;padding:12px 20px;border-top:1px solid #F2F0EC">
+              <span style="width:7px;height:7px;border-radius:50%;background:#9A9CA1;margin-top:5px;flex-shrink:0"></span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600;color:#1B1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">VPN lenta no home office</div>
+                <div style="font-size:11.5px;color:#9A9CA1;margin-top:2px">Júlia Reis · há 5 h</div>
+              </div>
+              <span style="font-size:10.5px;font-weight:600;color:#2F7350;background:#EAF1EC;border:1px solid #CBE2D2;padding:2px 8px;border-radius:999px;white-space:nowrap">Andamento</span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ░░ DRAWER — detalhe do dispositivo ░░ -->
+  <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(20,21,23,.36);backdrop-filter:blur(2px);z-index:60;animation:smBackdrop .2s ease"></div>
+
+    <aside style="position:fixed;top:0;right:0;bottom:0;width:452px;max-width:94vw;background:#fff;border-left:1px solid #E7E5E0;box-shadow:-18px 0 48px rgba(20,20,20,.14);z-index:61;display:flex;flex-direction:column;animation:smDrawerIn .32s cubic-bezier(.2,.7,.2,1)">
+      <div style="{{ selView.stripStyle }}"></div>
+
+      <!-- header -->
+      <div style="padding:26px 24px 18px;border-bottom:1px solid #EFEDE9">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:46px;height:46px;border-radius:11px;background:#F4F3F0;border:1px solid #E7E5E0;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#3F4248"><i data-lucide="{{ selView.icon }}" style="width:22px;height:22px"></i></div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9CA1;margin-bottom:4px">{{ selView.local }} · {{ selView.sector }}</div>
+            <h2 style="font-size:18px;font-weight:600;letter-spacing:-.3px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ selView.host }}</h2>
+            <div style="font-size:12.5px;color:#8A8D93;margin-top:3px">{{ selView.model }}</div>
+          </div>
+          <button class="sm-drawer-close" onClick="{{ closeDrawer }}" style="width:34px;height:34px;border-radius:8px;border:1px solid #E7E5E0;background:#fff;color:#8A8D93;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .12s"><i data-lucide="x" style="width:17px;height:17px"></i></button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:9px;margin-top:16px">
+          <span style="{{ selView.badgeStyle }}"><span style="{{ selView.dotStyle }}"></span>{{ selView.stLabel }}</span>
+          <span style="font-size:12px;color:#9A9CA1">Visto {{ selView.seen }} · uptime <b style="font-family:'IBM Plex Mono',monospace;font-weight:500;color:#5F6268">{{ selView.uptime }}</b></span>
+        </div>
+
+        <!-- ações -->
+        <div style="display:flex;align-items:center;gap:8px;margin-top:18px">
+          <button style="{{ remoteStyle }}"><i data-lucide="screen-share" style="width:16px;height:16px"></i> Acesso remoto</button>
+          <button class="sm-drawer-act" style="width:42px;height:42px;border-radius:9px;border:1px solid #E7E5E0;background:#fff;color:#6A6E74;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s" title="Reiniciar"><i data-lucide="rotate-cw" style="width:17px;height:17px"></i></button>
+          <button class="sm-drawer-act" style="width:42px;height:42px;border-radius:9px;border:1px solid #E7E5E0;background:#fff;color:#6A6E74;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s" title="Bloquear"><i data-lucide="lock" style="width:17px;height:17px"></i></button>
+          <button class="sm-drawer-act" style="width:42px;height:42px;border-radius:9px;border:1px solid #E7E5E0;background:#fff;color:#6A6E74;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s" title="Mais ações"><i data-lucide="more-horizontal" style="width:17px;height:17px"></i></button>
+        </div>
+      </div>
+
+      <!-- body -->
+      <div style="flex:1;overflow-y:auto;padding:22px 24px 28px">
+
+        <!-- métricas -->
+        <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">Métricas em tempo real</div>
+
+        <sc-if value="{{ selView.metricsLive }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-bottom:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:12.5px;color:#3F4248;font-weight:500">Processador</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#1B1C1E">{{ selView.cpu.label }}</span>
+            </div>
+            <div style="{{ selView.cpu.trackStyle }}"><div style="{{ selView.cpu.barStyle }}"></div></div>
+          </div>
+          <div style="margin-bottom:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:12.5px;color:#3F4248;font-weight:500">Memória</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#1B1C1E">{{ selView.ram.label }}</span>
+            </div>
+            <div style="{{ selView.ram.trackStyle }}"><div style="{{ selView.ram.barStyle }}"></div></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ selView.isOffline }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:9px;padding:11px 13px;background:#F8ECEB;border:1px solid #ECCDC9;border-radius:9px;margin-bottom:16px">
+            <i data-lucide="wifi-off" style="width:16px;height:16px;color:#A33F38"></i>
+            <span style="font-size:12.5px;color:#A33F38;font-weight:500">Dispositivo offline — CPU e memória indisponíveis</span>
+          </div>
+        </sc-if>
+
+        <div style="margin-bottom:24px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+            <span style="font-size:12.5px;color:#3F4248;font-weight:500">Armazenamento</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#1B1C1E">{{ selView.disk.label }}</span>
+          </div>
+          <div style="{{ selView.disk.trackStyle }}"><div style="{{ selView.disk.barStyle }}"></div></div>
+        </div>
+
+        <!-- conexão -->
+        <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:6px">Conexão</div>
+        <div style="margin-bottom:22px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Endereço IP</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.ip }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">MAC</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.mac }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Porta do agente</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.port }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0"><span style="font-size:12.5px;color:#8A8D93">Último boot</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.lastBoot }}</span></div>
+        </div>
+
+        <!-- hardware -->
+        <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:6px">Hardware</div>
+        <div style="margin-bottom:22px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Sistema</span><span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.so }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Processador</span><span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.cpu_name }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Memória</span><span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.ram_name }}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0"><span style="font-size:12.5px;color:#8A8D93">Armazenamento</span><span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.disk_name }}</span></div>
+        </div>
+
+        <!-- atribuição -->
+        <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:12px">Atribuição</div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#FAF9F7;border:1px solid #EFEDE9;border-radius:11px">
+          <div style="width:38px;height:38px;border-radius:50%;background:#EDEAE3;color:#5F6268;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0">{{ selView.initials }}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13.5px;font-weight:600;color:#1B1C1E">{{ selView.owner }}</div>
+            <div style="font-size:11.5px;color:#9A9CA1;margin-top:1px">{{ selView.sector }}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;color:#9A9CA1;letter-spacing:.06em;text-transform:uppercase">Patrimônio</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:#3F4248;margin-top:2px">{{ selView.patrimonio }}</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:960},&quot;companyName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;System Mérito&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1B1C1E&quot;,&quot;options&quot;:[&quot;#1B1C1E&quot;,&quot;#2E6E6A&quot;,&quot;#3E5BA9&quot;,&quot;#8A4B2F&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { filter: 'todos', selectedId: null };
+
+  _metric(pct){
+    const c = pct >= 90 ? { fg:'#BD4B43', bg:'#F4DCD9' }
+            : pct >= 70 ? { fg:'#B07D2B', bg:'#EDE0C2' }
+            :             { fg:'#3E8E5E', bg:'#D6E5DB' };
+    return {
+      pct,
+      label: pct + '%',
+      trackStyle: { height:'7px', borderRadius:'4px', background:c.bg, overflow:'hidden' },
+      barStyle:   { height:'100%', width: pct + '%', borderRadius:'4px', background:c.fg, transition:'width .5s cubic-bezier(.2,.7,.2,1)' },
+    };
+  }
+
+  _decorate(d){
+    const S = {
+      online:     { label:'Online',     dot:'#3E8E5E', bg:'#EAF1EC', color:'#2F7350', bd:'#CBE2D2', strip:'#3E8E5E' },
+      offline:    { label:'Offline',    dot:'#BD4B43', bg:'#F8ECEB', color:'#A33F38', bd:'#ECCDC9', strip:'#BD4B43' },
+      manutencao: { label:'Manutenção', dot:'#B07D2B', bg:'#F6F0E2', color:'#8F6722', bd:'#E7D8B4', strip:'#B07D2B' },
+    };
+    const st = S[d.status];
+    const isUp = d.status === 'online';
+    return Object.assign({}, d, {
+      stLabel: st.label,
+      isOffline: !isUp,
+      stripStyle: { position:'absolute', left:0, right:0, top:0, height:'3px', background:st.strip },
+      badgeStyle: { display:'inline-flex', alignItems:'center', gap:'6px', padding:'4px 11px 4px 9px', borderRadius:'999px', fontSize:'12px', fontWeight:600, background:st.bg, color:st.color, border:'1px solid '+st.bd, whiteSpace:'nowrap' },
+      dotStyle:   { width:'7px', height:'7px', borderRadius:'50%', background:st.dot, flexShrink:0 },
+      cpu_name: d.cpu, ram_name: d.ram, disk_name: d.disk,
+      cpu:  isUp ? this._metric(d.cpuLoad)  : null,
+      ram:  isUp ? this._metric(d.ramUsed)  : null,
+      disk: this._metric(d.diskUsed),
+      metricsLive: isUp,
+    });
+  }
+
+  componentDidMount(){ this._icons(); }
+  componentDidUpdate(){ this._icons(); }
+  _icons(){
+    const go = () => {
+      if (window.lucide && window.lucide.createIcons) {
+        try { window.lucide.createIcons({ attrs: { width: 18, height: 18, 'stroke-width': 1.75 } }); } catch(e){}
+      } else { setTimeout(go, 80); }
+    };
+    go();
+  }
+
+  _all(){
+    const S = {
+      online:     { label:'Online',     dot:'#3E8E5E', bg:'#EAF1EC', color:'#2F7350', bd:'#CBE2D2' },
+      offline:    { label:'Offline',    dot:'#BD4B43', bg:'#F8ECEB', color:'#A33F38', bd:'#ECCDC9' },
+      manutencao: { label:'Manutenção', dot:'#B07D2B', bg:'#F6F0E2', color:'#8F6722', bd:'#E7D8B4' },
+    };
+    const raw = [
+      { id:'d1', host:'PC-FINANCEIRO-01', model:'Dell OptiPlex 7090',  ip:'192.168.1.10', mac:'A4:BB:6D:21:08:F1', port:'8765', so:'Windows 11 Pro 23H2', cpu:'Intel Core i5-12400', ram:'16 GB DDR4', disk:'512 GB NVMe', cpuLoad:18, ramUsed:54, diskUsed:61, owner:'Ana Souza',    initials:'AS', sector:'Financeiro', patrimonio:'PAT-001042', local:'Escritório', seen:'agora',  uptime:'12d 04h', lastBoot:'12/06 · 08:14', status:'online',     icon:'monitor' },
+      { id:'d2', host:'NB-DIRETORIA-02',  model:'Lenovo ThinkPad X1',  ip:'192.168.1.22', mac:'3C:9A:F4:0B:7E:22', port:'8765', so:'Windows 11 Pro 23H2', cpu:'Intel Core i7-1365U', ram:'32 GB LPDDR5', disk:'1 TB NVMe',  cpuLoad:9,  ramUsed:41, diskUsed:38, owner:'Marcos Vidal', initials:'MV', sector:'Diretoria',  patrimonio:'PAT-000318', local:'Escritório', seen:'2 min',  uptime:'3d 11h',  lastBoot:'21/06 · 09:02', status:'online',     icon:'laptop' },
+      { id:'d3', host:'SRV-CORE-01',      model:'Dell PowerEdge R650', ip:'192.168.1.1',  mac:'F0:1D:2B:9C:44:A0', port:'8765', so:'Windows Server 2022', cpu:'2× Xeon Silver 4314', ram:'128 GB ECC',   disk:'4 TB RAID-10', cpuLoad:47, ramUsed:72, diskUsed:55, owner:'Infra TI',     initials:'TI', sector:'Infraestrutura', patrimonio:'PAT-000007', local:'Datacenter', seen:'agora',  uptime:'86d 02h', lastBoot:'30/03 · 02:40', status:'online',     icon:'server' },
+      { id:'d4', host:'PC-STAND-SP04',    model:'HP ProDesk 400 G7',   ip:'10.20.2.14',   mac:'B8:27:EB:55:1A:9D', port:'8765', so:'Windows 10 Pro 22H2', cpu:'Intel Core i3-10100', ram:'8 GB DDR4',    disk:'256 GB SSD', cpuLoad:0,  ramUsed:0,  diskUsed:88, owner:'Vendas SP',    initials:'VS', sector:'Comercial',  patrimonio:'PAT-000911', local:'Stand SP',   seen:'1 h',    uptime:'—',       lastBoot:'24/06 · 07:55', status:'manutencao', icon:'monitor' },
+      { id:'d5', host:'NB-OBRA-RJ07',     model:'Acer TravelMate P2',  ip:'10.30.7.31',   mac:'D8:3A:DD:6F:2C:11', port:'8765', so:'Windows 11 Pro 22H2', cpu:'Intel Core i5-1135G7',ram:'16 GB DDR4',   disk:'512 GB SSD', cpuLoad:0,  ramUsed:0,  diskUsed:44, owner:'Eng. Costa',   initials:'EC', sector:'Engenharia', patrimonio:'PAT-000654', local:'Obra RJ',    seen:'3 h',    uptime:'—',       lastBoot:'24/06 · 06:30', status:'offline',    icon:'laptop' },
+      { id:'d6', host:'PC-RH-09',         model:'Dell Vostro 3690',    ip:'192.168.1.41', mac:'5C:F9:DD:84:B7:30', port:'8765', so:'Windows 11 Pro 23H2', cpu:'Intel Core i5-11400', ram:'16 GB DDR4',   disk:'480 GB SSD', cpuLoad:23, ramUsed:49, diskUsed:52, owner:'Júlia Reis',   initials:'JR', sector:'RH',         patrimonio:'PAT-000477', local:'Escritório', seen:'agora',  uptime:'7d 19h',  lastBoot:'16/06 · 13:20', status:'online',     icon:'monitor' },
+      { id:'d7', host:'IMP-MARKETING-1',  model:'HP LaserJet M428fdw', ip:'192.168.1.88', mac:'00:1B:78:9E:5F:C2', port:'—',    so:'Firmware 4.11.2',     cpu:'—',                   ram:'256 MB',       disk:'—',          cpuLoad:0,  ramUsed:0,  diskUsed:0,  owner:'Marketing',    initials:'MK', sector:'Marketing',  patrimonio:'PAT-000820', local:'Escritório', seen:'12 min', uptime:'21d 06h', lastBoot:'03/06 · 10:05', status:'online',     icon:'printer' },
+    ];
+    return raw.map(d => {
+      const st = S[d.status];
+      return Object.assign({}, d, {
+        stLabel: st.label,
+        dotStyle: { width:'7px', height:'7px', borderRadius:'50%', background:st.dot, flexShrink:0 },
+        badgeStyle: { display:'inline-flex', alignItems:'center', gap:'6px', padding:'3px 9px 3px 8px', borderRadius:'999px', fontSize:'11.5px', fontWeight:600, background:st.bg, color:st.color, border:'1px solid '+st.bd, whiteSpace:'nowrap' },
+      });
+    });
+  }
+
+  renderVals(){
+    const accent  = this.props.accent ?? '#1B1C1E';
+    const company = this.props.companyName ?? 'System Mérito';
+    const all = this._all();
+    const f = this.state.filter;
+    const filtered = all.filter(d => f === 'todos' ? true : f === 'online' ? d.status === 'online' : d.status !== 'online');
+    const devices = filtered.map(d => Object.assign({}, d, { open: () => this.setState({ selectedId: d.id }) }));
+    const selRaw = this.state.selectedId ? all.find(x => x.id === this.state.selectedId) : null;
+    const selView = selRaw ? this._decorate(selRaw) : null;
+
+    const base = { padding:'6px 13px', borderRadius:'7px', border:'none', cursor:'pointer', fontSize:'12.5px', fontWeight:600, fontFamily:'inherit', transition:'all .12s' };
+    const on   = Object.assign({}, base, { background:'#FFFFFF', color:'#1B1C1E', boxShadow:'0 1px 2px rgba(20,20,20,.10)' });
+    const off  = Object.assign({}, base, { background:'transparent', color:'#6A6E74' });
+
+    return {
+      company,
+      devices,
+      count: devices.length,
+      totalAll: all.length,
+      hasSel: !!selView,
+      selView,
+      closeDrawer: () => this.setState({ selectedId: null }),
+      remoteStyle: { display:'inline-flex', alignItems:'center', justifyContent:'center', gap:'8px', flex:1, padding:'11px', borderRadius:'9px', background:accent, color:'#fff', border:'none', cursor:'pointer', fontSize:'13px', fontWeight:600, fontFamily:'inherit' },
+      setTodos:  () => this.setState({ filter:'todos' }),
+      setOnline: () => this.setState({ filter:'online' }),
+      setOutros: () => this.setState({ filter:'offline' }),
+      fTodos:  f === 'todos'  ? on : off,
+      fOnline: f === 'online' ? on : off,
+      fOutros: f === 'offline' ? on : off,
+      primaryStyle: { display:'inline-flex', alignItems:'center', gap:'7px', padding:'9px 15px', borderRadius:'8px', background:accent, color:'#fff', border:'none', cursor:'pointer', fontSize:'13px', fontWeight:600, fontFamily:'inherit' },
+      navBarStyle:  { position:'absolute', left:0, top:'6px', bottom:'6px', width:'3px', borderRadius:'0 3px 3px 0', background:accent },
+    };
+  }
+}
+</script>
+</body>
+</html>

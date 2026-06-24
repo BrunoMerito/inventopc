@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+@keyframes smpulse{0%{box-shadow:0 0 0 0 rgba(62,142,94,.45)}70%{box-shadow:0 0 0 6px rgba(62,142,94,0)}100%{box-shadow:0 0 0 0 rgba(62,142,94,0)}}
+@keyframes smrise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes smfade{from{opacity:0}to{opacity:1}}
+.sm-field input::placeholder{color:#A7A9AE}
+.sm-field:focus-within{border-color:#1B1C1E!important;box-shadow:0 0 0 3px rgba(27,28,30,.07)!important}
+.sm-eye:hover{color:#1B1C1E!important}
+.sm-link:hover{color:#1B1C1E!important}
+.sm-primary:hover{background:#000!important}
+.sm-primary:hover .sm-arrow{transform:translateX(3px)}
+</style>
+</helmet>
+
+<div data-screen-label="Login" style="display:flex;height:100vh;width:100%;background:#FFFFFF;color:#1B1C1E;overflow:hidden;font-family:'Archivo',sans-serif">
+
+  <!-- ░ LEFT — painel de marca ░ -->
+  <div style="width:46%;flex-shrink:0;background:#16181A;color:#F4F3F0;display:flex;flex-direction:column;padding:44px;position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background-image:radial-gradient(#23252800 1px,transparent 0),radial-gradient(rgba(255,255,255,.025) 1.1px,transparent 0);background-size:22px 22px;background-position:0 0,11px 11px;pointer-events:none"></div>
+
+    <div style="position:relative;animation:smrise .55s ease both">
+      <img src="assets/merito-logo.png" alt="Mérito" style="height:30px;width:auto;filter:invert(1)">
+    </div>
+
+    <div style="position:relative;margin-top:auto;animation:smrise .6s ease .08s both">
+      <div style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A8C90;margin-bottom:22px">
+        <span style="width:18px;height:1px;background:#3A3C40;display:inline-block"></span>Plataforma de gestão
+      </div>
+      <h1 style="font-size:33px;font-weight:600;line-height:1.12;letter-spacing:-.7px;max-width:420px">System Mérito</h1>
+      <p style="font-size:14px;line-height:1.7;color:#9A9CA0;margin-top:18px;max-width:380px">Inventário, helpdesk e acesso remoto em um só lugar — com visibilidade total da frota em tempo real.</p>
+
+      <div style="display:flex;gap:5px;margin-top:30px">
+        <span style="width:34px;height:6px;border-radius:2px;background:#F4F3F0"></span>
+        <span style="width:18px;height:6px;border-radius:2px;background:#3A3C40"></span>
+        <span style="width:18px;height:6px;border-radius:2px;background:#3A3C40"></span>
+      </div>
+    </div>
+
+    <div style="position:relative;margin-top:34px;display:flex;align-items:center;gap:9px;font-size:12px;color:#7C7E82;animation:smfade .8s ease .4s both">
+      <span style="width:7px;height:7px;border-radius:50%;background:#3E8E5E;animation:smpulse 2.4s infinite"></span>
+      Sistemas operacionais · <span style="font-family:'IBM Plex Mono',monospace;color:#AEB0B4">132</span> dispositivos monitorados
+    </div>
+  </div>
+
+  <!-- ░ RIGHT — formulário ░ -->
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px;background:#F7F6F3">
+    <div style="width:100%;max-width:372px;animation:smrise .6s ease .15s both">
+
+      <div style="margin-bottom:30px">
+        <h2 style="font-size:24px;font-weight:600;letter-spacing:-.4px">Acessar o painel</h2>
+        <p style="font-size:13.5px;color:#6A6E74;margin-top:7px">Entre com suas credenciais corporativas.</p>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;font-weight:600;color:#3F4248;margin-bottom:7px">Usuário</label>
+        <div class="sm-field" style="display:flex;align-items:center;gap:9px;height:44px;padding:0 13px;background:#fff;border:1px solid #E2E0DA;border-radius:9px;transition:border-color .15s,box-shadow .15s">
+          <span style="color:#9A9CA1;display:inline-flex"><i data-lucide="user"></i></span>
+          <input value="ricardo.alves" autocomplete="username" style="flex:1;border:none;outline:none;background:none;font-family:inherit;font-size:13.5px;color:#1B1C1E">
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+          <label style="font-size:12px;font-weight:600;color:#3F4248">Senha</label>
+          <a class="sm-link" style="font-size:12px;font-weight:600;color:#8A8D93;cursor:pointer;transition:color .15s">Esqueci a senha</a>
+        </div>
+        <div class="sm-field" style="display:flex;align-items:center;gap:9px;height:44px;padding:0 13px;background:#fff;border:1px solid #E2E0DA;border-radius:9px;transition:border-color .15s,box-shadow .15s">
+          <span style="color:#9A9CA1;display:inline-flex"><i data-lucide="lock"></i></span>
+          <input type="{{ inputType }}" value="senha-secreta-123" autocomplete="current-password" style="flex:1;border:none;outline:none;background:none;font-family:inherit;font-size:13.5px;color:#1B1C1E;letter-spacing:.04em">
+          <button class="sm-eye" onClick="{{ toggleShow }}" style="border:none;background:none;color:#9A9CA1;cursor:pointer;display:inline-flex;padding:2px;transition:color .15s"><i data-lucide="{{ eyeIcon }}"></i></button>
+        </div>
+      </div>
+
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:22px;cursor:pointer">
+        <input type="checkbox" checked style="width:15px;height:15px;accent-color:#1B1C1E;cursor:pointer">
+        <span style="font-size:12.5px;color:#5F6268;font-weight:500">Manter sessão neste dispositivo</span>
+      </label>
+
+      <button class="sm-primary" style="width:100%;height:46px;border:none;border-radius:9px;background:#1B1C1E;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s">
+        Entrar <span class="sm-arrow" style="display:inline-flex;transition:transform .18s"><i data-lucide="arrow-right" style="width:17px;height:17px"></i></span>
+      </button>
+
+      <div style="display:flex;align-items:center;gap:12px;margin:22px 0">
+        <span style="flex:1;height:1px;background:#E4E2DC"></span>
+        <span style="font-size:11px;color:#A7A9AE;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em">ACESSO RESTRITO</span>
+        <span style="flex:1;height:1px;background:#E4E2DC"></span>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;color:#9A9CA1">
+        <span style="display:inline-flex;color:#9A9CA1"><i data-lucide="shield-check" style="width:14px;height:14px"></i></span>
+        Conexão segura · System Mérito v8.2
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:800}}">
+class Component extends DCLogic {
+  state = { show: false };
+
+  componentDidMount(){ this._icons(); }
+  componentDidUpdate(){ this._icons(); }
+  _icons(){
+    const go = () => {
+      if (window.lucide && window.lucide.createIcons) {
+        try { window.lucide.createIcons({ attrs: { width: 17, height: 17, 'stroke-width': 1.75 } }); } catch(e){}
+      } else { setTimeout(go, 80); }
+    };
+    go();
+  }
+
+  renderVals(){
+    const show = this.state.show;
+    return {
+      inputType: show ? 'text' : 'password',
+      eyeIcon: show ? 'eye-off' : 'eye',
+      toggleShow: () => this.setState({ show: !this.state.show }),
+    };
+  }
+}
+</script>
+</body>
+</html>

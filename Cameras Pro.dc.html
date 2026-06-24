@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@keyframes smrise{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:none}}
+@keyframes smpulse{0%{box-shadow:0 0 0 0 rgba(62,142,94,.45)}70%{box-shadow:0 0 0 5px rgba(62,142,94,0)}100%{box-shadow:0 0 0 0 rgba(62,142,94,0)}}
+@keyframes smblink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes smBackdrop{from{opacity:0}to{opacity:1}}
+@keyframes smDrawerIn{from{transform:translateX(48px);opacity:0}to{transform:none;opacity:1}}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#D6D4CE;border-radius:10px;border:2px solid #F4F3F0}
+::-webkit-scrollbar-track{background:transparent}
+.sm-navlink:hover{background:rgba(255,255,255,.045)!important;color:#EDEDEE!important}
+.sm-icbtn:hover{background:#F1EFEA!important;color:#1B1C1E!important}
+.sm-cam{transition:box-shadow .16s,transform .16s,border-color .16s}
+.sm-cam:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(20,20,20,.12);border-color:#D4D1C9}
+.sm-cam:hover .sm-cam-expand{opacity:1!important}
+.sm-drawer-close:hover{background:#F1EFEA!important;color:#1B1C1E!important}
+.sm-ctl:hover{background:rgba(255,255,255,.16)!important;color:#fff!important}
+.sm-ptz:hover{background:#EDEBE5!important;color:#1B1C1E!important}
+</style>
+</helmet>
+
+<div data-screen-label="Câmeras" style="display:flex;height:100vh;width:100%;background:#F4F3F0;color:#1B1C1E;overflow:hidden">
+
+  <!-- ░░ SIDEBAR ░░ -->
+  <aside style="width:248px;flex-shrink:0;background:#17181A;display:flex;flex-direction:column;border-right:1px solid #000">
+    <div style="padding:24px 18px 20px;display:flex;flex-direction:column;gap:9px">
+      <img src="assets/merito-logo.png" alt="Mérito" style="height:25px;width:auto;align-self:flex-start;filter:invert(1)">
+      <div style="font-size:9.5px;color:#7A7C80;letter-spacing:.18em;text-transform:uppercase;padding-left:2px">Gestão de TI</div>
+    </div>
+
+    <nav style="flex:1;padding:6px 12px;overflow-y:auto">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Principal</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="layout-dashboard"></i></span> Visão geral</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Inventário</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="store"></i></span> Stand</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="building-2"></i></span> Escritório</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="hard-hat"></i></span> Obra</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="network"></i></span> Rede &amp; dispositivos</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Monitoramento</div>
+      <a class="sm-navlink" style="position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:600;color:#F4F3F0;background:rgba(255,255,255,.08);margin-bottom:2px">
+        <div style="{{ navBarStyle }}"></div>
+        <span style="display:inline-flex;color:#F4F3F0"><i data-lucide="cctv"></i></span> Câmeras
+        <span style="margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:#9FB0C4"><span style="width:6px;height:6px;border-radius:50%;background:#3E8E5E"></span>{{ onlineCount }}</span>
+      </a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Helpdesk</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="life-buoy"></i></span> Tickets</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Sistema</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="bar-chart-3"></i></span> Relatórios</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="settings"></i></span> Configurações</a>
+    </nav>
+
+    <div style="padding:12px;border-top:1px solid #232427">
+      <div style="display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:7px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#2B2C30;color:#E7E7E9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0">RA</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12.5px;font-weight:600;color:#EDEDEE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Ricardo Alves</div>
+          <div style="font-size:10.5px;color:#7A7C80">Administrador</div>
+        </div>
+        <span style="display:inline-flex;color:#6A6C70"><i data-lucide="chevron-down"></i></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ░░ MAIN ░░ -->
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden">
+
+    <header style="height:60px;flex-shrink:0;background:#FFFFFF;border-bottom:1px solid #E7E5E0;display:flex;align-items:center;gap:16px;padding:0 28px">
+      <div style="position:relative;flex:1;max-width:440px">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9A9CA1;display:inline-flex"><i data-lucide="search"></i></span>
+        <input placeholder="Buscar câmera, local, IP…" style="width:100%;height:38px;padding:0 64px 0 38px;border:1px solid #E7E5E0;border-radius:8px;background:#FAF9F7;font-size:13px;font-family:inherit;color:#1B1C1E;outline:none">
+        <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);display:inline-flex;gap:3px">
+          <kbd style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6A6E74;background:#F1EFEA;border:1px solid #E4E2DC;border-radius:4px;padding:1px 5px">⌘</kbd>
+          <kbd style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6A6E74;background:#F1EFEA;border:1px solid #E4E2DC;border-radius:4px;padding:1px 5px">K</kbd>
+        </span>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:#5F6268;font-weight:500">
+          <span style="width:7px;height:7px;border-radius:50%;background:#3E8E5E;animation:smpulse 2.4s infinite"></span>
+          NVR conectado
+        </div>
+        <div style="width:1px;height:22px;background:#E7E5E0"></div>
+        <button class="sm-icbtn" style="width:36px;height:36px;border-radius:8px;border:1px solid #E7E5E0;background:#fff;color:#5F6268;display:flex;align-items:center;justify-content:center;cursor:pointer"><i data-lucide="layout-grid"></i></button>
+        <button style="{{ primaryStyle }}"><i data-lucide="plus"></i> Adicionar câmera</button>
+      </div>
+    </header>
+
+    <main style="flex:1;overflow-y:auto;padding:28px 28px 36px">
+
+      <!-- page header -->
+      <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:22px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:6px">Monitoramento · CFTV</div>
+          <h1 style="font-size:25px;font-weight:600;letter-spacing:-.5px;line-height:1">Câmeras</h1>
+          <p style="font-size:13px;color:#62656B;margin-top:7px">{{ totalAll }} câmeras · <b style="color:#2F7350;font-weight:600">{{ onlineCount }} online</b> · {{ offlineCount }} sem sinal · Stand e Obra</p>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:3px;background:#FFFFFF;border:1px solid #E7E5E0;border-radius:9px;padding:4px">
+          <button style="{{ fTodas }}" onClick="{{ setTodas }}">Todas</button>
+          <button style="{{ fStand }}" onClick="{{ setStand }}">Stand</button>
+          <button style="{{ fObra }}" onClick="{{ setObra }}">Obra</button>
+          <button style="{{ fOffline }}" onClick="{{ setOffline }}">Sem sinal</button>
+        </div>
+      </div>
+
+      <!-- KPI strip -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;animation:smrise .55s cubic-bezier(.2,.7,.2,1) .05s both">
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:16px 18px;box-shadow:0 1px 2px rgba(20,20,20,.03);display:flex;align-items:center;gap:13px">
+          <div style="width:40px;height:40px;border-radius:9px;background:#F1EFEA;color:#3F4248;display:flex;align-items:center;justify-content:center"><i data-lucide="cctv"></i></div>
+          <div><div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;letter-spacing:-1px;line-height:1">{{ totalAll }}</div><div style="font-size:11.5px;color:#9A9CA1;margin-top:3px">Câmeras totais</div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:16px 18px;box-shadow:0 1px 2px rgba(20,20,20,.03);display:flex;align-items:center;gap:13px">
+          <div style="width:40px;height:40px;border-radius:9px;background:#EAF1EC;color:#2F7350;display:flex;align-items:center;justify-content:center"><i data-lucide="signal"></i></div>
+          <div><div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;letter-spacing:-1px;line-height:1">{{ onlineCount }}</div><div style="font-size:11.5px;color:#9A9CA1;margin-top:3px">Transmitindo</div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:16px 18px;box-shadow:0 1px 2px rgba(20,20,20,.03);display:flex;align-items:center;gap:13px">
+          <div style="width:40px;height:40px;border-radius:9px;background:#F8ECEB;color:#A33F38;display:flex;align-items:center;justify-content:center"><i data-lucide="video-off"></i></div>
+          <div><div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;letter-spacing:-1px;line-height:1">{{ offlineCount }}</div><div style="font-size:11.5px;color:#9A9CA1;margin-top:3px">Sem sinal</div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:16px 18px;box-shadow:0 1px 2px rgba(20,20,20,.03);display:flex;align-items:center;gap:13px">
+          <div style="width:40px;height:40px;border-radius:9px;background:#F1EFEA;color:#3F4248;display:flex;align-items:center;justify-content:center"><i data-lucide="hard-drive"></i></div>
+          <div><div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;letter-spacing:-1px;line-height:1">{{ recCount }}</div><div style="font-size:11.5px;color:#9A9CA1;margin-top:3px">Gravando · 14 dias</div></div>
+        </div>
+      </div>
+
+      <!-- wall -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(296px,1fr));gap:16px;animation:smrise .55s cubic-bezier(.2,.7,.2,1) .12s both">
+        <sc-for list="{{ cameras }}" as="c" hint-placeholder-count="9">
+          <div class="sm-cam" onClick="{{ c.open }}" style="background:#fff;border:1px solid #E7E5E0;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(20,20,20,.04);cursor:pointer">
+            <div style="position:relative;aspect-ratio:16/9;background:{{ c.feedBg }};overflow:hidden">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px);pointer-events:none"></div>
+              <div style="position:absolute;inset:0;box-shadow:inset 0 0 56px rgba(0,0,0,.55);pointer-events:none"></div>
+              <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:9px 11px">
+                <span style="{{ c.liveBadge }}"><span style="{{ c.liveDot }}"></span>{{ c.liveLabel }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.05em">{{ c.resolution }}</span>
+              </div>
+              <sc-if value="{{ c.isOnline }}" hint-placeholder-val="{{ true }}">
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.08)"><i data-lucide="cctv" style="width:44px;height:44px"></i></div>
+              </sc-if>
+              <sc-if value="{{ c.isOffline }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:rgba(255,255,255,.42)">
+                  <i data-lucide="wifi-off" style="width:24px;height:24px"></i>
+                  <span style="font-size:11px;font-weight:700;letter-spacing:.2em">SEM SINAL</span>
+                </div>
+              </sc-if>
+              <div class="sm-cam-expand" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,10,13,.32);opacity:0;transition:opacity .16s">
+                <span style="display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:8px;background:rgba(255,255,255,.92);color:#1B1C1E;font-size:12.5px;font-weight:600"><i data-lucide="maximize-2" style="width:14px;height:14px"></i> Ao vivo</span>
+              </div>
+              <div style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:8px 11px;background:linear-gradient(0deg,rgba(0,0,0,.5),transparent)">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.6)">{{ clock }}</span>
+                <sc-if value="{{ c.recording }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:#FF7A7A;letter-spacing:.1em"><span style="width:6px;height:6px;border-radius:50%;background:#E5484D;animation:smblink 1.4s infinite"></span>REC</span>
+                </sc-if>
+              </div>
+            </div>
+            <div style="padding:12px 14px;display:flex;align-items:center;gap:10px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.label }}</div>
+                <div style="font-size:11px;color:#9A9CA1;font-family:'IBM Plex Mono',monospace;margin-top:2px">{{ c.name }}</div>
+              </div>
+              <span style="{{ c.locChip }}">{{ c.site }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </main>
+  </div>
+
+  <!-- ░░ DRAWER — câmera ao vivo ░░ -->
+  <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(20,21,23,.4);backdrop-filter:blur(2px);z-index:60;animation:smBackdrop .2s ease"></div>
+
+    <aside style="position:fixed;top:0;right:0;bottom:0;width:600px;max-width:96vw;background:#fff;border-left:1px solid #E7E5E0;box-shadow:-18px 0 48px rgba(20,20,20,.16);z-index:61;display:flex;flex-direction:column;animation:smDrawerIn .32s cubic-bezier(.2,.7,.2,1)">
+
+      <!-- header -->
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:20px 22px 16px;border-bottom:1px solid #EFEDE9">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:#9A9CA1;margin-bottom:5px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#6A6E74">{{ selView.name }}</span>
+            <span style="width:3px;height:3px;border-radius:50%;background:#C6C4BE"></span>
+            <span>{{ selView.site }}</span>
+          </div>
+          <h2 style="font-size:18px;font-weight:600;letter-spacing:-.3px;line-height:1.2">{{ selView.label }}</h2>
+        </div>
+        <button class="sm-drawer-close" onClick="{{ closeDrawer }}" style="width:34px;height:34px;border-radius:8px;border:1px solid #E7E5E0;background:#fff;color:#8A8D93;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .12s"><i data-lucide="x" style="width:17px;height:17px"></i></button>
+      </div>
+
+      <div style="flex:1;overflow-y:auto">
+
+        <!-- feed grande -->
+        <div style="padding:18px 22px 0">
+          <div style="position:relative;aspect-ratio:16/9;background:{{ selView.feedBg }};border-radius:12px;overflow:hidden">
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px);pointer-events:none"></div>
+            <div style="position:absolute;inset:0;box-shadow:inset 0 0 70px rgba(0,0,0,.55);pointer-events:none"></div>
+            <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:12px 14px">
+              <span style="{{ selView.liveBadge }}"><span style="{{ selView.liveDot }}"></span>{{ selView.liveLabel }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.55)">{{ selView.resolution }} · {{ selView.fps }} fps</span>
+            </div>
+            <sc-if value="{{ selView.isOnline }}" hint-placeholder-val="{{ true }}">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.08)"><i data-lucide="cctv" style="width:60px;height:60px"></i></div>
+              <!-- PTZ -->
+              <div style="position:absolute;right:14px;bottom:54px;width:84px;height:84px;border-radius:50%;background:rgba(12,14,18,.5);border:1px solid rgba(255,255,255,.14);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);place-items:center">
+                <span></span><span style="color:rgba(255,255,255,.7);display:inline-flex"><i data-lucide="chevron-up" style="width:15px;height:15px"></i></span><span></span>
+                <span style="color:rgba(255,255,255,.7);display:inline-flex"><i data-lucide="chevron-left" style="width:15px;height:15px"></i></span><span style="width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5)"></span><span style="color:rgba(255,255,255,.7);display:inline-flex"><i data-lucide="chevron-right" style="width:15px;height:15px"></i></span>
+                <span></span><span style="color:rgba(255,255,255,.7);display:inline-flex"><i data-lucide="chevron-down" style="width:15px;height:15px"></i></span><span></span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ selView.isOffline }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,.45)">
+                <i data-lucide="wifi-off" style="width:34px;height:34px"></i>
+                <span style="font-size:13px;font-weight:700;letter-spacing:.22em">SEM SINAL</span>
+                <span style="font-size:11.5px;color:rgba(255,255,255,.35)">Última imagem {{ selView.lastMotion }}</span>
+              </div>
+            </sc-if>
+            <div style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:linear-gradient(0deg,rgba(0,0,0,.55),transparent)">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.66)">{{ clock }}</span>
+              <sc-if value="{{ selView.recording }}" hint-placeholder-val="{{ true }}">
+                <span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#FF7A7A;letter-spacing:.1em"><span style="width:7px;height:7px;border-radius:50%;background:#E5484D;animation:smblink 1.4s infinite"></span>GRAVANDO</span>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- controles -->
+          <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+            <button class="sm-ptz" style="display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:9px;border:1px solid #E2E0DA;background:#F4F3F0;color:#3F4248;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .12s"><i data-lucide="play" style="width:15px;height:15px"></i> Ao vivo</button>
+            <button class="sm-ptz" style="width:40px;height:40px;border-radius:9px;border:1px solid #E2E0DA;background:#fff;color:#6A6E74;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s" title="Capturar imagem"><i data-lucide="camera" style="width:17px;height:17px"></i></button>
+            <button class="sm-ptz" style="width:40px;height:40px;border-radius:9px;border:1px solid #E2E0DA;background:#fff;color:#6A6E74;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s" title="Baixar trecho"><i data-lucide="download" style="width:17px;height:17px"></i></button>
+            <button class="sm-ptz" style="width:40px;height:40px;border-radius:9px;border:1px solid #E2E0DA;background:#fff;color:#6A6E74;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s" title="Áudio"><i data-lucide="volume-2" style="width:17px;height:17px"></i></button>
+            <button class="sm-ptz" style="margin-left:auto;width:40px;height:40px;border-radius:9px;border:1px solid #E2E0DA;background:#fff;color:#6A6E74;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s" title="Tela cheia"><i data-lucide="maximize" style="width:17px;height:17px"></i></button>
+          </div>
+        </div>
+
+        <!-- linha do tempo de gravações -->
+        <div style="padding:22px 22px 4px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1">Gravações · hoje</div>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+              <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#6A6E74"><span style="width:9px;height:9px;border-radius:2px;background:#3E8E5E"></span>Contínuo</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#6A6E74"><span style="width:9px;height:9px;border-radius:2px;background:#B07D2B"></span>Movimento</span>
+            </div>
+          </div>
+          <div style="position:relative;height:36px;background:#F4F3F0;border:1px solid #E7E5E0;border-radius:8px;overflow:hidden">
+            <sc-for list="{{ selView.timeline }}" as="seg" hint-placeholder-count="6">
+              <div style="{{ seg.style }}"></div>
+            </sc-for>
+            <div style="{{ selView.playhead }}"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#A7A9AE">
+            <span>00h</span><span>06h</span><span>12h</span><span>18h</span><span>24h</span>
+          </div>
+        </div>
+
+        <!-- detalhes -->
+        <div style="padding:18px 22px 26px">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:6px">Detalhes do dispositivo</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 22px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Status</span><span style="{{ selView.statusChip }}"><span style="{{ selView.statusDot }}"></span>{{ selView.statusLabel }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Local</span><span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.site }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Endereço IP</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.ip }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Resolução</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.resolution }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Codec</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.codec }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F2F0EC"><span style="font-size:12.5px;color:#8A8D93">Retenção</span><span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.retention }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0"><span style="font-size:12.5px;color:#8A8D93">Último movimento</span><span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.lastMotion }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0"><span style="font-size:12.5px;color:#8A8D93">Firmware</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.firmware }}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer ações -->
+      <div style="border-top:1px solid #EFEDE9;background:#fff;padding:14px 22px;display:flex;align-items:center;gap:8px">
+        <button style="{{ primaryWide }}"><i data-lucide="history" style="width:15px;height:15px"></i> Ver gravações</button>
+        <button class="sm-ptz" style="display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:9px;border:1px solid #E2E0DA;background:#fff;color:#3F4248;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .12s"><i data-lucide="settings-2" style="width:15px;height:15px"></i> Configurar</button>
+      </div>
+    </aside>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:960},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1B1C1E&quot;,&quot;options&quot;:[&quot;#1B1C1E&quot;,&quot;#2E6E6A&quot;,&quot;#3E5BA9&quot;,&quot;#8A4B2F&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { filter: 'todas', selectedId: null };
+
+  componentDidMount(){ this._icons(); }
+  componentDidUpdate(){ this._icons(); }
+  _icons(){
+    const go = () => {
+      if (window.lucide && window.lucide.createIcons) {
+        try { window.lucide.createIcons({ attrs: { width: 18, height: 18, 'stroke-width': 1.75 } }); } catch(e){}
+      } else { setTimeout(go, 80); }
+    };
+    go();
+  }
+
+  _raw(){
+    return [
+      { id:'c1', name:'CAM-STAND-01', label:'Entrada principal',   local:'stand', site:'Stand SP', ip:'192.168.5.21', status:'online',  resolution:'1080p', fps:25, lastMotion:'há 1 min' },
+      { id:'c2', name:'CAM-STAND-02', label:'Balcão de vendas',    local:'stand', site:'Stand SP', ip:'192.168.5.22', status:'online',  resolution:'1080p', fps:25, lastMotion:'há 3 min' },
+      { id:'c3', name:'CAM-STAND-03', label:'Estoque',             local:'stand', site:'Stand SP', ip:'192.168.5.23', status:'online',  resolution:'1080p', fps:20, lastMotion:'há 12 min' },
+      { id:'c4', name:'CAM-STAND-04', label:'Estacionamento',      local:'stand', site:'Stand SP', ip:'192.168.5.24', status:'online',  resolution:'4K',    fps:20, lastMotion:'há 2 min' },
+      { id:'c5', name:'CAM-OBRA-01',  label:'Portão de acesso',    local:'obra',  site:'Obra RJ',  ip:'10.30.9.11',   status:'online',  resolution:'4K',    fps:25, lastMotion:'há 40 s' },
+      { id:'c6', name:'CAM-OBRA-02',  label:'Almoxarifado',        local:'obra',  site:'Obra RJ',  ip:'10.30.9.12',   status:'online',  resolution:'1080p', fps:20, lastMotion:'há 5 min' },
+      { id:'c7', name:'CAM-OBRA-03',  label:'Torre A — laje 8',    local:'obra',  site:'Obra RJ',  ip:'10.30.9.13',   status:'online',  resolution:'1080p', fps:15, lastMotion:'há 8 min' },
+      { id:'c8', name:'CAM-OBRA-04',  label:'Portão do canteiro',  local:'obra',  site:'Obra RJ',  ip:'10.30.9.14',   status:'offline', resolution:'1080p', fps:20, lastMotion:'há 22 min' },
+      { id:'c9', name:'CAM-OBRA-05',  label:'Pátio de materiais',  local:'obra',  site:'Obra RJ',  ip:'10.30.9.15',   status:'online',  resolution:'4K',    fps:25, lastMotion:'há 1 min' },
+    ];
+  }
+
+  _timeline(status){
+    if (status === 'offline') {
+      return [
+        { left:0,  width:62, color:'#CBE2D2' },
+        { left:62, width:38, color:'#E6BBB5' },
+      ];
+    }
+    return [
+      { left:0,  width:100, color:'#DCEAE1' },
+      { left:8,  width:6,   color:'#B07D2B' },
+      { left:27, width:4,   color:'#B07D2B' },
+      { left:41, width:9,   color:'#B07D2B' },
+      { left:63, width:5,   color:'#B07D2B' },
+      { left:78, width:8,   color:'#B07D2B' },
+    ];
+  }
+
+  _decorate(c){
+    const isOnline = c.status === 'online';
+    const warm = c.local === 'obra';
+    const feedBg = !isOnline
+      ? 'repeating-linear-gradient(45deg,#15171b 0 16px,#101216 16px 32px)'
+      : warm
+        ? 'radial-gradient(120% 85% at 50% 0%, #26221b 0%, #16120c 58%, #0c0a07 100%)'
+        : 'radial-gradient(120% 85% at 50% 0%, #1b2733 0%, #0f141a 58%, #0a0d12 100%)';
+
+    const loc = warm
+      ? { bg:'#F4EAE1', fg:'#8A4B23', bd:'#E2C7AE' }
+      : { bg:'#EEF1F4', fg:'#3F5166', bd:'#D7DEE6' };
+
+    const ST = isOnline
+      ? { label:'Online',  bg:'#EAF1EC', fg:'#2F7350', bd:'#CBE2D2', dot:'#3E8E5E' }
+      : { label:'Sem sinal', bg:'#F8ECEB', fg:'#A33F38', bd:'#ECCDC9', dot:'#BD4B43' };
+
+    const liveBadge = isOnline
+      ? { display:'inline-flex', alignItems:'center', gap:'5px', padding:'3px 8px', borderRadius:'5px', background:'rgba(8,10,13,.42)', color:'#fff', fontSize:'9.5px', fontWeight:700, letterSpacing:'.08em' }
+      : { display:'inline-flex', alignItems:'center', gap:'5px', padding:'3px 8px', borderRadius:'5px', background:'rgba(80,30,28,.5)', color:'#F0C9C5', fontSize:'9.5px', fontWeight:700, letterSpacing:'.08em' };
+    const liveDot = { width:'6px', height:'6px', borderRadius:'50%', background:isOnline?'#37D27A':'#E5645C', animation: isOnline?'smblink 1.6s infinite':'none' };
+
+    const timeline = this._timeline(c.status).map(s => ({
+      style: { position:'absolute', left:s.left+'%', top:0, bottom:0, width:s.width+'%', background:s.color }
+    }));
+
+    return Object.assign({}, c, {
+      isOnline, isOffline: !isOnline,
+      recording: isOnline,
+      feedBg,
+      resolution: c.resolution,
+      locChip: { fontSize:'11px', fontWeight:600, padding:'3px 9px', borderRadius:'6px', background:loc.bg, color:loc.fg, border:'1px solid '+loc.bd, whiteSpace:'nowrap', flexShrink:0 },
+      liveBadge, liveDot,
+      liveLabel: isOnline ? 'AO VIVO' : 'OFFLINE',
+      statusLabel: ST.label,
+      statusChip: { display:'inline-flex', alignItems:'center', gap:'6px', padding:'3px 10px 3px 8px', borderRadius:'999px', fontSize:'11.5px', fontWeight:600, background:ST.bg, color:ST.fg, border:'1px solid '+ST.bd, whiteSpace:'nowrap' },
+      statusDot: { width:'6px', height:'6px', borderRadius:'50%', background:ST.dot, flexShrink:0 },
+      codec: 'H.265 (HEVC)',
+      retention: '14 dias',
+      firmware: 'v5.7.3',
+      timeline,
+      playhead: { position:'absolute', left:'43%', top:'-2px', bottom:'-2px', width:'2px', background:'#1B1C1E' },
+    });
+  }
+
+  renderVals(){
+    const accent = this.props.accent ?? '#1B1C1E';
+    const f = this.state.filter;
+    const all = this._raw().map(c => this._decorate(c));
+    const filtered = all.filter(c =>
+      f === 'todas'   ? true :
+      f === 'offline' ? c.status === 'offline' :
+      c.local === f
+    );
+    const cameras = filtered.map(c => Object.assign({}, c, { open: () => this.setState({ selectedId: c.id }) }));
+    const selRaw = this.state.selectedId ? all.find(x => x.id === this.state.selectedId) : null;
+
+    const onlineCount  = all.filter(c => c.status === 'online').length;
+    const offlineCount = all.length - onlineCount;
+
+    const segBase = { padding:'6px 13px', borderRadius:'7px', border:'none', cursor:'pointer', fontSize:'12.5px', fontWeight:600, fontFamily:'inherit', transition:'all .12s' };
+    const on  = Object.assign({}, segBase, { background:'#1B1C1E', color:'#fff' });
+    const off = Object.assign({}, segBase, { background:'transparent', color:'#6A6E74' });
+
+    return {
+      cameras,
+      selView: selRaw,
+      hasSel: !!selRaw,
+      totalAll: all.length,
+      onlineCount, offlineCount,
+      recCount: onlineCount,
+      clock: '24/06/2026  10:24:08',
+      closeDrawer: () => this.setState({ selectedId: null }),
+      setTodas:   () => this.setState({ filter:'todas' }),
+      setStand:   () => this.setState({ filter:'stand' }),
+      setObra:    () => this.setState({ filter:'obra' }),
+      setOffline: () => this.setState({ filter:'offline' }),
+      fTodas:   f === 'todas'   ? on : off,
+      fStand:   f === 'stand'   ? on : off,
+      fObra:    f === 'obra'    ? on : off,
+      fOffline: f === 'offline' ? on : off,
+      primaryStyle: { display:'inline-flex', alignItems:'center', gap:'7px', padding:'9px 15px', borderRadius:'8px', background:accent, color:'#fff', border:'none', cursor:'pointer', fontSize:'13px', fontWeight:600, fontFamily:'inherit' },
+      primaryWide:  { flex:1, display:'inline-flex', alignItems:'center', justifyContent:'center', gap:'7px', padding:'10px 14px', borderRadius:'9px', background:accent, color:'#fff', border:'none', cursor:'pointer', fontSize:'12.5px', fontWeight:600, fontFamily:'inherit' },
+      navBarStyle:  { position:'absolute', left:0, top:'6px', bottom:'6px', width:'3px', borderRadius:'0 3px 3px 0', background:'#F4F3F0' },
+    };
+  }
+}
+</script>
+</body>
+</html>

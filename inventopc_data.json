@@ -2,7 +2,7 @@
   "computers": {
     "1": {
       "hostname": "MERITOSP195",
-      "ip": "192.168.88.66",
+      "ip": "10.60.64.48",
       "mac": "f4:c8:8a:9d:7d:e9",
       "usuario": "BrunoRibamar",
       "so": "Microsoft Windows 11 Pro (64 bits)",
@@ -21,7 +21,7 @@
       "id": 1,
       "status": "online",
       "registrado_em": "2026-06-19T21:16:30.713379Z",
-      "ultimo_visto": "2026-06-22T20:32:33.215749Z",
+      "ultimo_visto": "2026-06-23T21:10:32.568808Z",
       "obs": "",
       "setor": "",
       "patrimonio": "",

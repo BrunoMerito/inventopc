@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@keyframes smrise{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:none}}
+@keyframes smpulse{0%{box-shadow:0 0 0 0 rgba(62,142,94,.45)}70%{box-shadow:0 0 0 5px rgba(62,142,94,0)}100%{box-shadow:0 0 0 0 rgba(62,142,94,0)}}
+@keyframes smBackdrop{from{opacity:0}to{opacity:1}}
+@keyframes smDrawerIn{from{transform:translateX(48px);opacity:0}to{transform:none;opacity:1}}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#D6D4CE;border-radius:10px;border:2px solid #F4F3F0}
+::-webkit-scrollbar-track{background:transparent}
+.sm-navlink:hover{background:rgba(255,255,255,.045)!important;color:#EDEDEE!important}
+.sm-trow:hover{background:#FAF9F7!important}
+.sm-icbtn:hover{background:#F1EFEA!important;color:#1B1C1E!important}
+.sm-drawer-act:hover{background:#F1EFEA!important;border-color:#D4D1C9!important;color:#1B1C1E!important}
+.sm-drawer-close:hover{background:#F1EFEA!important;color:#1B1C1E!important}
+.sm-reply:focus{outline:none;border-color:#1B1C1E!important;box-shadow:0 0 0 3px rgba(27,28,30,.06)!important}
+</style>
+</helmet>
+
+<div data-screen-label="Tickets" style="display:flex;height:100vh;width:100%;background:#F4F3F0;color:#1B1C1E;overflow:hidden">
+
+  <!-- ░░ SIDEBAR ░░ -->
+  <aside style="width:248px;flex-shrink:0;background:#17181A;display:flex;flex-direction:column;border-right:1px solid #000">
+    <div style="padding:24px 18px 20px;display:flex;flex-direction:column;gap:9px">
+      <img src="assets/merito-logo.png" alt="Mérito" style="height:25px;width:auto;align-self:flex-start;filter:invert(1)">
+      <div style="font-size:9.5px;color:#7A7C80;letter-spacing:.18em;text-transform:uppercase;padding-left:2px">Gestão de TI</div>
+    </div>
+
+    <nav style="flex:1;padding:6px 12px;overflow-y:auto">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Principal</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="layout-dashboard"></i></span> Visão geral</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Inventário</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="store"></i></span> Stand</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="building-2"></i></span> Escritório</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="hard-hat"></i></span> Obra</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="network"></i></span> Rede &amp; dispositivos</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Helpdesk</div>
+      <a class="sm-navlink" style="position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:600;color:#F4F3F0;background:rgba(255,255,255,.08);margin-bottom:2px">
+        <div style="{{ navBarStyle }}"></div>
+        <span style="display:inline-flex;color:#F4F3F0"><i data-lucide="life-buoy"></i></span> Tickets
+        <span style="margin-left:auto;min-width:19px;height:19px;padding:0 5px;border-radius:6px;background:#BD4B43;color:#fff;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center">{{ openCount }}</span>
+      </a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="plus-circle"></i></span> Novo ticket</a>
+
+      <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5E6064;padding:14px 8px 6px">Sistema</div>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="zap"></i></span> Ações remotas</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="bar-chart-3"></i></span> Relatórios</a>
+      <a class="sm-navlink" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#AFB1B5;margin-bottom:2px"><span style="display:inline-flex;color:#7C7E82"><i data-lucide="settings"></i></span> Configurações</a>
+    </nav>
+
+    <div style="padding:12px;border-top:1px solid #232427">
+      <div style="display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:7px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#2B2C30;color:#E7E7E9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0">RA</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12.5px;font-weight:600;color:#EDEDEE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Ricardo Alves</div>
+          <div style="font-size:10.5px;color:#7A7C80">Administrador</div>
+        </div>
+        <span style="display:inline-flex;color:#6A6C70"><i data-lucide="chevron-down"></i></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ░░ MAIN ░░ -->
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden">
+
+    <header style="height:60px;flex-shrink:0;background:#FFFFFF;border-bottom:1px solid #E7E5E0;display:flex;align-items:center;gap:16px;padding:0 28px">
+      <div style="position:relative;flex:1;max-width:440px">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9A9CA1;display:inline-flex"><i data-lucide="search"></i></span>
+        <input placeholder="Buscar ticket, solicitante, assunto…" style="width:100%;height:38px;padding:0 64px 0 38px;border:1px solid #E7E5E0;border-radius:8px;background:#FAF9F7;font-size:13px;font-family:inherit;color:#1B1C1E;outline:none">
+        <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);display:inline-flex;gap:3px">
+          <kbd style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6A6E74;background:#F1EFEA;border:1px solid #E4E2DC;border-radius:4px;padding:1px 5px">⌘</kbd>
+          <kbd style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6A6E74;background:#F1EFEA;border:1px solid #E4E2DC;border-radius:4px;padding:1px 5px">K</kbd>
+        </span>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:#5F6268;font-weight:500">
+          <span style="width:7px;height:7px;border-radius:50%;background:#3E8E5E;animation:smpulse 2.4s infinite"></span>
+          Fila sincronizada
+        </div>
+        <div style="width:1px;height:22px;background:#E7E5E0"></div>
+        <button class="sm-icbtn" style="width:36px;height:36px;border-radius:8px;border:1px solid #E7E5E0;background:#fff;color:#5F6268;display:flex;align-items:center;justify-content:center;cursor:pointer"><i data-lucide="bell"></i></button>
+        <button style="{{ primaryStyle }}"><i data-lucide="plus"></i> Novo ticket</button>
+      </div>
+    </header>
+
+    <main style="flex:1;overflow-y:auto;padding:28px 28px 36px">
+
+      <!-- page header -->
+      <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:22px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:6px">Helpdesk · Fila de atendimento</div>
+          <h1 style="font-size:25px;font-weight:600;letter-spacing:-.5px;line-height:1">Tickets</h1>
+          <p style="font-size:13px;color:#62656B;margin-top:7px">{{ totalAll }} chamados · <b style="color:#BD4B43;font-weight:600">{{ slaRisk }} com SLA em risco</b> · cumprimento de SLA em 96% no mês</p>
+        </div>
+      </div>
+
+      <!-- KPI strip -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;animation:smrise .55s cubic-bezier(.2,.7,.2,1) .05s both">
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">Em aberto</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">{{ openCount }}</div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:13px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:18px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:12px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:21px;background:#DAD8D2;border-radius:1px"></span><span style="width:5px;height:16px;background:#DAD8D2;border-radius:1px"></span><span style="width:5px;height:24px;background:#C8C6BF;border-radius:1px"></span><span style="width:5px;height:28px;background:#1B1C1E;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#3E8E5E;font-weight:600">▼ 3</span> vs. ontem</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">SLA em risco</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">{{ slaRisk }}</div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:12px;background:#EFD9D6;border-radius:1px"></span><span style="width:5px;height:10px;background:#EFD9D6;border-radius:1px"></span><span style="width:5px;height:16px;background:#EFD9D6;border-radius:1px"></span><span style="width:5px;height:13px;background:#E6BBB5;border-radius:1px"></span><span style="width:5px;height:20px;background:#E6BBB5;border-radius:1px"></span><span style="width:5px;height:17px;background:#D17B72;border-radius:1px"></span><span style="width:5px;height:23px;background:#BD4B43;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#BD4B43;font-weight:600">1 vencido</span> · priorizar agora</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">Resolvidos hoje</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">18</div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:14px;background:#D6E5DB;border-radius:1px"></span><span style="width:5px;height:18px;background:#D6E5DB;border-radius:1px"></span><span style="width:5px;height:16px;background:#D6E5DB;border-radius:1px"></span><span style="width:5px;height:22px;background:#C2DBCB;border-radius:1px"></span><span style="width:5px;height:20px;background:#C2DBCB;border-radius:1px"></span><span style="width:5px;height:26px;background:#7FB89A;border-radius:1px"></span><span style="width:5px;height:29px;background:#3E8E5E;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#3E8E5E;font-weight:600">▲ 5</span> acima da média</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E7E5E0;border-radius:11px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,20,.03)">
+          <div style="font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9CA1;margin-bottom:14px">1ª resposta (média)</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:31px;font-weight:600;letter-spacing:-1.5px;line-height:.9;font-variant-numeric:tabular-nums">14<span style="font-size:16px;color:#9A9CA1;letter-spacing:0"> min</span></div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+              <span style="width:5px;height:28px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:24px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:26px;background:#E6E4DE;border-radius:1px"></span><span style="width:5px;height:19px;background:#DAD8D2;border-radius:1px"></span><span style="width:5px;height:21px;background:#DAD8D2;border-radius:1px"></span><span style="width:5px;height:15px;background:#C8C6BF;border-radius:1px"></span><span style="width:5px;height:12px;background:#1B1C1E;border-radius:1px"></span>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#62656B"><span style="color:#3E8E5E;font-weight:600">▼ 4 min</span> vs. semana passada</div>
+        </div>
+      </div>
+
+      <!-- fila -->
+      <section style="background:#fff;border:1px solid #E7E5E0;border-radius:12px;box-shadow:0 1px 2px rgba(20,20,20,.03);overflow:hidden;animation:smrise .55s cubic-bezier(.2,.7,.2,1) .12s both">
+        <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid #EFEDE9">
+          <h2 style="font-size:14px;font-weight:600;letter-spacing:-.2px">Fila de atendimento</h2>
+          <span style="font-size:11px;font-weight:600;color:#6A6E74;background:#F1EFEA;border:1px solid #E7E5E0;padding:2px 9px;border-radius:999px;font-family:'IBM Plex Mono',monospace">{{ count }}</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:3px;background:#F4F3F0;border:1px solid #E7E5E0;border-radius:9px;padding:3px">
+            <button style="{{ fTodos }}" onClick="{{ setTodos }}">Todos</button>
+            <button style="{{ fAberto }}" onClick="{{ setAberto }}">Aberto</button>
+            <button style="{{ fAnd }}" onClick="{{ setAnd }}">Andamento</button>
+            <button style="{{ fResolv }}" onClick="{{ setResolv }}">Resolvido</button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:2.8fr 1fr 1.3fr 0.95fr 1.05fr;gap:12px;padding:11px 20px;border-bottom:1px solid #EFEDE9;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9CA1">
+          <div>Chamado</div><div>Categoria</div><div>Responsável</div><div>SLA</div><div>Status</div>
+        </div>
+
+        <sc-for list="{{ tickets }}" as="t" hint-placeholder-count="6">
+          <div class="sm-trow" onClick="{{ t.open }}" style="display:grid;grid-template-columns:2.8fr 1fr 1.3fr 0.95fr 1.05fr;gap:12px;align-items:center;padding:13px 20px 13px 17px;border-bottom:1px solid #F2F0EC;cursor:pointer;box-shadow:{{ t.stripShadow }}">
+            <div style="display:flex;align-items:center;gap:11px;min-width:0">
+              <span style="{{ t.prioDot }}" title="{{ t.prioLabel }}"></span>
+              <div style="min-width:0">
+                <div style="font-size:13.5px;font-weight:600;color:#1B1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.subject }}</div>
+                <div style="font-size:11.5px;color:#9A9CA1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span style="font-family:'IBM Plex Mono',monospace">{{ t.num }}</span> · {{ t.requester }} · {{ t.opened }}</div>
+              </div>
+            </div>
+            <div><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#5F6268;background:#F4F3F0;border:1px solid #E7E5E0;padding:3px 9px;border-radius:6px"><i data-lucide="{{ t.catIcon }}" style="width:12px;height:12px"></i>{{ t.category }}</span></div>
+            <div style="display:flex;align-items:center;gap:8px;min-width:0">
+              <div style="{{ t.assigneeStyle }}">{{ t.assigneeInitials }}</div>
+              <span style="font-size:12.5px;color:#3F4248;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.assignee }}</span>
+            </div>
+            <div><span style="{{ t.slaStyle }}"><i data-lucide="{{ t.slaIcon }}" style="width:12px;height:12px"></i>{{ t.slaText }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="{{ t.statusStyle }}"><span style="{{ t.statusDot }}"></span>{{ t.statusLabel }}</span><i data-lucide="chevron-right" style="width:15px;height:15px;color:#C6C4BE;flex-shrink:0"></i></div>
+          </div>
+        </sc-for>
+
+        <div style="padding:12px 20px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px;color:#9A9CA1">Mostrando {{ count }} de {{ totalAll }} chamados</span>
+          <a style="font-size:12.5px;font-weight:600;color:#1B1C1E;display:inline-flex;align-items:center;gap:5px;cursor:pointer">Histórico completo <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ░░ DRAWER — detalhe do ticket ░░ -->
+  <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(20,21,23,.36);backdrop-filter:blur(2px);z-index:60;animation:smBackdrop .2s ease"></div>
+
+    <aside style="position:fixed;top:0;right:0;bottom:0;width:560px;max-width:96vw;background:#fff;border-left:1px solid #E7E5E0;box-shadow:-18px 0 48px rgba(20,20,20,.14);z-index:61;display:flex;flex-direction:column;animation:smDrawerIn .32s cubic-bezier(.2,.7,.2,1)">
+      <div style="{{ selView.stripStyle }}"></div>
+
+      <!-- header -->
+      <div style="padding:24px 24px 18px;border-bottom:1px solid #EFEDE9">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:#9A9CA1;margin-bottom:6px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#6A6E74">{{ selView.num }}</span>
+              <span style="width:3px;height:3px;border-radius:50%;background:#C6C4BE"></span>
+              <span style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="{{ selView.channelIcon }}" style="width:12px;height:12px"></i>{{ selView.channel }}</span>
+            </div>
+            <h2 style="font-size:18px;font-weight:600;letter-spacing:-.3px;line-height:1.25">{{ selView.subject }}</h2>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+              <span style="{{ selView.statusStyle }}"><span style="{{ selView.statusDot }}"></span>{{ selView.statusLabel }}</span>
+              <span style="{{ selView.prioChip }}"><i data-lucide="{{ selView.prioIcon }}" style="width:12px;height:12px"></i>{{ selView.prioLabel }}</span>
+              <span style="{{ selView.slaStyle }}"><i data-lucide="{{ selView.slaIcon }}" style="width:12px;height:12px"></i>{{ selView.slaText }}</span>
+            </div>
+          </div>
+          <button class="sm-drawer-close" onClick="{{ closeDrawer }}" style="width:34px;height:34px;border-radius:8px;border:1px solid #E7E5E0;background:#fff;color:#8A8D93;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .12s"><i data-lucide="x" style="width:17px;height:17px"></i></button>
+        </div>
+
+        <!-- propriedades -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:18px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11px;color:#9A9CA1">Solicitante</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:24px;height:24px;border-radius:50%;background:#EDEAE3;color:#5F6268;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0">{{ selView.initials }}</div>
+              <span style="font-size:12.5px;color:#1B1C1E;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ selView.requester }} · {{ selView.sector }}</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11px;color:#9A9CA1">Responsável</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="{{ selView.assigneeStyle }}">{{ selView.assigneeInitials }}</div>
+              <span style="font-size:12.5px;color:#1B1C1E;font-weight:500">{{ selView.assignee }}</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11px;color:#9A9CA1">Status</span>
+            <div style="position:relative">
+              <select value="{{ selView.status }}" onChange="{{ setStatus }}" style="width:100%;height:36px;padding:0 32px 0 11px;border:1px solid #E2E0DA;border-radius:8px;background:#FBFAF8;font-family:inherit;font-size:12.5px;font-weight:500;color:#1B1C1E;cursor:pointer;appearance:none">
+                <option value="aberto">Aberto</option>
+                <option value="andamento">Em andamento</option>
+                <option value="resolvido">Resolvido</option>
+                <option value="fechado">Fechado</option>
+              </select>
+              <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:#9A9CA1;display:inline-flex"><i data-lucide="chevron-down" style="width:14px;height:14px"></i></span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11px;color:#9A9CA1">Categoria</span>
+            <div style="position:relative">
+              <select value="{{ selView.category }}" onChange="{{ setCategory }}" style="width:100%;height:36px;padding:0 32px 0 11px;border:1px solid #E2E0DA;border-radius:8px;background:#FBFAF8;font-family:inherit;font-size:12.5px;font-weight:500;color:#1B1C1E;cursor:pointer;appearance:none">
+                <option value="Rede">Rede</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Software">Software</option>
+                <option value="Acesso">Acesso</option>
+                <option value="Câmeras">Câmeras</option>
+                <option value="Tablets">Tablets</option>
+                <option value="Celulares">Celulares</option>
+              </select>
+              <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:#9A9CA1;display:inline-flex"><i data-lucide="chevron-down" style="width:14px;height:14px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- thread -->
+      <div style="flex:1;overflow-y:auto;padding:22px 24px;background:#FBFAF8">
+        <sc-for list="{{ selView.messages }}" as="m" hint-placeholder-count="3">
+          <sc-if value="{{ m.isSys }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin:6px 0 16px">
+              <span style="height:1px;flex:1;background:#EAE8E2"></span>
+              <span style="font-size:11px;color:#9A9CA1;display:inline-flex;align-items:center;gap:6px"><i data-lucide="info" style="width:12px;height:12px"></i>{{ m.text }} · {{ m.time }}</span>
+              <span style="height:1px;flex:1;background:#EAE8E2"></span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ m.isMsg }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;gap:11px;margin-bottom:18px">
+              <div style="{{ m.avatarStyle }}">{{ m.initials }}</div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:5px">
+                  <span style="font-size:12.5px;font-weight:600;color:#1B1C1E">{{ m.name }}</span>
+                  <span style="font-size:11px;color:#A7A9AE;font-family:'IBM Plex Mono',monospace">{{ m.time }}</span>
+                </div>
+                <div style="{{ m.bubbleStyle }}">{{ m.text }}</div>
+              </div>
+            </div>
+          </sc-if>
+        </sc-for>
+      </div>
+
+      <!-- reply -->
+      <div style="border-top:1px solid #EFEDE9;background:#fff;padding:14px 18px 16px">
+        <textarea class="sm-reply" placeholder="Escreva uma resposta ao solicitante…" style="width:100%;height:62px;resize:none;border:1px solid #E2E0DA;border-radius:10px;padding:11px 13px;font-family:inherit;font-size:13px;color:#1B1C1E;background:#FBFAF8;transition:border-color .15s,box-shadow .15s"></textarea>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+          <button style="{{ replyStyle }}"><i data-lucide="send" style="width:15px;height:15px"></i> Responder</button>
+          <button class="sm-drawer-act" style="display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:9px;border:1px solid #E7E5E0;background:#fff;color:#6A6E74;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .12s"><i data-lucide="lock" style="width:14px;height:14px"></i> Nota interna</button>
+          <button class="sm-drawer-act" style="margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:9px;border:1px solid #CBE2D2;background:#EAF1EC;color:#2F7350;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .12s"><i data-lucide="check-circle-2" style="width:14px;height:14px"></i> Resolver</button>
+        </div>
+      </div>
+    </aside>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:960},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1B1C1E&quot;,&quot;options&quot;:[&quot;#1B1C1E&quot;,&quot;#2E6E6A&quot;,&quot;#3E5BA9&quot;,&quot;#8A4B2F&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { filter: 'todos', selectedId: null, edits: {} };
+
+  _setField(field, value){
+    const id = this.state.selectedId;
+    if (!id) return;
+    this.setState(s => {
+      const edits = Object.assign({}, s.edits);
+      edits[id] = Object.assign({}, edits[id], { [field]: value });
+      return { edits };
+    });
+  }
+
+  componentDidMount(){ this._icons(); }
+  componentDidUpdate(){ this._icons(); }
+  _icons(){
+    const go = () => {
+      if (window.lucide && window.lucide.createIcons) {
+        try { window.lucide.createIcons({ attrs: { width: 18, height: 18, 'stroke-width': 1.75 } }); } catch(e){}
+      } else { setTimeout(go, 80); }
+    };
+    go();
+  }
+
+  _raw(){
+    return [
+      { id:'t1', num:'#4821', subject:'Servidor de arquivos sem resposta', requester:'Infra TI', initials:'TI', sector:'Infraestrutura', channel:'Monitoramento', category:'Rede', priority:'critica', status:'aberto', assignee:'Você', assigneeInitials:'RA', sla:'12 min', slaState:'risk', opened:'há 12 min',
+        messages:[
+          { who:'sys', text:'Ticket aberto pelo monitor de disponibilidade', time:'08:02' },
+          { who:'req', name:'Monitor de rede', initials:'MN', time:'08:02', text:'O host SRV-CORE-01 (192.168.1.1) parou de responder a ping e SMB. Última resposta às 08:01.' },
+          { who:'agent', name:'Você · Suporte', initials:'RA', time:'08:06', text:'Verificando. Abri sessão remota no servidor — o serviço LanmanServer caiu. Reiniciando o serviço agora.' },
+        ] },
+      { id:'t2', num:'#4820', subject:'Impressora não conecta na rede', requester:'Ana Souza', initials:'AS', sector:'Financeiro', channel:'E-mail', category:'Hardware', priority:'alta', status:'andamento', assignee:'Carlos M.', assigneeInitials:'CM', sla:'1h 40', slaState:'ok', opened:'há 1 h',
+        messages:[
+          { who:'req', name:'Ana Souza', initials:'AS', time:'09:14', text:'A HP LaserJet do financeiro sumiu da rede. Já reiniciei e continua offline. Preciso imprimir os boletos hoje.' },
+          { who:'agent', name:'Carlos M. · Suporte', initials:'CM', time:'09:31', text:'Oi Ana! O IP da impressora mudou (DHCP). Vou fixar um IP estático e reinstalar a fila de impressão. Te aviso em ~30 min.' },
+        ] },
+      { id:'t3', num:'#4818', subject:'Solicitação de novo notebook', requester:'Carlos Lima', initials:'CL', sector:'Comercial', channel:'Portal', category:'Hardware', priority:'media', status:'andamento', assignee:'Você', assigneeInitials:'RA', sla:'6 h', slaState:'ok', opened:'há 3 h',
+        messages:[
+          { who:'req', name:'Carlos Lima', initials:'CL', time:'07:40', text:'Vou para o stand de SP semana que vem e preciso de um notebook para apresentações.' },
+          { who:'agent', name:'Você · Suporte', initials:'RA', time:'08:55', text:'Encaminhado para aprovação do gestor. Assim que aprovar, separo um ThinkPad do estoque e preparo o ambiente.' },
+        ] },
+      { id:'t4', num:'#4815', subject:'VPN lenta no home office', requester:'Júlia Reis', initials:'JR', sector:'RH', channel:'E-mail', category:'Rede', priority:'media', status:'andamento', assignee:'Carlos M.', assigneeInitials:'CM', sla:'4 h', slaState:'ok', opened:'há 5 h',
+        messages:[
+          { who:'req', name:'Júlia Reis', initials:'JR', time:'06:20', text:'A VPN está muito lenta desde ontem, demora para abrir o sistema de RH. Em casa minha internet está normal.' },
+          { who:'agent', name:'Carlos M. · Suporte', initials:'CM', time:'07:05', text:'Identificamos saturação no link secundário. Migrando seu perfil para o gateway principal — teste em 1 h, por favor.' },
+        ] },
+      { id:'t5', num:'#4812', subject:'Acesso ao ERP negado após troca de senha', requester:'Pedro Alves', initials:'PA', sector:'Compras', channel:'Telefone', category:'Acesso', priority:'alta', status:'aberto', assignee:'Não atribuído', assigneeInitials:'?', sla:'Vencido', slaState:'breached', opened:'há 2 h',
+        messages:[
+          { who:'req', name:'Pedro Alves', initials:'PA', time:'08:40', text:'Troquei a senha de rede e agora o ERP não deixa eu entrar, diz “credenciais inválidas”. Estou sem trabalhar.' },
+          { who:'sys', text:'SLA de primeira resposta vencido', time:'10:40' },
+        ] },
+      { id:'t6', num:'#4809', subject:'Outlook não sincroniza e-mails', requester:'Marina Dias', initials:'MD', sector:'Marketing', channel:'Portal', category:'Software', priority:'baixa', status:'resolvido', assignee:'Você', assigneeInitials:'RA', sla:'No prazo', slaState:'done', opened:'ontem',
+        messages:[
+          { who:'req', name:'Marina Dias', initials:'MD', time:'Ontem 16:10', text:'O Outlook parou de receber e-mails novos. Os antigos aparecem, mas nada chega.' },
+          { who:'agent', name:'Você · Suporte', initials:'RA', time:'Ontem 16:48', text:'Era o perfil OST corrompido. Recriei o perfil e a sincronização voltou. Pode confirmar?' },
+          { who:'req', name:'Marina Dias', initials:'MD', time:'Ontem 17:02', text:'Voltou! Obrigada pela rapidez.' },
+          { who:'sys', text:'Ticket marcado como resolvido', time:'Ontem 17:05' },
+        ] },
+      { id:'t7', num:'#4805', subject:'Configurar segundo monitor', requester:'Bruno Tavares', initials:'BT', sector:'Engenharia', channel:'Portal', category:'Hardware', priority:'baixa', status:'resolvido', assignee:'Carlos M.', assigneeInitials:'CM', sla:'No prazo', slaState:'done', opened:'ontem',
+        messages:[
+          { who:'req', name:'Bruno Tavares', initials:'BT', time:'Ontem 11:00', text:'Recebi um monitor novo mas não consigo estender a tela, só espelha.' },
+          { who:'agent', name:'Carlos M. · Suporte', initials:'CM', time:'Ontem 11:25', text:'Acessei remoto e configurei o modo estendido + organizei a disposição das telas. Tudo certo!' },
+          { who:'sys', text:'Ticket marcado como resolvido', time:'Ontem 11:30' },
+        ] },
+      { id:'t8', num:'#4822', subject:'Câmera 04 do canteiro sem sinal', requester:'Eng. Costa', initials:'EC', sector:'Engenharia', channel:'Monitoramento', category:'Câmeras', priority:'alta', status:'aberto', assignee:'Você', assigneeInitials:'RA', sla:'30 min', slaState:'risk', opened:'há 20 min',
+        messages:[
+          { who:'sys', text:'Perda de sinal detectada em CAM-OBRA-04', time:'10:18' },
+          { who:'req', name:'Eng. Costa', initials:'EC', time:'10:20', text:'A câmera 04 do portão do canteiro está sem imagem no painel. As outras câmeras da obra estão normais.' },
+        ] },
+    ];
+  }
+
+  _meta(){
+    const P = {
+      critica:{ label:'Crítica', strip:'#BD4B43', dot:'#BD4B43', icon:'flame',      chip:{bg:'#F8ECEB',fg:'#A33F38',bd:'#ECCDC9'} },
+      alta:   { label:'Alta',    strip:'#A85A28', dot:'#A85A28', icon:'chevrons-up', chip:{bg:'#F4EAE1',fg:'#8A4B23',bd:'#E2C7AE'} },
+      media:  { label:'Média',   strip:'#B07D2B', dot:'#B07D2B', icon:'equal',       chip:{bg:'#F6F0E2',fg:'#8F6722',bd:'#E7D8B4'} },
+      baixa:  { label:'Baixa',   strip:'#3E8E5E', dot:'#3E8E5E', icon:'chevron-down',chip:{bg:'#EAF1EC',fg:'#2F7350',bd:'#CBE2D2'} },
+    };
+    const ST = {
+      aberto:    { label:'Aberto',       bg:'#EFEEEB', fg:'#3F4248', bd:'#E2E0DA', dot:'#6A6E74' },
+      andamento: { label:'Em andamento', bg:'#F6F0E2', fg:'#8F6722', bd:'#E7D8B4', dot:'#B07D2B' },
+      resolvido: { label:'Resolvido',    bg:'#EAF1EC', fg:'#2F7350', bd:'#CBE2D2', dot:'#3E8E5E' },
+      fechado:   { label:'Fechado',      bg:'#EFEEEB', fg:'#6A6E74', bd:'#E2E0DA', dot:'#9A9CA1' },
+    };
+    const CH = { 'E-mail':'mail', 'Portal':'globe', 'Telefone':'phone', 'Monitoramento':'activity' };
+    const CAT = { 'Rede':'network', 'Hardware':'cpu', 'Software':'app-window', 'Acesso':'key-round', 'Câmeras':'cctv', 'Tablets':'tablet', 'Celulares':'smartphone' };
+    return { P, ST, CH, CAT };
+  }
+
+  _sla(state, sla){
+    if (state === 'breached') return { style:{display:'inline-flex',alignItems:'center',gap:'5px',fontSize:'11.5px',fontWeight:600,padding:'3px 9px',borderRadius:'999px',background:'#BD4B43',color:'#fff',border:'1px solid #BD4B43',whiteSpace:'nowrap'}, icon:'alert-triangle', text:'Vencido' };
+    if (state === 'risk')     return { style:{display:'inline-flex',alignItems:'center',gap:'5px',fontSize:'11.5px',fontWeight:600,padding:'3px 9px',borderRadius:'999px',background:'#F8ECEB',color:'#A33F38',border:'1px solid #ECCDC9',whiteSpace:'nowrap'}, icon:'timer', text:'SLA '+sla };
+    if (state === 'done')     return { style:{display:'inline-flex',alignItems:'center',gap:'5px',fontSize:'11.5px',fontWeight:600,padding:'3px 9px',borderRadius:'999px',background:'#EAF1EC',color:'#2F7350',border:'1px solid #CBE2D2',whiteSpace:'nowrap'}, icon:'check', text:'No prazo' };
+    return { style:{display:'inline-flex',alignItems:'center',gap:'5px',fontSize:'11.5px',fontWeight:600,padding:'3px 9px',borderRadius:'999px',background:'#F4F3F0',color:'#6A6E74',border:'1px solid #E7E5E0',whiteSpace:'nowrap'}, icon:'clock', text:'SLA '+sla };
+  }
+
+  _decorate(t){
+    const { P, ST, CH, CAT } = this._meta();
+    const p = P[t.priority], st = ST[t.status], sla = this._sla(t.slaState, t.sla);
+    const unassigned = t.assigneeInitials === '?';
+    const assigneeStyle = { width:'24px', height:'24px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px', fontWeight:600, flexShrink:0,
+      background: unassigned ? '#F4F3F0' : '#1B1C1E', color: unassigned ? '#B0B2B6' : '#fff', border: unassigned ? '1px dashed #CFCCC4' : 'none' };
+    const messages = (t.messages || []).map(m => {
+      const isSys = m.who === 'sys', isAgent = m.who === 'agent';
+      return Object.assign({}, m, {
+        isSys, isMsg: !isSys,
+        avatarStyle: { width:'30px', height:'30px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'11px', fontWeight:600, flexShrink:0,
+          background: isAgent ? '#1B1C1E' : '#EDEAE3', color: isAgent ? '#fff' : '#5F6268' },
+        bubbleStyle: { fontSize:'13px', lineHeight:1.6, color:'#2A2D33', padding:'11px 14px', borderRadius:'4px 11px 11px 11px',
+          background: isAgent ? '#EFF3F1' : '#fff', border: '1px solid ' + (isAgent ? '#DCE7E1' : '#EFEDE9') },
+      });
+    });
+    return Object.assign({}, t, {
+      prioLabel: p.label, prioIcon: p.icon,
+      prioDot: { width:'9px', height:'9px', borderRadius:'50%', background:p.dot, flexShrink:0 },
+      prioChip: { display:'inline-flex', alignItems:'center', gap:'5px', fontSize:'11.5px', fontWeight:600, padding:'3px 9px', borderRadius:'999px', background:p.chip.bg, color:p.chip.fg, border:'1px solid '+p.chip.bd, whiteSpace:'nowrap' },
+      stripShadow: 'inset 3px 0 0 ' + p.strip,
+      stripStyle: { position:'absolute', left:0, right:0, top:0, height:'3px', background:p.strip },
+      statusLabel: st.label,
+      statusStyle: { display:'inline-flex', alignItems:'center', gap:'6px', padding:'3px 10px 3px 8px', borderRadius:'999px', fontSize:'11.5px', fontWeight:600, background:st.bg, color:st.fg, border:'1px solid '+st.bd, whiteSpace:'nowrap' },
+      statusDot: { width:'6px', height:'6px', borderRadius:'50%', background:st.dot, flexShrink:0 },
+      slaStyle: sla.style, slaIcon: sla.icon, slaText: sla.text,
+      catIcon: CAT[t.category] || 'tag',
+      channelIcon: CH[t.channel] || 'message-square',
+      assigneeStyle,
+      messages,
+    });
+  }
+
+  renderVals(){
+    const accent  = this.props.accent ?? '#1B1C1E';
+    const f = this.state.filter;
+    const edits = this.state.edits || {};
+    const all = this._raw().map(t => this._decorate(Object.assign({}, t, edits[t.id] || {})));
+    const filtered = all.filter(t => f === 'todos' ? true : t.status === f);
+    const tickets = filtered.map(t => Object.assign({}, t, { open: () => this.setState({ selectedId: t.id }) }));
+    const selRaw = this.state.selectedId ? all.find(x => x.id === this.state.selectedId) : null;
+
+    const openCount = this._raw().filter(t => t.status !== 'resolvido').length;
+    const slaRisk   = this._raw().filter(t => t.slaState === 'risk' || t.slaState === 'breached').length;
+
+    const base = { padding:'6px 12px', borderRadius:'7px', border:'none', cursor:'pointer', fontSize:'12px', fontWeight:600, fontFamily:'inherit', transition:'all .12s' };
+    const on   = Object.assign({}, base, { background:'#FFFFFF', color:'#1B1C1E', boxShadow:'0 1px 2px rgba(20,20,20,.10)' });
+    const off  = Object.assign({}, base, { background:'transparent', color:'#6A6E74' });
+
+    return {
+      tickets,
+      selView: selRaw,
+      hasSel: !!selRaw,
+      count: tickets.length,
+      totalAll: all.length,
+      openCount, slaRisk,
+      closeDrawer: () => this.setState({ selectedId: null }),
+      setStatus:   (e) => this._setField('status', e.target.value),
+      setCategory: (e) => this._setField('category', e.target.value),
+      setTodos:  () => this.setState({ filter:'todos' }),
+      setAberto: () => this.setState({ filter:'aberto' }),
+      setAnd:    () => this.setState({ filter:'andamento' }),
+      setResolv: () => this.setState({ filter:'resolvido' }),
+      fTodos:  f === 'todos'     ? on : off,
+      fAberto: f === 'aberto'    ? on : off,
+      fAnd:    f === 'andamento' ? on : off,
+      fResolv: f === 'resolvido' ? on : off,
+      primaryStyle: { display:'inline-flex', alignItems:'center', gap:'7px', padding:'9px 15px', borderRadius:'8px', background:accent, color:'#fff', border:'none', cursor:'pointer', fontSize:'13px', fontWeight:600, fontFamily:'inherit' },
+      replyStyle:   { display:'inline-flex', alignItems:'center', gap:'7px', padding:'9px 16px', borderRadius:'9px', background:accent, color:'#fff', border:'none', cursor:'pointer', fontSize:'12.5px', fontWeight:600, fontFamily:'inherit' },
+      navBarStyle:  { position:'absolute', left:0, top:'6px', bottom:'6px', width:'3px', borderRadius:'0 3px 3px 0', background:'#F4F3F0' },
+    };
+  }
+}
+</script>
+</body>
+</html>
